@@ -25,7 +25,7 @@ export default function RootLayout({
             <Sidebar />
             <section className='flex flex-col w-full'>
               <Header />
-              <main className='m-2'>
+              <main className='px-24 pt-9'>
                 {children}
               </main>
             </section>

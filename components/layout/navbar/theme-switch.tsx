@@ -8,6 +8,8 @@ import {useIsSSR} from "@react-aria/ssr";
 
 import { SunFilledIcon, MoonFilledIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
+import { useBoundStore } from "@/hooks/store/useBoundStore";
+import { useStore } from "zustand";
 
 export interface ThemeSwitchProps {
 	className?: string;
@@ -20,9 +22,16 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 }) => {
 	const { theme, setTheme } = useTheme();
   const isSSR = useIsSSR();
+  const editor = useStore(useBoundStore, (state) => state.editor)
 
 	const onChange = () => {
-		theme === "light" ? setTheme("dark") : setTheme("light");
+    if (theme === "light") {
+      setTheme("dark")
+      editor?.domElement.setAttribute("data-theme", "dark") 
+    } else {
+      setTheme("light")
+      editor?.domElement.setAttribute("data-theme", "light") 
+    }
 	};
 
 	const {

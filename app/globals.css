@@ -35,6 +35,10 @@
     --ring: 0 0% 63.9%;
  
     --radius: 0.5rem;
+
+    --code: 0 79% 63%;
+
+    --code-background: 135, 131, 120;
   }
  
   .dark {
@@ -66,6 +70,8 @@
     --destructive-foreground: 0 85.7% 97.3%;
  
     --ring: 0 0% 14.9%;
+
+ 
   }
 }
  

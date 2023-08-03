@@ -1,5 +1,10 @@
 import { IconSvgProps } from "@/types";
 
+export { RiCodeSSlashFill as CodeIcon } from "react-icons/ri"
+export {
+  HiOutlineChevronUpDown as ChevronsUpDownIcon
+} from "react-icons/hi2"
+
 export const SunFilledIcon = ({
 	size = 24,
 	width,

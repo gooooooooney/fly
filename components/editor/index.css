@@ -1,0 +1,8 @@
+[data-text-color=code] {
+  color: hsl(var(--code));
+}
+[data-background-color=code] {
+  background-color: rgba(var(--code-background), 15%);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}

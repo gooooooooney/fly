@@ -11,5 +11,5 @@ export const createLayoutSlice: StateCreator<
   LayoutSlice
   > = (set) => ({
     collapsed: false,
-    setCollapsed: (bol: boolean) => set((state) => ({ ...state, open: bol })),
+    setCollapsed: (bol: boolean) => set((state) => ({ ...state, collapsed: bol })),
   })

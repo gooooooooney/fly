@@ -9,9 +9,10 @@ import {
 } from "@nextui-org/react";
 import { DoubleArrowLeftIcon } from "@radix-ui/react-icons"
 import { ThemeSwitch } from "./theme-switch";
-import useStore from "@/hooks/use-store";
+// import useStore from "@/hooks/use-store";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { cn } from "@/lib/utils";
+import { useStore } from "zustand";
 
 export default function Header() {
   const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [state.collapsed, state.setCollapsed])!
@@ -19,12 +20,19 @@ export default function Header() {
   return (
     <Navbar isBordered={false} maxWidth="2xl">
       <NavbarContent justify="start">
-        <NavbarItem onClick={() => setCollapsed(!collapsed)}>
-          <DoubleArrowLeftIcon className={cn(
-            "transition-transform",
-            collapsed ? "transform rotate-180" : "transform rotate-0"
-          )} />
-          </NavbarItem>
+        <NavbarItem >
+          <Button
+            variant="light"
+            onClick={() => {
+              setCollapsed(!collapsed)
+            }}
+            isIconOnly>
+            <DoubleArrowLeftIcon className={cn(
+              "transition-transform",
+              collapsed ? "transform rotate-180" : "transform rotate-0"
+            )} />
+          </Button>
+        </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
