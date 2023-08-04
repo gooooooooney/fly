@@ -19,6 +19,12 @@ dependencies:
   '@react-aria/visually-hidden':
     specifier: ^3.8.2
     version: 3.8.2(react@18.2.0)
+  '@tiptap/core':
+    specifier: ^2.0.4
+    version: 2.0.4(@tiptap/pm@2.0.4)
+  '@tiptap/extension-code':
+    specifier: ^2.0.4
+    version: 2.0.4(@tiptap/core@2.0.4)
   '@types/node':
     specifier: 20.4.5
     version: 20.4.5
