@@ -7,12 +7,12 @@ import {
   Link,
   Button
 } from "@nextui-org/react";
-import { DoubleArrowLeftIcon } from "@radix-ui/react-icons"
 import { ThemeSwitch } from "./theme-switch";
 // import useStore from "@/hooks/use-store";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { cn } from "@/lib/utils";
 import { useStore } from "zustand";
+import { Icons } from "@/components/icons";
 
 export default function Header() {
   const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [state.collapsed, state.setCollapsed])!
@@ -27,7 +27,7 @@ export default function Header() {
               setCollapsed(!collapsed)
             }}
             isIconOnly>
-            <DoubleArrowLeftIcon className={cn(
+            <Icons.DoubleArrowLeftIcon className={cn(
               "transition-transform",
               collapsed ? "transform rotate-180" : "transform rotate-0"
             )} />

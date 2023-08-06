@@ -8,7 +8,8 @@ import { SidebarRoot } from './sidebar-root';
 import useStore from '@/hooks/use-store';
 import { useBoundStore } from '@/hooks/store/useBoundStore';
 import SidebarHeader from './sidebar-header';
-import { HomeIcon, QuestionMarkIcon } from '@radix-ui/react-icons';
+import { Icons } from '@/components/icons';
+
 
 export const Sidebar = () => {
   const { theme, setTheme } = useTheme();
@@ -20,10 +21,10 @@ export const Sidebar = () => {
     <SidebarRoot collapsed={collapsed} collapsedWidth='0'>
       <SidebarHeader />
       <Menu>
-        <MenuItem icon={<HomeIcon />}>
+        <MenuItem icon={<Icons.HomeIcon />}>
           我的主页
         </MenuItem>
-        <MenuItem icon={<QuestionMarkIcon />}>帮助中心</MenuItem>
+        <MenuItem icon={<Icons.QuestionMarkIcon />}>帮助中心</MenuItem>
       </Menu>
     </SidebarRoot>
   )

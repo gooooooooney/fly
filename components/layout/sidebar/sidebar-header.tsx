@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Avatar, User } from "@nextui-org/react";
-import { ChevronsUpDownIcon } from "@/components/icons";
+import { Icons } from "@/components/icons";
 
 export default function SidebarHeader() {
   return (
@@ -18,7 +18,7 @@ export default function SidebarHeader() {
               className="transition-transform"
               name="gooney的空间"
             />
-            <ChevronsUpDownIcon className="ml-3" size={18} />
+            <Icons.ChevronsUpDownIcon className="ml-3" size={18} />
           </section>
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">

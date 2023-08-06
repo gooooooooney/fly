@@ -16,12 +16,14 @@ export default function Editor() {
   const editor: BlockNoteEditor | null = useBlockNote({
     theme: theme === "light" ? "light" : "dark",
     enableBlockNoteExtensions: true,
+    
     editorDOMAttributes: {
-      class: "!bg-background",
+      class: "!bg-background !ps-0 !pe-0",
     },
   });
   registerExtensions(editor)
   setEditor(editor)
+  
   return <BlockNoteView editor={editor} >
     <FormattingToolbarPositioner
       editor={editor}

@@ -1,9 +1,17 @@
 import { IconSvgProps } from "@/types";
 
-export { RiCodeSSlashFill as CodeIcon } from "react-icons/ri"
-export {
-  HiOutlineChevronUpDown as ChevronsUpDownIcon
+import { RiCodeSSlashFill  } from "react-icons/ri"
+import {
+  HiOutlineChevronUpDown 
 } from "react-icons/hi2"
+
+import {
+	RxFace,
+	RxHome,
+	RxQuestionMark,
+	RxDoubleArrowLeft,
+	RxImage
+} from "react-icons/rx"
 
 export const SunFilledIcon = ({
 	size = 24,
@@ -48,3 +56,15 @@ export const MoonFilledIcon = ({
 		/>
 	</svg>
 );
+
+export const Icons = {
+	  SunFilledIcon,
+	  MoonFilledIcon,
+	  Face: RxFace,
+	  ChevronsUpDownIcon: HiOutlineChevronUpDown,
+	  CodeIcon:RiCodeSSlashFill,
+	  HomeIcon:RxHome,
+	  QuestionMarkIcon:RxQuestionMark,
+	  DoubleArrowLeftIcon:RxDoubleArrowLeft,
+	  ImageIcon:RxImage
+}
