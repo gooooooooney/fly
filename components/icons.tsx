@@ -10,7 +10,8 @@ import {
 	RxHome,
 	RxQuestionMark,
 	RxDoubleArrowLeft,
-	RxImage
+	RxImage,
+	RxTrash
 } from "react-icons/rx"
 
 export const SunFilledIcon = ({
@@ -66,5 +67,6 @@ export const Icons = {
 	  HomeIcon:RxHome,
 	  QuestionMarkIcon:RxQuestionMark,
 	  DoubleArrowLeftIcon:RxDoubleArrowLeft,
-	  ImageIcon:RxImage
+	  ImageIcon:RxImage,
+		TrashIcon: RxTrash
 }

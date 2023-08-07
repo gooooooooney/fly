@@ -14,17 +14,17 @@ export default function Editor() {
   const { theme } = useTheme();
   const setEditor = useStore(useBoundStore, (state) => state.setEditor)
   const editor: BlockNoteEditor | null = useBlockNote({
-    theme: theme === "light" ? "light" : "dark",
+    theme: theme as "light" | "dark" ,
     enableBlockNoteExtensions: true,
     
     editorDOMAttributes: {
       class: "!bg-background !ps-0 !pe-0",
     },
-  });
+  }, [theme]);
   registerExtensions(editor)
   setEditor(editor)
   
-  return <BlockNoteView editor={editor} >
+  return <BlockNoteView className="w-full" editor={editor} >
     <FormattingToolbarPositioner
       editor={editor}
       formattingToolbar={FormattingToolbar}

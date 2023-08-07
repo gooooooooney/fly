@@ -1,37 +1,50 @@
 import Editor from "@/components/editor";
-import IconAndCover from "@/components/icon-cover";
-import { Icons } from "@/components/icons";
-import { Button } from "@nextui-org/button";
-import { Image } from "@nextui-org/image";
-import NextImage from "next/image";
+import Helmet from "@/components/helmet";
+import Cover from "@/components/page/cover";
+import IconAndCover from "@/components/page/icon-cover";
+import { PageTitle } from "@/components/page/page-title";
+import { Separator } from "@/components/ui/separator";
+import { getCollections } from "@/lib/unsplash/getCollections";
 
-export default function BlockPage() {
+async function getGithubEmojis() {
+  const res = await fetch("https://api.github.com/emojis")
+  const emojis = await res.json()
+  return emojis
+}
+
+async function getNotionIcons() {
+  const res = await fetch("https://www.notion.so/icons/all")
+  const icons = await res.json()
+  return icons
+}
+
+async function getLocalEmojis() {
+  const res = await fetch("/api/emojis.json")
+  const emojis = await res.json()
+  return emojis
+}
+
+
+export default async function BlockPage() {
   return (
-    <section className="h-screen  w-full flex flex-col items-center z-1 overflow-auto max-h-full ">
+    <>
+      <Helmet />
+      <section className="h-screen  w-full flex flex-col items-center z-1 overflow-auto max-h-full ">
+        <Cover />
+        <div className="max-w-3xl flex flex-col w-full  ">
+          <div className="flex flex-col w-full">
+            <div className="group mt-10">
+              <IconAndCover />
+              <PageTitle />
+            </div>
+          </div>
+          <Separator />
 
-      <section className="w-full">
-        <Image
-          as={NextImage}
-          width={0}
-          className="w-full h-[30vh] "
-          height={0}
-          sizes="100vw"
-          isZoomed
-          removeWrapper
-          radius="none"
-          src="/notion.jpeg"
-          alt="NextUI hero Image"
-        />
+          <section className="w-full flex ">
+            <Editor />
+          </section>
+        </div>
       </section>
-
-
-      <div className="max-w-3xl flex flex-col w-full px-6 pt-9 ">
-
-        <section className="group">
-          <IconAndCover />
-        </section>
-        <Editor />
-      </div>
-    </section>
+    </>
   )
 }
