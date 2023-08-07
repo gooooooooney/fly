@@ -37,6 +37,7 @@ export const Images = () => {
               width={0}
               className="w-full cursor-pointer h-16"
               height={64}
+              fallbackSrc
               sizes="100vw"
               isZoomed
               radius="none"

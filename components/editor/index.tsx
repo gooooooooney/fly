@@ -9,29 +9,32 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import FormattingToolbar from "./formatting-toolbar";
 import { registerExtensions } from "@/lib/extensions";
 
-// Our <Editor> component that we can now use
 export default function Editor() {
   const { theme } = useTheme();
   const setEditor = useStore(useBoundStore, (state) => state.setEditor)
   const editor: BlockNoteEditor | null = useBlockNote({
-    theme: theme as "light" | "dark" ,
+    theme: theme as "light" | "dark",
     enableBlockNoteExtensions: true,
-    
+
     editorDOMAttributes: {
       class: "!bg-background !ps-0 !pe-0",
     },
   }, [theme]);
   registerExtensions(editor)
   setEditor(editor)
-  
-  return <BlockNoteView className="w-full" editor={editor} >
-    <FormattingToolbarPositioner
-      editor={editor}
-      formattingToolbar={FormattingToolbar}
-    />
-    {/* <DefaultFormattingToolbar editor={editor} /> */}
-    <HyperlinkToolbarPositioner editor={editor} />
-    <SlashMenuPositioner editor={editor} />
-    <SideMenuPositioner editor={editor} />
-  </BlockNoteView>;
+
+  return (
+    <BlockNoteView
+      className="w-full"
+      editor={editor} >
+      <FormattingToolbarPositioner
+        editor={editor}
+        formattingToolbar={FormattingToolbar}
+      />
+      {/* <DefaultFormattingToolbar editor={editor} /> */}
+      <HyperlinkToolbarPositioner editor={editor} />
+      <SlashMenuPositioner editor={editor} />
+      <SideMenuPositioner editor={editor} />
+    </BlockNoteView>
+  )
 }

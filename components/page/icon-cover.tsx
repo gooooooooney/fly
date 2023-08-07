@@ -5,7 +5,7 @@ import EmojiPicker from "./emoji-picker";
 import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { LIST } from "@/constatns/emojis";
-import { Random } from "@/lib/utils";
+import { Random, cn } from "@/lib/utils";
 import ImagePicker from "./image-picker";
 import { covers } from "@/constatns/images";
 import { Icons } from "../icons";
@@ -32,7 +32,12 @@ function IconAndCover() {
     }
     return (
         <>
-            {emoji && <div className="h-18 w-18 relative max-w-full z-10 -mt-[2.2rem]">
+            {emoji && <div className={cn(
+                "h-18 w-18 relative max-w-full z-10 -mt-[2.2rem]",
+                {
+                    "mt-24": !cover,
+                }
+            )}>
                 <Popover placement="left" radius="sm">
                     <PopoverTrigger >
                         <Button variant="light" className="text-7xl px-0 h-18 w-18 aria-expanded:opacity-100">{emoji}</Button>

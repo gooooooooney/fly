@@ -18,7 +18,7 @@ export default function Header() {
   const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [state.collapsed, state.setCollapsed])!
 
   return (
-    <Navbar isBordered={false} maxWidth="2xl">
+    <Navbar isBordered={false}  maxWidth="full">
       <NavbarContent justify="start">
         <NavbarItem >
           <Button
@@ -35,7 +35,7 @@ export default function Header() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem>
+        <NavbarItem className="mr-8">
           <ThemeSwitch />
         </NavbarItem>
       </NavbarContent>

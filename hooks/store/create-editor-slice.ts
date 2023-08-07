@@ -12,10 +12,7 @@ export const createEditorSlice: StateCreator<
   EditorSlice
   > = (set) => ({
     editor: null,
-    setEditor: (editor) => set((state) => {
-      if (state.editor) {
-        return state
-      }
+    setEditor: (editor) => set((state) => {      
       return { ...state, editor }
     }),
   })

@@ -11,7 +11,6 @@ function findExtensionByName(editor: TiptapEditor, name: string) {
 export function registerExtensions(editor: BlockNoteEditor) {
   const coreEditor = editor._tiptapEditor as TiptapEditor
   coreEditor.extensionManager.extensions.push(Blockquote)
-  console.log(coreEditor.extensionManager.extensions)
   const codeMark = findExtensionByName(coreEditor, "code") as Mark
   registerCodeExtension(codeMark)
 }
