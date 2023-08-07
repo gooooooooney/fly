@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function Random(min: number, max: number) {
+  return Math.round(Math.random() * (max - min)) + min;
+}
+
 export const isAppleOS = () =>
   typeof navigator !== "undefined" &&
   (/Mac/.test(navigator.platform) ||
