@@ -29,7 +29,7 @@ export const Images = () => {
             alt="NextUI hero Image"
           /> */}
             <Image
-              onClick={() => setCover(item.urls.full)}
+              onClick={() => setCover(item.urls.raw)}
               classNames={{
                 wrapper: "!max-w-full",
               }}
@@ -59,7 +59,7 @@ export const Images = () => {
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              onClick={() => setCover(item.urls.full)}
+              onClick={() => setCover(item.urls.raw)}
               as={NextImage}
               width={0}
               className="w-full cursor-pointer h-16"
@@ -87,7 +87,7 @@ export const Images = () => {
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              onClick={() => setCover(item.urls.full)}
+              onClick={() => setCover(item.urls.raw)}
               as={NextImage}
               width={0}
               className="w-full cursor-pointer h-16"

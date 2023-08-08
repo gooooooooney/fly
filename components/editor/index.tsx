@@ -18,6 +18,9 @@ export default function Editor() {
     editorDOMAttributes: {
       class: "!bg-background !ps-0 !pe-0",
     },
+    onEditorContentChange: (editor) => {
+      // console.log(editor.topLevelBlocks)
+    }
   }, [theme]);
   
   // registerExtensions(editor)

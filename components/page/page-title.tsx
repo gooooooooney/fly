@@ -12,7 +12,6 @@ export const PageTitle = () => {
     if (e.key === "Enter") {
       editor?.focus()
       e.preventDefault()
-      
     }
   }
   return (
@@ -28,7 +27,6 @@ export const PageTitle = () => {
         placeholder="Untitled"
         className="[&[contenteditable]]:after:cursor-text [&[contenteditable]]:empty:after:content-[attr(placeholder)] [&[contenteditable]]:after:text-[#37352f26] dark:[&[contenteditable]]:after:text-[#373737] outline-none scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
       />
-<p onClick={() => console.log(editor?.topLevelBlocks)}>save</p>
     </div>
   )
 }
