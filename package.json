@@ -37,7 +37,6 @@
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "framer-motion": "^10.15.1",
-    "lucide-react": "^0.263.1",
     "next": "13.4.13",
     "next-themes": "^0.2.1",
     "postcss": "8.4.27",
@@ -51,8 +50,5 @@
     "typescript": "5.1.6",
     "unsplash-js": "^7.0.18",
     "zustand": "^4.4.1"
-  },
-  "devDependencies": {
-    "@types/react-helmet": "^6.1.6"
   }
 }
