@@ -1,5 +1,4 @@
 
-import { gradientColors, pureColors, spaceBackgrounds } from "@/constatns/images";
 import { Image } from "@nextui-org/image";
 import NextImage from "next/image";
 import { Link } from "@nextui-org/link";
@@ -7,18 +6,19 @@ import NextLink from "next/link";
 
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useStore } from "zustand";
-export const Images = () => {
+import { loves, nature, outdoor } from "@/constatns/images/pelexs";
+export const PelexsImages = () => {
   const setCover = useStore(useBoundStore, (state) => state.setCover)
 
   return (
     <>
-      <Link isBlock href="https://unsplash.com/s/photos/pure-color" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>
-        Pure Color
+      <Link isBlock href="https://www.pexels.com/search/nature" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>
+        Nature
       </Link>
       <div className="w-full flex items-start px-3 flex-wrap">
 
 
-        {pureColors.map((item, index) => (
+        {nature.map((item, index) => (
           <div className="w-1/4 p-[3px]" key={item.id}>
             {/* <NextImage
             width={0}
@@ -29,7 +29,7 @@ export const Images = () => {
             alt="NextUI hero Image"
           /> */}
             <Image
-              onClick={() => setCover(item.urls.raw)}
+              onClick={() => setCover(item.src.original)}
               classNames={{
                 wrapper: "!max-w-full",
               }}
@@ -41,25 +41,25 @@ export const Images = () => {
               sizes="100vw"
               isZoomed
               radius="none"
-              src={item.urls.small}
+              src={item.src.original}
               alt="NextUI hero Image"
             />
           </div>
         ))}
       </div>
-      <Link isBlock href="https://unsplash.com/s/photos/gradient-color" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>
-        Gradient Color
+      <Link isBlock href="https://www.pexels.com/search/outdoor/" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>
+        Outdoor
       </Link>
       <div className="w-full flex items-start px-3 flex-wrap">
 
 
-        {gradientColors.map((item, index) => (
+        {outdoor.map((item, index) => (
           <div className="w-1/4 p-[3px]" key={item.id}>
             <Image
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              onClick={() => setCover(item.urls.raw)}
+              onClick={() => setCover(item.src.original)}
               as={NextImage}
               width={0}
               className="w-full cursor-pointer h-16"
@@ -67,7 +67,7 @@ export const Images = () => {
               sizes="100vw"
               isZoomed
               radius="none"
-              src={item.urls.small}
+              src={item.src.original}
               alt="NextUI hero Image"
             />
           </div>
@@ -75,19 +75,19 @@ export const Images = () => {
 
 
       </div>
-      <Link isBlock href="https://unsplash.com/s/photos/universe" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>
-        Universe
+      <Link isBlock href="https://www.pexels.com/search/love" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>
+        Love
       </Link>
       <div className="w-full flex items-start px-3 flex-wrap">
 
 
-        {spaceBackgrounds.map((item, index) => (
+        {loves.map((item, index) => (
           <div className="w-1/4 p-[3px]" key={item.id}>
             <Image
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              onClick={() => setCover(item.urls.raw)}
+              onClick={() => setCover(item.src.original)}
               as={NextImage}
               width={0}
               className="w-full cursor-pointer h-16"
@@ -95,7 +95,7 @@ export const Images = () => {
               sizes="100vw"
               isZoomed
               radius="none"
-              src={item.urls.small}
+              src={item.src.original}
               alt="NextUI hero Image"
             />
           </div>

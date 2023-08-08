@@ -1,19 +1,22 @@
 "use client"
 import { Tab, Tabs } from "@nextui-org/tabs"
-import { Images } from "./images";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { UnsplashImages } from "./images/unsplash";
+import { PelexsImages } from "./images/pelexs";
 
 function ImagePicker() {
 
   return (
     <Tabs variant="underlined" size="sm" aria-label="Options">
-      <Tab key="gallery" title="Gallery" className="w-full">
+      <Tab key="unsplash" title="Unsplash" className="w-full">
         <ScrollArea className="h-96 w-full">
-          <Images  />
+          <UnsplashImages  />
         </ScrollArea>
       </Tab>
-      <Tab key="upload" title="Upload">
-        111
+      <Tab key="pelexs" title="Pelexs">
+      <ScrollArea className="h-96 w-full">
+          <PelexsImages  />
+        </ScrollArea>
       </Tab>
     </Tabs>
   )

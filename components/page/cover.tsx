@@ -35,7 +35,7 @@ function Cover() {
                 objectPosition: `center ${y}%`,
               }}
               draggable={false}
-              as={NextImage}
+              // as={NextImage}
               width={0}
               className="w-full h-[30vh] "
               height={0}
