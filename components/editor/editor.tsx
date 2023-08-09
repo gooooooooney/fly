@@ -14,24 +14,21 @@ interface EditorProps {
   editable: boolean
   theme: "light" | "dark"
   onEditorReady?: (editor: BlockNoteEditor | null) => void
+  onEditorContentChange?: (editor: BlockNoteEditor) => void
 }
 
-export default function Editor({ editable, theme, onEditorReady }: EditorProps) {
-  console.log("render")
+export default function Editor({ editable, theme, onEditorReady, onEditorContentChange }: EditorProps) {
+  const initialContent = useStore(useBoundStore, (state) => state.blocks)
   const editor: BlockNoteEditor | null = useBlockNote({
     theme,
     editable,
+    initialContent: initialContent,
     editorDOMAttributes: {
       class: "!bg-background !ps-0 !pe-0",
     },
+    onEditorReady,
+    onEditorContentChange
   }, [theme]);
-
-
-  useEffect(() => {
-    if (onEditorReady) {
-      onEditorReady(editor);
-    }
-  }, [editor, onEditorReady]);
 
   useEffect(() => {
     if (editor) {

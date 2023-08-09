@@ -8,8 +8,7 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useStore } from "zustand";
 import { loves, nature, outdoor } from "@/constatns/images/pelexs";
 export const PelexsImages = () => {
-  const setCover = useStore(useBoundStore, (state) => state.setCover)
-
+  const [setCover] = useStore(useBoundStore, (state) => [state.setCover, state.pageId])
   return (
     <>
       <Link isBlock href="https://www.pexels.com/search/nature" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>

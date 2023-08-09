@@ -24,17 +24,17 @@ async function getLocalEmojis() {
 }
 
 
-export default async function BlockPage() {
+export default async function BlockPage({ params }: { params: { hash: string } }) {
   return (
     <>
-      <Helmet />
+      <Helmet id={params.hash} />
       <section className="h-screen   w-full flex flex-col items-center z-1 overflow-auto max-h-full ">
         <Cover />
         <div className="max-w-3xl flex flex-col w-full flex-grow ">
           <div className="flex flex-col w-full">
             <div className="group">
-              <IconAndCover />
-              <PageTitle />
+              <IconAndCover id={params.hash} />
+              <PageTitle id={params.hash} />
             </div>
           </div>
           <Separator />

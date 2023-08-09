@@ -14,7 +14,7 @@ import { Icons } from "@/components/icons";
 
 
 
-function IconAndCover() {
+function IconAndCover({ id }: { id: string }) {
     const { emoji, setCover, cover, setIcon } = useStore(useBoundStore, (state) => ({
         emoji: state.icon,
         setIcon: state.setIcon,
@@ -24,10 +24,12 @@ function IconAndCover() {
     const handleRandomIcon = () => {
         const randomEmojiList = LIST[Random(0, LIST.length - 1)]
         const randomEmoji = randomEmojiList[Random(0, randomEmojiList.length - 1)]
+
         setIcon(randomEmoji)
     }
     const handleRandomCover = () => {
         const randomCover = covers[Random(0, covers.length - 1)]
+
         setCover(randomCover.urls.full)
     }
     return (
