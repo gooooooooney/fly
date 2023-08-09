@@ -33,7 +33,7 @@ function IconAndCover() {
     return (
         <>
             {emoji && <div className={cn(
-                "h-18 w-18 relative max-w-full z-10 -mt-[2.2rem]",
+                "h-18 w-18 relative max-w-full z-10 -mt-[2.2rem] inline-block",
                 {
                     "mt-24": !cover,
                 }
