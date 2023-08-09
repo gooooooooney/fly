@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <section className='flex h-screen'>
+          <section className='flex h-full'>
             <Sidebar />
             <section className='flex flex-col w-full'>
               <Header />

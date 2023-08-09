@@ -7,8 +7,8 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { LIST } from "@/constatns/emojis";
 import { Random, cn } from "@/lib/utils";
 import ImagePicker from "./image-picker";
-import { Icons } from "../icons";
 import { covers } from "@/constatns/images/unsplash";
+import { Icons } from "@/components/icons";
 
 
 

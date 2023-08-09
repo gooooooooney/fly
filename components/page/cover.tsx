@@ -7,7 +7,7 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useStore } from "zustand";
 import { Button } from "@nextui-org/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
-import ImagePicker from "./image-picker";
+import ImagePicker from "./icon-cover/image-picker";
 import { Icons } from "../icons";
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider"

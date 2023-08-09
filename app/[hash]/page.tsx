@@ -1,10 +1,9 @@
+import { EditorWrapper } from "@/components/editor";
 import Helmet from "@/components/helmet";
 import Cover from "@/components/page/cover";
 import IconAndCover from "@/components/page/icon-cover";
 import { PageTitle } from "@/components/page/page-title";
 import { Separator } from "@/components/ui/separator";
-import { getCollections } from "@/lib/unsplash/getCollections";
-import dynamic from "next/dynamic";
 
 async function getGithubEmojis() {
   const res = await fetch("https://api.github.com/emojis")
@@ -23,7 +22,6 @@ async function getLocalEmojis() {
   const emojis = await res.json()
   return emojis
 }
-const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
 
 
 export default async function BlockPage() {
@@ -32,7 +30,7 @@ export default async function BlockPage() {
       <Helmet />
       <section className="h-screen   w-full flex flex-col items-center z-1 overflow-auto max-h-full ">
         <Cover />
-        <div className="max-w-3xl flex flex-col w-full  ">
+        <div className="max-w-3xl flex flex-col w-full flex-grow ">
           <div className="flex flex-col w-full">
             <div className="group">
               <IconAndCover />
@@ -41,8 +39,8 @@ export default async function BlockPage() {
           </div>
           <Separator />
 
-          <section className="w-full flex mt-8">
-            <Editor />
+          <section className=" flex-grow flex flex-col mt-8">
+            <EditorWrapper />
           </section>
         </div>
       </section>

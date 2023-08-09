@@ -1,42 +1,26 @@
-"use client"; // this registers <Editor> as a Client Component
+"use client"
+import { useBoundStore } from "@/hooks/store/useBoundStore"
+import { useStore } from "zustand"
+import { useTheme } from "next-themes"
+import dynamic from "next/dynamic";
 import { BlockNoteEditor } from "@blocknote/core";
-import { BlockNoteView, DefaultFormattingToolbar, FormattingToolbarPositioner, HyperlinkToolbarPositioner, SideMenuPositioner, SlashMenuPositioner, useBlockNote } from "@blocknote/react";
-import "./index.css"
-import "@blocknote/core/style.css";
-import { useTheme } from "next-themes";
-import { useStore } from "zustand";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
-import FormattingToolbar from "./formatting-toolbar";
-import { registerExtensions } from "@/lib/extensions";
+import { useCallback } from "react";
 
-export default function Editor() {
-  const { theme } = useTheme();
-  const setEditor = useStore(useBoundStore, (state) => state.setEditor)
-  const editor: BlockNoteEditor | null = useBlockNote({
-    theme: theme as "light" | "dark",
-    
-    editorDOMAttributes: {
-      class: "!bg-background !ps-0 !pe-0",
-    },
-    onEditorContentChange: (editor) => {
-      // console.log(editor.topLevelBlocks)
+const Editor = dynamic(() => import("@/components/editor/editor"), { ssr: false })
+export const EditorWrapper = () => {
+  const [editable, setEditor] = useStore(useBoundStore, (state) => [state.editable, state.setEditor])
+  const { theme } = useTheme()
+  const handleEditorRead = useCallback((editor: BlockNoteEditor | null) => {
+    if (editor) {
+      setEditor(editor)
     }
-  }, [theme]);
-  
-  // registerExtensions(editor)
-  setEditor(editor)
-
+  }, [setEditor])
   return (
-    <BlockNoteView
-      className="w-full"
-      editor={editor} >
-      <FormattingToolbarPositioner
-        editor={editor}
-        formattingToolbar={FormattingToolbar}
-      />
-      <HyperlinkToolbarPositioner editor={editor} />
-      <SlashMenuPositioner editor={editor} />
-      <SideMenuPositioner editor={editor} />
-    </BlockNoteView>
+    <>
+      <Editor
+        theme={theme as "light" | "dark"}
+        editable={editable}
+        onEditorReady={handleEditorRead} />
+    </>
   )
 }
