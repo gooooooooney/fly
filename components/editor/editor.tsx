@@ -1,14 +1,13 @@
 "use client"; // this registers <Editor> as a Client Component
 import { BlockNoteEditor } from "@blocknote/core";
-import { BlockNoteView, DefaultFormattingToolbar, FormattingToolbarPositioner, HyperlinkToolbarPositioner, SideMenuPositioner, SlashMenuPositioner, useBlockNote } from "@blocknote/react";
+import { BlockNoteView, FormattingToolbarPositioner, HyperlinkToolbarPositioner, SideMenuPositioner, SlashMenuPositioner, getDefaultReactSlashMenuItems, useBlockNote } from "@blocknote/react";
 import "./index.css"
 import "@blocknote/core/style.css";
-import { useTheme } from "next-themes";
 import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import FormattingToolbar from "./formatting-toolbar";
-import { registerExtensions } from "@/lib/extensions";
 import { useEffect } from "react";
+import { insertPagetem } from "./slashmenu";
 
 interface EditorProps {
   editable: boolean
@@ -22,6 +21,10 @@ export default function Editor({ editable, theme, onEditorReady, onEditorContent
   const editor: BlockNoteEditor | null = useBlockNote({
     theme,
     editable,
+    slashMenuItems: [
+      ...getDefaultReactSlashMenuItems(),
+      insertPagetem,
+    ],
     initialContent: initialContent.length > 0 ? initialContent : undefined,
     editorDOMAttributes: {
       class: "!bg-background !ps-0 !pe-0",
