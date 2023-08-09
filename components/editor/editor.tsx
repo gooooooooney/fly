@@ -22,7 +22,7 @@ export default function Editor({ editable, theme, onEditorReady, onEditorContent
   const editor: BlockNoteEditor | null = useBlockNote({
     theme,
     editable,
-    initialContent: initialContent,
+    initialContent: initialContent.length > 0 ? initialContent : undefined,
     editorDOMAttributes: {
       class: "!bg-background !ps-0 !pe-0",
     },
