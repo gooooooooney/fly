@@ -7,7 +7,7 @@ export async function initDb(id: string) {
   if (!pageInfo) {
     await db.pageInfo.add({
       id,
-      title: "Untitled",
+      title: "",
       icon: "",
       cover: "",
       editable: true,

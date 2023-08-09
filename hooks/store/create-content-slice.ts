@@ -1,7 +1,7 @@
-import { db } from "@/lib/models/db"
 import { StateCreator } from "zustand"
 import _ from "lodash"
 import { BlockNoteEditor } from "@blocknote/core"
+import { UpdatePageInfo } from "@/lib/models/update-page-info"
 
 export interface ContentSlice {
   pageId: string
@@ -31,21 +31,22 @@ export const createContentSlice: StateCreator<
     editable: true,
     setPageId: (pageId) => set((state) => ({ ...state, pageId })),
     setEditable: (editable) => set((state) => {
-      db.pageInfo.update(state.pageId, { editable })
+      
+      UpdatePageInfo(state.pageId, { editable })
       return ({ ...state, editable })
     }),
     setCover: (cover) => set((state) => {
-      db.pageInfo.update(state.pageId, { cover })
+      UpdatePageInfo(state.pageId, { cover })
       return ({ ...state, cover })
     }),
     setTitle: (title) => set((state) => {
       _.debounce(() => {
-        db.pageInfo.update(state.pageId, { title })
+        UpdatePageInfo(state.pageId, { title })
       }, 1000)()
       return ({ ...state, title })
     }),
     setIcon: (icon) => set((state) => {
-      db.pageInfo.update(state.pageId, { icon })
+      UpdatePageInfo(state.pageId, { icon })
 
       return ({ ...state, icon })
     }),
