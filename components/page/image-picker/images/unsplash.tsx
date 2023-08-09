@@ -20,14 +20,6 @@ export const UnsplashImages = () => {
 
         {pureColors.map((item, index) => (
           <div className="w-1/4 p-[3px]" key={item.id}>
-            {/* <NextImage
-            width={0}
-            className="w-full h-16"
-            height={64}
-            sizes="100vw"
-            src={item.cover_photo.urls.small}
-            alt="NextUI hero Image"
-          /> */}
             <Image
               onClick={() => setCover(item.urls.raw)}
               classNames={{
