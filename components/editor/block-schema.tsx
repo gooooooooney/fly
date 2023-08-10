@@ -35,10 +35,8 @@ export const PageBlock = createReactBlockSpec({
                 }} className="flex hover:bg-foreground-50 cursor-pointer" >
 
 
-                    {/* <InlineContent > */}
                     <span className="mr-1">{block.props.icon}</span>
                     <span className="underline">{block.props.title}</span>
-                    {/* </InlineContent> */}
                     <InlineContent className="hidden" />
                 </div>
 
