@@ -1,4 +1,3 @@
-import { BlockNoteEditor } from "@blocknote/core"
 import { Toolbar, BlockTypeDropdown, ToggledStyleButton, TextAlignButton, ColorStyleButton, NestBlockButton, UnnestBlockButton, CreateLinkButton, ToolbarButton, useEditorContentChange, useEditorSelectionChange } from "@blocknote/react"
 
 function FormattingToolbar(props: { editor: BlockNoteEditor }) {

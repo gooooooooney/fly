@@ -26,8 +26,8 @@
     "@radix-ui/react-scroll-area": "^1.0.4",
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slider": "^1.1.2",
-    "@react-aria/ssr": "^3.7.0",
-    "@react-aria/visually-hidden": "^3.8.2",
+    "@react-aria/ssr": "^3.7.1",
+    "@react-aria/visually-hidden": "^3.8.3",
     "@tiptap/core": "^2.0.4",
     "@tiptap/extension-blockquote": "^2.0.4",
     "@tiptap/extension-code": "^2.0.4",
@@ -60,7 +60,7 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.196",
+    "@types/lodash": "^4.14.197",
     "terser-webpack-plugin": "^5.3.9"
   }
 }

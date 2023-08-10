@@ -1,5 +1,4 @@
 "use client"; // this registers <Editor> as a Client Component
-import { BlockNoteEditor } from "@blocknote/core";
 import { BlockNoteView, FormattingToolbarPositioner, HyperlinkToolbarPositioner, SideMenuPositioner, SlashMenuPositioner, getDefaultReactSlashMenuItems, useBlockNote } from "@blocknote/react";
 import "./index.css"
 import "@blocknote/core/style.css";
@@ -7,7 +6,10 @@ import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import FormattingToolbar from "./formatting-toolbar";
 import { useEffect } from "react";
-import { insertPagetem } from "./slashmenu";
+import { insertPageItem } from "./slashmenu";
+import { blockSchema } from "./block-schema";
+
+type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
 interface EditorProps {
   editable: boolean
@@ -18,12 +20,13 @@ interface EditorProps {
 
 export default function Editor({ editable, theme, onEditorReady, onEditorContentChange }: EditorProps) {
   const initialContent = useStore(useBoundStore, (state) => state.blocks)
-  const editor: BlockNoteEditor | null = useBlockNote({
+  const editor = useBlockNote({
     theme,
     editable,
+    blockSchema: blockSchema,
     slashMenuItems: [
-      ...getDefaultReactSlashMenuItems(),
-      insertPagetem,
+      ...getDefaultReactSlashMenuItems(blockSchema),
+      insertPageItem,
     ],
     initialContent: initialContent.length > 0 ? initialContent : undefined,
     editorDOMAttributes: {
@@ -31,14 +34,15 @@ export default function Editor({ editable, theme, onEditorReady, onEditorContent
     },
     onEditorReady,
     onEditorContentChange
-  }, [theme]);
+  }, [theme, initialContent]);
 
   useEffect(() => {
     if (editor) {
       editor.isEditable = editable;
     }
   }, [editable, editor]);
-
+  // Give tests a way to get prosemirror instance
+  (window as WindowWithProseMirror).ProseMirror = editor?._tiptapEditor;
   // registerExtensions(editor)
 
   return (
@@ -67,7 +71,7 @@ export default function Editor({ editable, theme, onEditorReady, onEditorContent
             range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
             selection = window.getSelection(); //get the selection object (allows you to change selection)
             selection?.removeAllRanges(); //remove any selections already made
-            selection?.addRange(range); //make the range you have just created the visible selection
+            selection?.addRange(range); //make the range you have just created the visible selection 
           }
           const editable = document.querySelectorAll<HTMLElement>(
             "[contenteditable=true]",

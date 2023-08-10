@@ -1,4 +1,3 @@
-import { BlockNoteEditor } from "@blocknote/core"
 import { StateCreator } from "zustand"
 
 export interface EditorSlice {

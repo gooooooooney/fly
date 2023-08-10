@@ -16,7 +16,8 @@ function Helmet({ id }: { id: string }) {
 
   useEffect(() => {
     initDb(id)
-  }, [])
+    // setPageId(id)
+  }, [id])
 
   useEffect(() => {
     const link = document.querySelector("link[rel*='icon']") as HTMLLinkElement;

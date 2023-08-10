@@ -3,7 +3,6 @@ import { useBoundStore } from "@/hooks/store/useBoundStore"
 import { useStore } from "zustand"
 import { useTheme } from "next-themes"
 import dynamic from "next/dynamic";
-import { BlockNoteEditor } from "@blocknote/core";
 import { useCallback } from "react";
 import { UpdatePageInfo } from "@/lib/models/update-page-info";
 import _ from "lodash";
