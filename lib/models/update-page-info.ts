@@ -1,4 +1,3 @@
-import { type } from "os";
 import { PageInfo, db } from "./db";
 
 type UpdatePageInfo = Partial<Omit<PageInfo, "properties">> | Partial<{
@@ -15,7 +14,7 @@ export async function UpdatePageInfo(id: string, pageInfo: UpdatePageInfo) {
       if (!res) return
       const parentRes = await db.pageInfo.get(res.parentId)
       if (!parentRes) return
-      const parentBlock = parentRes.blocks.find(block => block.id === id) as any
+      const parentBlock = parentRes.blocks.find(block => block.id === id)! as any
       parentBlock!.props["title"] = res.properties.title || "Untitled"
       parentBlock!.props["icon"] = res.properties.icon || "📄"
       await db.pageInfo.update(res.parentId, {

@@ -48,6 +48,8 @@ export const PageBlock = createReactBlockSpec({
     }
 })
 
+export type PageBlockSpec = typeof PageBlock
+
 
 export const blockSchema = {
     ...defaultBlockSchema,
