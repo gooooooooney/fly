@@ -34,7 +34,7 @@ export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
     insertOrUpdateBlock(editor, {
       type: "page",
     })
-    // 避免editor onEditorContentChange时间未出发 导致blocks未更新
+    // 避免editor onEditorContentChange事件未触发 导致blocks未更新
     UpdatePageInfo(pageId, {
       blocks: editor.topLevelBlocks
     })

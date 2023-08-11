@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import { UpdatePageInfo } from "@/lib/models/update-page-info";
 import _ from "lodash";
 
+
 const Editor = dynamic(() => import("@/components/editor/editor"), { ssr: false })
 export const EditorWrapper = () => {
   const [editable, setEditor, pageId] = useStore(useBoundStore, (state) => [state.editable, state.setEditor, state.pageId])
@@ -23,12 +24,10 @@ export const EditorWrapper = () => {
     })
   }, 2000)
   return (
-    <>
-      <Editor
-        theme={theme as "light" | "dark"}
-        editable={editable}
-        onEditorContentChange={handleOnEditorContentChange}
-        onEditorReady={handleEditorRead} />
-    </>
+    <Editor
+      theme={theme as "light" | "dark"}
+      editable={editable}
+      onEditorContentChange={handleOnEditorContentChange}
+      onEditorReady={handleEditorRead} />
   )
 }

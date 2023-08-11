@@ -2,9 +2,9 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { db } from "@/lib/models/db";
 
 export async function initDb(id: string) {
+  if (!id) return
 
   const pageInfo = await db.pageInfo.get(id)
-  console.log(id, pageInfo)
   if (!pageInfo) {
     await db.pageInfo.add({
       id,
@@ -32,7 +32,8 @@ export async function initDb(id: string) {
   }
 }
 
-export async function addPageInfo({id, parentId}:{id: string, parentId?: string}) {
+export async function addPageInfo({ id, parentId }: { id: string, parentId?: string }) {
+  if (!id) return
   const pageInfo = await db.pageInfo.get(id)
   if (!pageInfo) {
     await db.pageInfo.add({

@@ -8,8 +8,6 @@ import {useIsSSR} from "@react-aria/ssr";
 
 import { SunFilledIcon, MoonFilledIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
 
 export interface ThemeSwitchProps {
 	className?: string;

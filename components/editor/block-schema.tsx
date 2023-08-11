@@ -1,13 +1,8 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { db } from "@/lib/models/db";
-import { addPageInfo } from "@/lib/models/init-db";
-import { UpdatePageInfo } from "@/lib/models/update-page-info";
 import { BlockSchema, defaultBlockSchema, defaultProps } from "@blocknote/core";
 import { createReactBlockSpec, InlineContent } from "@blocknote/react";
 import { Link } from "@nextui-org/link";
-import { set } from "lodash";
+import NextLink from "next/link";
 
-import { useParams, useRouter } from 'next/navigation'
 
 export const PageBlock = createReactBlockSpec({
     type: "page",
@@ -22,23 +17,18 @@ export const PageBlock = createReactBlockSpec({
     },
     containsInlineContent: true,
     render: ({ block }) => {
-        const params = useParams()
-        const router = useRouter()
         return (
             <>
-                <div onClick={() => {
-                    addPageInfo({
-                        id: block.id,
-                        parentId: params.hash as string,
-                    })
-                    router.push(`/${block.id}`)
-                }} className="flex hover:bg-foreground-50 cursor-pointer" >
-
-
+                {/* <div className="relative items-center tap-highlight-transparent outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium text-primary no-underline px-2 py-1 hover:after:opacity-100 after:content-[''] after:inset-0 after:opacity-0 after:w-full after:h-full after:rounded-xl after:transition-background after:absolute hover:after:bg-primary/20 flex cursor-pointer " >
                     <span className="mr-1">{block.props.icon}</span>
                     <span className="underline">{block.props.title}</span>
                     <InlineContent className="hidden" />
-                </div>
+                </div> */}
+                <NextLink href={`/${block.id}`}  className="relative items-center tap-highlight-transparent outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-medium text-primary no-underline px-2 py-1 hover:after:opacity-100 after:content-[''] after:inset-0 after:opacity-0 after:w-full after:h-full after:rounded-xl after:transition-background after:absolute hover:after:bg-primary/20 flex cursor-pointer " >
+                    <span className="mr-1">{block.props.icon}</span>
+                    <span className="underline">{block.props.title}</span>
+                    <InlineContent className="hidden" />
+                </NextLink>
 
             </>
 

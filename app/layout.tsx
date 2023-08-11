@@ -26,6 +26,7 @@ export default function RootLayout({
             <section className='flex flex-col w-full'>
               <Header />
               <main className='w-full relative max-h-full'>
+
                 {children}
               </main>
             </section>

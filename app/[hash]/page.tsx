@@ -4,7 +4,6 @@ import Cover from "@/components/page/cover";
 import IconAndCover from "@/components/page/icon-cover";
 import { PageTitle } from "@/components/page/page-title";
 import { Separator } from "@/components/ui/separator";
-
 async function getGithubEmojis() {
   const res = await fetch("https://api.github.com/emojis")
   const emojis = await res.json()
@@ -24,26 +23,31 @@ async function getLocalEmojis() {
 }
 
 
-export default async function BlockPage({ params }: { params: { hash: string } }) {
+
+export default function BlockPage({ params }: { params: { hash: string } }) {
   return (
     <>
       <Helmet id={params.hash} />
-      <section className="h-screen   w-full flex flex-col items-center z-1 overflow-auto max-h-full ">
-        <Cover />
-        <div className="max-w-3xl flex flex-col w-full flex-grow ">
-          <div className="flex flex-col w-full">
-            <div className="group">
-              <IconAndCover id={params.hash} />
-              <PageTitle id={params.hash} />
-            </div>
-          </div>
-          <Separator />
+      <>
+        <section className="h-screen   w-full flex flex-col items-center z-1 overflow-auto max-h-full ">
+          <Cover />
+          <div className="max-w-3xl flex flex-col w-full flex-grow ">
+            <div className="flex flex-col w-full">
+              <div className="group">
 
-          <section className=" flex-grow flex flex-col mt-8">
-            <EditorWrapper />
-          </section>
-        </div>
-      </section>
+                <IconAndCover id={params.hash} />
+                <PageTitle id={params.hash} />
+
+              </div>
+            </div>
+            <Separator />
+
+            <section className=" flex-grow flex flex-col mt-8">
+              <EditorWrapper />
+            </section>
+          </div>
+        </section>
+      </>
     </>
   )
 }

@@ -12,7 +12,8 @@ import {
 	RxDoubleArrowLeft,
 	RxImage,
 	RxTrash,
-	RxFile
+	RxFile,
+	RxDragHandleDots2
 } from "react-icons/rx"
 
 export const SunFilledIcon = ({
@@ -70,5 +71,6 @@ export const Icons = {
 	DoubleArrowLeftIcon: RxDoubleArrowLeft,
 	ImageIcon: RxImage,
 	TrashIcon: RxTrash,
-	File: RxFile
+	File: RxFile,
+	DragHandle: RxDragHandleDots2
 }
