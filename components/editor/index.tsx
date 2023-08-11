@@ -18,6 +18,29 @@ export const EditorWrapper = () => {
     }
   }, [setEditor])
 
+  const handleTextCursorPositionChange = (editor: BlockNoteEditor) => {
+    const currentBlock = editor.getTextCursorPosition().block
+    if (currentBlock.type === "page") {
+      // Retrieve all blocks before the current block and reverse them.
+      const blocks = editor.topLevelBlocks.slice(0, editor.topLevelBlocks.indexOf(currentBlock)).reverse()
+      // Then find the first block that is not a page block and set the cursor to the end of that block.
+
+      let hasNotPageBlock = false
+      for (let i = 0; i < blocks.length; i++) {
+        const block = blocks[i];
+        if (block.type !== "page") {
+          hasNotPageBlock = true
+          editor.setTextCursorPosition(block, "end")
+          break
+        }
+      }
+      // If there is no such block, blur the editor.
+      if (!hasNotPageBlock) {
+        editor._tiptapEditor.commands.blur()
+      }
+    }
+  }
+
   const handleOnEditorContentChange = _.debounce((editor: BlockNoteEditor) => {
     pageId && UpdatePageInfo(pageId, {
       blocks: editor.topLevelBlocks
@@ -28,6 +51,7 @@ export const EditorWrapper = () => {
       theme={theme as "light" | "dark"}
       editable={editable}
       onEditorContentChange={handleOnEditorContentChange}
+      onTextCursorPositionChange={handleTextCursorPositionChange}
       onEditorReady={handleEditorRead} />
   )
 }

@@ -13,7 +13,8 @@ import {
 	RxImage,
 	RxTrash,
 	RxFile,
-	RxDragHandleDots2
+	RxDragHandleDots2,
+	RxPlus,
 } from "react-icons/rx"
 
 export const SunFilledIcon = ({
@@ -72,5 +73,6 @@ export const Icons = {
 	ImageIcon: RxImage,
 	TrashIcon: RxTrash,
 	File: RxFile,
-	DragHandle: RxDragHandleDots2
+	DragHandle: RxDragHandleDots2,
+	Plus: RxPlus
 }

@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Header from '@/components/layout/navbar/header'
 import { Sidebar } from '@/components/layout/sidebar'
+import { cn } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className} >
+      <body className={cn(inter.className, "text-primary")} >
         <Providers>
           <section className='flex h-full'>
             <Sidebar />

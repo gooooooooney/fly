@@ -18,11 +18,17 @@ interface EditorProps {
   theme: "light" | "dark"
   onEditorReady?: (editor: BlockNoteEditor | null) => void
   onEditorContentChange?: (editor: BlockNoteEditor) => void
+  onTextCursorPositionChange?: (editor: BlockNoteEditor) => void
 }
 
-export default function Editor({ editable, theme, onEditorReady, onEditorContentChange }: EditorProps) {
+export default function Editor({
+  editable,
+  theme,
+  onEditorReady,
+  onEditorContentChange,
+  onTextCursorPositionChange
+}: EditorProps) {
   const initialContent = useStore(useBoundStore, (state) => state.blocks)
-  const [isReady, setIsReady] = useState(false)
   const editor = useBlockNote({
     theme,
     editable,
@@ -39,38 +45,15 @@ export default function Editor({ editable, theme, onEditorReady, onEditorContent
       onEditorReady?.(editor)
     },
     onEditorContentChange,
-    onTextCursorPositionChange(editor) {
-      const currentBlock = editor.getTextCursorPosition().block
-      if (currentBlock.type === "page") {
-        // Retrieve all blocks before the current block and reverse them.
-        const blocks = editor.topLevelBlocks.slice(0, editor.topLevelBlocks.indexOf(currentBlock)).reverse()
-        // Then find the first block that is not a page block and set the cursor to the end of that block.
-
-        let hasNotPageBlock = false
-        for (let i = 0; i < blocks.length; i++) {
-          const block = blocks[i];
-          if (block.type !== "page") {
-            hasNotPageBlock = true
-            editor.setTextCursorPosition(block, "end")
-            break
-          }
-        }
-        // If there is no such block, blur the editor.
-        if (!hasNotPageBlock) {
-          editor._tiptapEditor.commands.blur()
-        }
-      }
-    }
+    onTextCursorPositionChange
   }, [theme, initialContent]);
 
   useEffect(() => {
     if (editor) {
-      setIsReady(true)
 
       editor.isEditable = editable;
     }
   }, [editable, editor]);
-
 
   return (
 

@@ -16,8 +16,6 @@ export const PageTitle = ({ id }: { id: string }) => {
   const handleEnter = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
     if (e.key === "Enter") {
       e.preventDefault()
-
-      setTitle(e.currentTarget.textContent as string)
       editor?.insertBlocks(
         [
           {
