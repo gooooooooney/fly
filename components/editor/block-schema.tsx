@@ -22,7 +22,7 @@ export const PageBlock = createReactBlockSpec({
                 <Link as={NextLink}
                     href={`/${block.id}`}
                     isBlock
-                    className=" after:rounded-sm  hover:after:bg-primary/10 flex cursor-pointer " >
+                    className="data-[focus-visible=true]:outline-0 after:rounded-sm  hover:after:bg-primary/10 flex cursor-pointer " >
                     <span className="mr-1">{block.props.icon}</span>
                     <span className="underline">{block.props.title}</span>
                     <InlineContent className="hidden" />

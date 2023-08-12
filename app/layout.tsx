@@ -22,12 +22,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(inter.className, "text-primary")} >
         <Providers>
-          <section className='flex h-full'>
+          <section className='flex h-screen'>
             <Sidebar />
             <section className='flex flex-col w-full'>
               <Header />
               <main className='w-full relative max-h-full'>
-
                 {children}
               </main>
             </section>
