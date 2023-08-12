@@ -1,24 +1,34 @@
 "use client"; // this registers <Editor> as a Client Component
-import { BlockNoteView, DragHandle, AddBlockButton, FormattingToolbarPositioner, HyperlinkToolbarPositioner, SideMenu, SideMenuButton, SideMenuPositioner, SideMenuProps, SlashMenuPositioner, getDefaultReactSlashMenuItems, useBlockNote } from "@blocknote/react";
-import "./index.css"
+import {
+  BlockNoteView,
+  DragHandle,
+  AddBlockButton,
+  FormattingToolbarPositioner,
+  HyperlinkToolbarPositioner,
+  SideMenu,
+  SideMenuButton,
+  SideMenuPositioner,
+  SideMenuProps,
+  SlashMenuPositioner,
+  getDefaultReactSlashMenuItems,
+  useBlockNote,
+} from "@blocknote/react";
+import "./index.css";
 import "@blocknote/core/style.css";
 import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import FormattingToolbar from "./formatting-toolbar";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { insertPageItem } from "./slashmenu";
-import { CustomBlockSchema, blockSchema } from "./block-schema";
-import { Icons } from "../icons";
-import { CustomSideMenu } from "./CustomSideMenu";
+import { blockSchema } from "./block-schema";
 
-
-let fn: (() => void) | null = null
+import { CustomSideMenu } from "./custom-side-menu";
 interface EditorProps {
-  editable: boolean
-  theme: "light" | "dark"
-  onEditorReady?: (editor: BlockNoteEditor | null) => void
-  onEditorContentChange?: (editor: BlockNoteEditor) => void
-  onTextCursorPositionChange?: (editor: BlockNoteEditor) => void
+  editable: boolean;
+  theme: "light" | "dark";
+  onEditorReady?: (editor: BlockNoteEditor | null) => void;
+  onEditorContentChange?: (editor: BlockNoteEditor) => void;
+  onTextCursorPositionChange?: (editor: BlockNoteEditor) => void;
 }
 
 export default function Editor({
@@ -26,63 +36,65 @@ export default function Editor({
   theme,
   onEditorReady,
   onEditorContentChange,
-  onTextCursorPositionChange
+  onTextCursorPositionChange,
 }: EditorProps) {
-  const initialContent = useStore(useBoundStore, (state) => state.blocks)
-  const editor = useBlockNote({
-    theme,
-    editable,
-    blockSchema: blockSchema,
-    slashMenuItems: [
-      ...getDefaultReactSlashMenuItems(blockSchema),
-      insertPageItem,
-    ],
-    initialContent: initialContent.length > 0 ? initialContent : undefined,
-    editorDOMAttributes: {
-      class: "!bg-background !ps-0 !pe-0",
+  const initialContent = useStore(useBoundStore, (state) => state.blocks);
+  const editor = useBlockNote(
+    {
+      theme,
+      editable,
+      blockSchema: blockSchema,
+      slashMenuItems: [
+        ...getDefaultReactSlashMenuItems(blockSchema),
+        
+        insertPageItem,
+      ],
+      initialContent: initialContent.length > 0 ? initialContent : undefined,
+      editorDOMAttributes: {
+        class: "!bg-background !ps-0 !pe-0",
+      },
+      onEditorReady: (editor) => {
+        onEditorReady?.(editor);
+      },
+      onEditorContentChange,
+      onTextCursorPositionChange,
     },
-    onEditorReady: (editor) => {
-      onEditorReady?.(editor)
-    },
-    onEditorContentChange,
-    onTextCursorPositionChange
-  }, [theme, initialContent]);
+    [theme, initialContent]
+  );
 
   useEffect(() => {
     if (editor) {
-
       editor.isEditable = editable;
     }
   }, [editable, editor]);
 
   return (
-
     <div className="flex-grow flex flex-col">
-      <BlockNoteView
-        className="w-full"
-        editor={editor} >
+      <BlockNoteView className="w-full" editor={editor}>
         <FormattingToolbarPositioner
           editor={editor}
           formattingToolbar={FormattingToolbar}
         />
         <HyperlinkToolbarPositioner editor={editor} />
         <SlashMenuPositioner editor={editor} />
-        <SideMenuPositioner
-          editor={editor}
-          sideMenu={CustomSideMenu}
-        />
+        <SideMenuPositioner editor={editor} sideMenu={CustomSideMenu} />
       </BlockNoteView>
       <div
         className="flex-grow"
         onClick={() => {
-          const tailBlock = editor.topLevelBlocks[editor.topLevelBlocks.length - 1]
-          // 确保点击空白处时，光标在最后一个block的末尾 
+          const tailBlock =
+            editor.topLevelBlocks[editor.topLevelBlocks.length - 1];
+          // 确保点击空白处时，光标在最后一个block的末尾
           if (tailBlock.type === "page") {
-            editor.insertBlocks([{ type: "paragraph" }], editor.topLevelBlocks[editor.topLevelBlocks.length - 1], "after")
+            editor.insertBlocks(
+              [{ type: "paragraph" }],
+              editor.topLevelBlocks[editor.topLevelBlocks.length - 1],
+              "after"
+            );
           }
           // https://stackoverflow.com/a/3866442
           function setEndOfContenteditable(
-            contentEditableElement: HTMLElement,
+            contentEditableElement: HTMLElement
           ) {
             var range, selection;
             range = document.createRange(); //Create a range (a range is a like the selection but invisible)
@@ -90,10 +102,10 @@ export default function Editor({
             range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
             selection = window.getSelection(); //get the selection object (allows you to change selection)
             selection?.removeAllRanges(); //remove any selections already made
-            selection?.addRange(range); //make the range you have just created the visible selection 
+            selection?.addRange(range); //make the range you have just created the visible selection
           }
           const editable = document.querySelector<HTMLElement>(
-            "[contenteditable=true]",
+            "[contenteditable=true]"
           );
 
           if (editable) {
@@ -103,5 +115,5 @@ export default function Editor({
         }}
       ></div>
     </div>
-  )
+  );
 }

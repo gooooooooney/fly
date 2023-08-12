@@ -5,7 +5,7 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { addPageInfo } from "@/lib/models/init-db";
 import { UpdatePageInfo } from "@/lib/models/update-page-info";
 
-function insertOrUpdateBlock(
+export function insertOrUpdateBlock(
   editor: BlockNoteEditor,
   block: any
 ) {
