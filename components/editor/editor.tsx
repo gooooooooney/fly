@@ -1,14 +1,9 @@
 "use client"; // this registers <Editor> as a Client Component
 import {
   BlockNoteView,
-  DragHandle,
-  AddBlockButton,
   FormattingToolbarPositioner,
   HyperlinkToolbarPositioner,
-  SideMenu,
-  SideMenuButton,
   SideMenuPositioner,
-  SideMenuProps,
   SlashMenuPositioner,
   getDefaultReactSlashMenuItems,
   useBlockNote,
@@ -23,6 +18,8 @@ import { insertPageItem } from "./slashmenu";
 import { blockSchema } from "./block-schema";
 
 import { CustomSideMenu } from "./custom-side-menu";
+import { CustomSlashMenu } from "./custom-slash-menu";
+import { useTheme } from "next-themes";
 interface EditorProps {
   editable: boolean;
   theme: "light" | "dark";
@@ -33,15 +30,14 @@ interface EditorProps {
 
 export default function Editor({
   editable,
-  theme,
   onEditorReady,
   onEditorContentChange,
   onTextCursorPositionChange,
 }: EditorProps) {
   const initialContent = useStore(useBoundStore, (state) => state.blocks);
+  const {theme} = useTheme()
   const editor = useBlockNote(
     {
-      theme,
       editable,
       blockSchema: blockSchema,
       slashMenuItems: [
@@ -50,8 +46,13 @@ export default function Editor({
         insertPageItem,
       ],
       initialContent: initialContent.length > 0 ? initialContent : undefined,
-      editorDOMAttributes: {
-        class: "!bg-background !ps-0 !pe-0",
+      domAttributes: {
+        blockContainer: {
+          class: "!bg-background text-primary",
+        },
+        editor: {
+          class: "!bg-background !ps-0 !pe-0",
+        },
       },
       onEditorReady: (editor) => {
         onEditorReady?.(editor);
@@ -59,7 +60,7 @@ export default function Editor({
       onEditorContentChange,
       onTextCursorPositionChange,
     },
-    [theme, initialContent]
+    [ initialContent]
   );
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export default function Editor({
 
   return (
     <div className="flex-grow flex flex-col">
-      <BlockNoteView className="w-full" editor={editor}>
+      <BlockNoteView className="w-full"  theme={theme as "light" | "dark"}  editor={editor}>
         <FormattingToolbarPositioner
           editor={editor}
           formattingToolbar={FormattingToolbar}
