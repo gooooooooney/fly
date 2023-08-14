@@ -1,26 +1,15 @@
 "use client"
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import {
   useState,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
 } from "react";
-import Image from "next/image";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
+import { Input } from "@nextui-org/input";
 import { Icons } from "@/components/icons";
 
 import React from "react";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
+import { redirect } from "next/navigation";
 
 const GooneyFlyLogo: React.FC = () => {
   return (
@@ -48,11 +37,33 @@ const GooneyFlyLogo: React.FC = () => {
 
 
 export const SignInCard = () => {
+
+  const { status } = useSession()
   const [signInClicked, setSignInClicked] = useState(false);
   const [gitHubClicked, setGitHubClicked] = useState(false);
+  const [emailClicked, setEmailClicked] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const validateEmail = (value: string) => value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+
+  const validationState = React.useMemo(() => {
+    if (email === "") return undefined;
+
+    return validateEmail(email) ? "valid" : "invalid";
+  }, [email]);
+  if (status === "authenticated") {
+    redirect("/")
+  }
+
+
+  const handleEmailClick = () => {
+    if (validationState === "invalid") return
+    setEmailClicked(true);
+    signIn("email", { email })
+  }
   return (
     <Card className="max-w-[400px] mx-auto">
-      <CardHeader className="flex flex-col gap-1">Sign in</CardHeader>
+      <CardHeader className="flex flex-col gap-1">Fly note</CardHeader>
       <CardBody>
         <div className="flex flex-col items-center justify-center space-y-3 border-b border-border bg-background px-4 py-6 pt-8 text-center md:px-16">
           <a href="https://precedent.dev">
@@ -60,7 +71,7 @@ export const SignInCard = () => {
           </a>
           <h3 className="font-display text-2xl font-bold">Sign In</h3>
           <p className="text-sm text-gray-500">
-            Plaease sign in - only your email and profile
+            Please sign in - only your email and profile
             picture will be stored.
           </p>
         </div>
@@ -69,12 +80,12 @@ export const SignInCard = () => {
         <Button
           variant="ghost"
           fullWidth
-          disabled={signInClicked}
+          disabled={signInClicked || gitHubClicked || emailClicked}
           isLoading={signInClicked}
           startContent={<Icons.Google className="h-5 w-5" />}
           onClick={() => {
             setSignInClicked(true);
-            signIn("google");
+            signIn("google", { callbackUrl: "/" });
           }}
         >
           Sign In with Google
@@ -82,16 +93,44 @@ export const SignInCard = () => {
         <Button
           variant="ghost"
           fullWidth
-          disabled={gitHubClicked}
+          disabled={signInClicked || gitHubClicked || emailClicked}
           isLoading={gitHubClicked}
           startContent={<Icons.Github className="h-5 w-5" />}
           onClick={() => {
             setGitHubClicked(true);
-            signIn("github")
+            signIn("github", { callbackUrl: "/" })
           }}
         >
           Sign In with Github
         </Button>
+        <div className="w-full mx-auto my-2 text-center">or</div>
+        <div className="flex flex-col w-full gap-2">
+          <Input
+            variant="faded"
+            value={email}
+            errorMessage={validationState === "invalid" && "Please enter a valid email"}
+            validationState={validationState}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleEmailClick()
+              }
+            }}
+            onValueChange={e => {
+              setEmail(e)
+            }}
+            type="email"
+            label="Email" />
+          <Button
+            variant="ghost"
+            fullWidth
+            disabled={signInClicked || gitHubClicked || emailClicked || validationState === "invalid"}
+            isLoading={emailClicked}
+            startContent={<Icons.Email className="h-5 w-5" />}
+            onClick={handleEmailClick}
+          >
+            Sign In with Email
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

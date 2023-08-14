@@ -49,9 +49,7 @@ export default function UserDropdown({ session }: { session: Session }) {
             textValue="logout"
             key="logout"
             onClick={() => {
-              signOut().then(() => {
-                router.push("/")
-              });
+              signOut({callbackUrl: "/"});
             }}
             color="danger"
           >

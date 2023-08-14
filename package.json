@@ -19,6 +19,7 @@
     "@nextui-org/divider": "^2.0.8",
     "@nextui-org/dropdown": "^2.0.9",
     "@nextui-org/image": "^2.0.9",
+    "@nextui-org/input": "^2.0.11",
     "@nextui-org/link": "^2.0.9",
     "@nextui-org/popover": "^2.0.9",
     "@nextui-org/progress": "^2.0.9",

@@ -13,6 +13,7 @@ import {
   RxFile,
   RxDragHandleDots2,
   RxPlus,
+  RxEnvelopeClosed,
 } from "react-icons/rx";
 
 export const SunFilledIcon = ({
@@ -138,4 +139,5 @@ export const Icons = {
   Plus: RxPlus,
   Google,
   Github,
+  Email: RxEnvelopeClosed
 };
