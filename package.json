@@ -11,8 +11,13 @@
     "vercel": "vercel"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@blocknote/core": "^0.9.0",
     "@blocknote/react": "^0.9.0",
+=======
+    "@blocknote/core": "^0.8.5",
+    "@blocknote/react": "^0.8.5",
+>>>>>>> 9ae5774a2b57fc69e3fe62199a6d2de3cfd05a72
     "@next-auth/prisma-adapter": "^1.0.7",
     "@nextui-org/button": "^2.0.9",
     "@nextui-org/card": "^2.0.9",
@@ -20,6 +25,10 @@
     "@nextui-org/dropdown": "^2.0.9",
     "@nextui-org/image": "^2.0.9",
     "@nextui-org/link": "^2.0.9",
+<<<<<<< HEAD
+=======
+    "@nextui-org/modal": "^2.0.10",
+>>>>>>> 9ae5774a2b57fc69e3fe62199a6d2de3cfd05a72
     "@nextui-org/popover": "^2.0.9",
     "@nextui-org/progress": "^2.0.9",
     "@nextui-org/react": "^2.0.14",
