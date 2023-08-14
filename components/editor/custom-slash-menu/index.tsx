@@ -1,6 +1,6 @@
 "use client";
 import { SlashMenuProps } from "@blocknote/react";
-import { FC, Fragment } from "react";
+import { FC, Fragment, use, useEffect, useState } from "react";
 import { CustomBlockSchema } from "../block-schema";
 import _ from "lodash";
 import {
@@ -9,76 +9,59 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
+
 } from "@nextui-org/dropdown";
 import { SlashMenuItem } from "./slash-menu-item";
 
 export const CustomSlashMenu = (props: SlashMenuProps<CustomBlockSchema>) => {
   let index = 0;
-
   const groups = _.groupBy(props.filteredItems, (i) => i.group);
-  console.log(groups);
+  const list = _.toArray(groups)
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    setOpen(true)
+  }, [props.filteredItems])
+
   return (
-    <Dropdown defaultOpen key="drop">
-      {/* <DropdownTrigger key="trigger">
-        <div>Custom</div>
-      </DropdownTrigger> */}
-      {/* <DropdownMenu key="slidmenu" variant="faded">
-        {_.map(groups, (group) => (
-          <DropdownSection key={group[0].group} title={group[0].group}>
-            {group.map((item) => {
-              index++;
-              return (
-                <Fragment key={item.name}>
-                  <SlashMenuItem
-                    name={item.name}
-                    icon={item.icon}
-                    hint={item.hint}
+    <Dropdown isOpen={open} onOpenChange={bol => {
+      setOpen(bol)
+    }} placement="left" classNames={{
+      base: "w-fit"
+    }}>
+      <DropdownTrigger>
+        Hidden
+      </DropdownTrigger>
+      <DropdownMenu
+        items={list}
+        onAction={(key) => {
+          const item = props.filteredItems.find(i => i.name === key)
+          if (item) {
+            props.itemCallback(item)
+          }
+        }} aria-labelledby="menu" variant="faded">
+        {
+          (group: any) => (
+            <DropdownSection items={group} key={group[0].group} title={group[0].group}>
+              {
+                ((item: any) => (
+                  <DropdownItem
+                    classNames={{
+                      shortcut: "w-fit whitespace-nowrap"
+                    }}
+                    startContent={<span className="text-xl text-default-500 pointer-events-none flex-shrink-0">
+                      {item.icon}
+                    </span>}
+                    description={item.hint}
                     shortcut={item.shortcut}
-                    isSelected={props.keyboardHoveredItemIndex === index}
-                    set={() => props.itemCallback(item)}
-                  />
-                </Fragment>
-              );
-            })}
-          </DropdownSection>
-        ))}
-      </DropdownMenu> */}
+                    key={item.name} >
+                    {item.name}
+                  </DropdownItem>
+                )) as any
+              }
+            </DropdownSection>
+          )
+        }
+      </DropdownMenu>
     </Dropdown>
   );
-  // return (
-  //   <Dropdown defaultOpen >
-  //     <DropdownMenu key="fff" variant="faded" aria-label="Dropdown menu with icons">
-  //       <DropdownItem
-  //         key="new"
-  //         shortcut="⌘N"
-
-  //       >
-  //         New file
-  //       </DropdownItem>
-  //       <DropdownItem
-  //         key="copy"
-  //         shortcut="⌘C"
-
-  //       >
-  //         Copy link
-  //       </DropdownItem>
-  //       <DropdownItem
-  //         key="edit"
-  //         shortcut="⌘⇧E"
-
-  //       >
-  //         Edit file
-  //       </DropdownItem>
-  //       <DropdownItem
-  //         key="delete"
-  //         className="text-danger"
-  //         color="danger"
-  //         shortcut="⌘⇧D"
-
-  //       >
-  //         Delete file
-  //       </DropdownItem>
-  //     </DropdownMenu>
-  //   </DropdownTrigger>
-  // );
 };
