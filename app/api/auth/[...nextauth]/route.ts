@@ -28,6 +28,16 @@ export const authOptions: NextAuthOptions = {
             //maxAge: 24 * 60 * 60, // 设置邮箱链接失效时间，默认24小时
         }),
     ],
+    callbacks: {
+        session({session, user}) {
+
+            if (session.user) {
+                session.user.id = user.id
+            }
+
+            return session;
+        },
+    },
     secret: process.env.NEXTAUTH_SECRET as string,
 };
 

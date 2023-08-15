@@ -1,5 +1,5 @@
 // tailwind.config.js
-const {nextui} = require("@nextui-org/react");
+const { nextui } = require("@nextui-org/react");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
-	],
+  ],
   theme: {
     container: {
       center: true,
@@ -78,6 +78,15 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate"), nextui({
-    prefix: "fly"
+    prefix: "fly",
+    themes: {
+      dark: {
+        layout: {
+          boxShadow: {
+            medium: "0 0 0 1px hsl(var(--border)), 0 0 0 1px hsl(var(--border))"
+          }
+        }
+      }
+    }
   })],
 }
