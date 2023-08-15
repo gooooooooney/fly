@@ -8,8 +8,6 @@ export async function POST(request: Request) {
   if (!session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
-
-
   const requestBody = await request.json();
   const wp = await prisma?.workspace.create({
     data: {
@@ -22,7 +20,10 @@ export async function POST(request: Request) {
         }
       },
       pages: {
-        create: true
+        // 为新空间创建第一个页面，后期可以删除
+        create: {
+          
+        }
       }
     },
     select: {

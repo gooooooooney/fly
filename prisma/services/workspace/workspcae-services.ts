@@ -11,9 +11,10 @@ export async function getWorkspacesByUserId(userId: string) {
       }
     }
   })
-  
   if (!user?.workspaces) {
     return []
   }
   return user.workspaces
 }
+
+

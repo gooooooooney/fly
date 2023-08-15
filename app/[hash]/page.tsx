@@ -5,9 +5,7 @@ import IconAndCover from "@/components/page/icon-cover";
 import { PageTitle } from "@/components/page/page-title";
 import { Separator } from "@/components/ui/separator";
 import { getPageById } from "@/prisma/services/pages/pages-services";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 async function getGithubEmojis() {
   const res = await fetch("https://api.github.com/emojis")
   const emojis = await res.json()
@@ -29,10 +27,6 @@ async function getLocalEmojis() {
 
 
 export default async function BlockPage({ params }: { params: { hash: string } }) {
-  const session = await getServerSession(authOptions);
-  if  (!session) {
-    redirect("/signin")
-  }
   const page = await getPageById(params.hash)
   if (!page) {
     redirect("/")

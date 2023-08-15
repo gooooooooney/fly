@@ -22,11 +22,11 @@ export default function Header({ session }: { session: Session | null }) {
     state.collapsed,
     state.setCollapsed,
   ])!;
-  const { SignInModal, setShowSignInModal } = useSignInModal();
+  // const { SignInModal, setShowSignInModal } = useSignInModal();
 
   return (
     <>
-      <SignInModal />
+      {/* <SignInModal /> */}
       <Navbar isBordered={false} maxWidth="full">
         <NavbarContent justify="start">
           <NavbarItem>
@@ -50,7 +50,7 @@ export default function Header({ session }: { session: Session | null }) {
           <NavbarItem className="mr-2">
             <ThemeSwitch />
           </NavbarItem>
-          <NavbarItem className="mr-8">
+          {/* <NavbarItem className="mr-8">
             {session ? (
               <UserDropdown session={session} />
             ) : (
@@ -64,7 +64,7 @@ export default function Header({ session }: { session: Session | null }) {
                 sign in
               </Button>
             )}
-          </NavbarItem>
+          </NavbarItem> */}
         </NavbarContent>
       </Navbar>
     </>
