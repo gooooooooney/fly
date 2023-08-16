@@ -80,43 +80,42 @@ model Workspace {
 }
 
 model Page {
-  id          String     @id @default(uuid())
-  description String?
-  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  pageInfos   PageInfo[]
-}
-
-model PageInfo {
   id          String      @id @default(uuid())
-  name        String
   description String?
-  page        Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  pageId      String
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   properties  Properties?
+  // page and block is one to many relationship, one page can have many blocks but one block can only belong to one page
   blocks      Block[]
 }
 
-model Block {
-  id      String   @id
-  type    String
-  content String
-  page    PageInfo @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  pageId  String
-  propsId String
+model Properties {
+  pageId String @unique
+  page   Page   @relation(fields: [pageId], references: [id])
+  id     String @id @default(cuid())
+  caover String @default("")
+  title  String @default("Untitled")
+  emoji  String @default("📝")
 }
 
-model Properties {
-  pageinfoId String?   @unique
-  pageinfo   PageInfo? @relation(fields: [pageinfoId], references: [id])
-  id         String    @id @default(cuid())
-  caover     String    @default("")
-  title      String    @default("")
-  emoji      String    @default("")
+model Block {
+  id      String  @id
+  type    Type
+  content Json    @db.Json
+  props   Json    @db.Json
+  page    Page    @relation(fields: [pageId], references: [id])
+  pageId  String
+  propsId String?
+}
+
+enum Type {
+  page
+  paragraph
+  heading
+  bulletListItem
+  numberedListItem
 }
 
 enum Role {

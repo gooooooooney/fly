@@ -21,13 +21,12 @@ export default async function PageLayout(
   }
   const wps = await getWorkspacesByUserId(session.user.id);
   const activeWp = wps.find((wp) => wp.isActive) || wps[0];
-
-  const menus = await getPageMenus(activeWp.id!);
+  const menus: any = await getPageMenus(activeWp.id!);
 
   return (
     <section className="flex h-screen">
       <Sidebar
-        menus={menus!.map((m) => ({ name: m.name, hasChildren: m.hasChildren }))}
+        menus={menus}
         name={activeWp.name}
         avatar={activeWp.avatar!}
         email={session.user.email!}

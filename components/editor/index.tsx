@@ -6,8 +6,12 @@ import dynamic from "next/dynamic";
 import { useCallback } from "react";
 import { UpdatePageInfo } from "@/lib/models/update-page-info";
 import _ from "lodash";
+import { fetcher } from "@/lib/utils";
+import { Block } from "@blocknote/core";
+import { CustomBlockSchema } from "./block-schema";
+import { SaveRequestData } from "@/types";
 
-
+let cacheBlocks = [] as BlockNoteEditor["topLevelBlocks"]
 const Editor = dynamic(() => import("@/components/editor/editor"), { ssr: false })
 export const EditorWrapper = () => {
   const [editable, setEditor, pageId] = useStore(useBoundStore, (state) => [state.editable, state.setEditor, state.pageId])
@@ -42,6 +46,41 @@ export const EditorWrapper = () => {
   }
 
   const handleOnEditorContentChange = _.debounce((editor: BlockNoteEditor) => {
+    const topLevelBlocks = editor.topLevelBlocks
+    let command = "create"
+    let block: Block<CustomBlockSchema> = editor.topLevelBlocks[0]
+    if (cacheBlocks.length == 0) {
+      cacheBlocks = topLevelBlocks
+      command = "create"
+      block = topLevelBlocks[0]
+    } else if (cacheBlocks.length == topLevelBlocks.length) {
+      command = "update"
+      block = topLevelBlocks[topLevelBlocks.length - 2]
+    } else if (cacheBlocks.length > topLevelBlocks.length) {
+      command = "delete"
+      block = cacheBlocks[cacheBlocks.length - 1]
+    } else {
+      command = "create"
+      block = topLevelBlocks[topLevelBlocks.length - 2]
+    }
+    cacheBlocks = topLevelBlocks
+
+    fetcher("/api/block/save", {
+      method: "POST",
+      body: JSON.stringify({
+        head: {
+          pageId
+        },
+        body: {
+          operations: [
+            {
+              command,
+              arg: block
+            }
+          ]
+        } as SaveRequestData
+      })
+    })
     pageId && UpdatePageInfo(pageId, {
       blocks: editor.topLevelBlocks
     })

@@ -10,8 +10,9 @@ import { FC } from "react";
 import { SubMenu } from "./submenu";
 
 interface MenuProps {
-  name: string;
-  hasChildren: boolean;
+  title: string;
+  emoji: string;
+  children: MenuProps[];
 }
 
 interface SidebarProps {
@@ -24,6 +25,23 @@ interface SidebarProps {
 export const Sidebar: FC<SidebarProps> = (props) => {
   const collapsed = useStore(useBoundStore, (state) => state.collapsed);
 
+  const renderChildren = (menus: MenuProps[]) => {
+    return menus.map((menu) => {
+      if (menu.children.length === 0) {
+        return <MenuItem key={menu.title}  >
+          <span>{menu.emoji}</span>
+          <span className="ml-1">{menu.title}</span>
+        </MenuItem>;
+      } else {
+        return (
+          <SubMenu key={menu.title} label={menu.title} >
+            {renderChildren(menu.children)}
+          </SubMenu>
+        );
+      }
+    });
+  }
+
 
   return (
     <SidebarRoot collapsed={collapsed} collapsedWidth="0">
@@ -35,17 +53,7 @@ export const Sidebar: FC<SidebarProps> = (props) => {
       <Menu>
         <SubMenu icon={<Icons.HomeIcon />} label="我的主页">
           {
-            props.menus.map((menu) => {
-              return menu.hasChildren ? (
-                <SubMenu key={menu.name} label={menu.name}>
-                  
-                </SubMenu>
-              ) : (
-                <MenuItem key={menu.name}>{menu.name}</MenuItem>
-              );
-                
-              
-            })
+            renderChildren(props.menus)
           }
         </SubMenu>
         <MenuItem icon={<Icons.QuestionMarkIcon />}>帮助中心</MenuItem>

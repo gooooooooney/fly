@@ -22,8 +22,14 @@ export async function POST(request: Request) {
       pages: {
         // 为新空间创建第一个页面，后期可以删除
         create: {
-          
-        }
+          properties: {
+            create: {
+              title: "Untitled",
+              emoji: "📝",
+            }
+          }
+        },
+        
       }
     },
     select: {
