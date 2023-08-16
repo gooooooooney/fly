@@ -58,7 +58,7 @@ export const EditorWrapper = () => {
       block = topLevelBlocks[topLevelBlocks.length - 2]
     } else if (cacheBlocks.length > topLevelBlocks.length) {
       command = "delete"
-      block = cacheBlocks[cacheBlocks.length - 1]
+      block = cacheBlocks[cacheBlocks.length - 2]
     } else {
       command = "create"
       block = topLevelBlocks[topLevelBlocks.length - 2]
