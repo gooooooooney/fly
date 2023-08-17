@@ -81,8 +81,10 @@ model Workspace {
 
 model Page {
   id          String      @id @default(uuid())
-  description String?
-  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  children    Page[]      @relation("ParentChildPage")
+  parent      Page?       @relation("ParentChildPage", fields: [parentId], references: [id])
+  parentId    String?
+  workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -92,12 +94,13 @@ model Page {
 }
 
 model Properties {
-  pageId String @unique
-  page   Page   @relation(fields: [pageId], references: [id])
-  id     String @id @default(cuid())
-  caover String @default("")
-  title  String @default("Untitled")
-  emoji  String @default("📝")
+  pageId   String  @unique
+  page     Page    @relation(fields: [pageId], references: [id])
+  id       String  @id @default(cuid())
+  cover    String  @default("")
+  title    String  @default("Untitled")
+  emoji    String  @default("📝")
+  editable Boolean @default(true)
 }
 
 model Block {
@@ -105,7 +108,7 @@ model Block {
   type    Type
   content Json    @db.Json
   props   Json    @db.Json
-  page    Page    @relation(fields: [pageId], references: [id])
+  page    Page?   @relation(fields: [pageId], references: [id])
   pageId  String
   propsId String?
 }

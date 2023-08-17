@@ -19,8 +19,7 @@ export async function POST(request: Request) {
   try {
     const count = await save({
       pageId: requestBody.head.pageId,
-      command: requestBody.body.operations[0].command,
-      block: requestBody.body.operations[0].arg,
+      operations: requestBody.body.operations,
     })
     return NextResponse.json({
       head: {},

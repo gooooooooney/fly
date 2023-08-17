@@ -1,15 +1,32 @@
 import { SaveParams } from "@/types"
 
 export async function getPageById(pageId: string) {
-  const page = prisma?.page.findUnique({
+  const page = await prisma?.page.findUnique({
     where: {
       id: pageId
     },
     include: {
-      properties: true
+      properties: true,
+      children: true
     }
   })
   return page
+}
+
+export async function getAllPage(pageId: string) {
+  return await prisma?.page.findMany({
+    where: {
+      id: pageId
+    },
+    include: {
+      children: {
+        include: {
+          properties: true,
+        }
+      },
+      properties: true,
+    }
+  })
 }
 
 export async function getPageMenus(workspaceId: string, blockId?: string) {
@@ -25,113 +42,133 @@ export async function getPageMenus(workspaceId: string, blockId?: string) {
     where,
     include: {
       properties: true,
-      blocks: {
+      children: {
         include: {
-          page: {
-            include: {
-              properties: true
-            }
-          }
+          properties: true,
         }
-      },
+      }
     },
   })
   if (!pages) {
     return []
   }
 
-  return pages.map((page) => ({
-    ...page.properties,
-    children: page.blocks!.filter((block) => block.type === "page").map(b => {
-      return {
-        ...b.page.properties,
-        children: [] as any[]
-      }
-    })
-  }))
+  return pages.map(page => {
+    return {
+      title: page.properties?.title,
+      emoji: page.properties?.emoji,
+      children: page.children?.map(child => {
+        return {
+          title: child.properties?.title,
+          emoji: child.properties?.emoji,
+          children: []
+        }
+      })
+    }
+  })
 }
 
+export async function addNewPage({
+  blockId,
+  spaceId,
+  parentId
+}: {
+  blockId: string
+  spaceId: string
+  parentId?: string
+}) {
+  return await prisma?.page.create({
+    data: {
+      id: blockId,
+      workspaceId: spaceId,
+      parentId,
+      properties: {
+        create: {
 
-export async function deleteBlocks() {
-  await prisma?.block.deleteMany
+        },
+      },
+    }
+  })
 }
 
 
 
 export async function save({
   pageId,
-  block,
-  command,
+  operations
 }: SaveParams) {
 
-  return prisma?.$transaction(async tx => {
 
-    switch (command) {
-      case "create":
-        return await tx.block.create({
-          data: {
-            id: block.id,
-            type: block.type,
-            props: JSON.stringify(block.props),
-            content: JSON.stringify(block.content),
-            pageId,
+  return prisma?.$transaction(async tx => {
+    const saveBlocks = async (blocks: BlockNoteEditor["topLevelBlocks"]) => {
+      const ids = blocks.map(b => b.id)
+      await tx.block.deleteMany({
+        where: {
+          pageId,
+          id: {
+            notIn: ids
           }
-        })
-      case "update":
-        return await tx.block.update({
+        }
+      })
+
+      try {
+        await Promise.all(blocks.map(async (block) => {
+          await tx.block.upsert({
+            where: {
+              pageId,
+              id: block.id
+            },
+            create: {
+              id: block.id,
+              type: block.type,
+              props: block.props,
+              content: block.content,
+              pageId,
+            },
+            update: {
+              type: block.type,
+              props: block.props,
+              content: block.content,
+            }
+          })
+        }))
+        return true
+      } catch (error) {
+        console.log(error)
+        return false
+      }
+    }
+
+    const type = operations.type
+    switch (type) {
+      case "block":
+        return await saveBlocks(operations.arg)
+      case "property":
+        return await tx.page.upsert({
           where: {
-            pageId,
-            id: block.id
+            id: pageId
           },
-          data: {
-            type: block.type,
-            props: JSON.stringify(block.props),
-            content: JSON.stringify(block.content),
-          }
-        })
-      case "delete":
-        return await tx.block.delete({
-          where: {
-            pageId,
-            id: block.id
+          create: {
+            properties: {
+              create: {
+                title: operations.arg.title,
+                emoji: operations.arg.emoji,
+                cover: operations.arg.cover,
+              }
+            }
+          },
+          update: {
+            properties: {
+              update: {
+                title: operations.arg.title,
+                emoji: operations.arg.emoji,
+                cover: operations.arg.cover,
+
+              }
+            }
           }
         })
     }
 
   })
-  // await prisma?.page.upsert({
-  //   where: {
-  //     id: pageId,
-  //     workspaceId: "ckq6q6q6q0000q6q6q6q6q6q6"
-  //   },
-  //   create: {
-  //     // workspace: {},
-  //     blocks: {
-  //       createMany: {
-  //         data: data.map(b => ({
-  //           id: b.id,
-  //           type: b.type,
-  //           props: JSON.stringify(b.props),
-  //           content: JSON.stringify(b.content),
-  //         }))
-  //       }
-  //     },
-  //   },
-  //   update: {
-  //     blocks: {
-  //       updateMany: data.map(b => {
-  //         return {
-  //           where: {
-  //             id: b.id,
-  //           },
-  //           data: {
-  //             type: b.type,
-  //             props: JSON.stringify(b.props),
-  //             content: JSON.stringify(b.content),
-  //           }
-  //         }
-  //       })
-  //     }
-  //   }
-  // })
 }

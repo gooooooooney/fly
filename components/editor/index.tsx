@@ -10,6 +10,7 @@ import { fetcher } from "@/lib/utils";
 import { Block } from "@blocknote/core";
 import { CustomBlockSchema } from "./block-schema";
 import { SaveRequestData } from "@/types";
+import { saveData } from "@/lib/data-source/page";
 
 let cacheBlocks = [] as BlockNoteEditor["topLevelBlocks"]
 const Editor = dynamic(() => import("@/components/editor/editor"), { ssr: false })
@@ -47,39 +48,12 @@ export const EditorWrapper = () => {
 
   const handleOnEditorContentChange = _.debounce((editor: BlockNoteEditor) => {
     const topLevelBlocks = editor.topLevelBlocks
-    let command = "create"
-    let block: Block<CustomBlockSchema> = editor.topLevelBlocks[0]
-    if (cacheBlocks.length == 0) {
-      cacheBlocks = topLevelBlocks
-      command = "create"
-      block = topLevelBlocks[0]
-    } else if (cacheBlocks.length == topLevelBlocks.length) {
-      command = "update"
-      block = topLevelBlocks[topLevelBlocks.length - 2]
-    } else if (cacheBlocks.length > topLevelBlocks.length) {
-      command = "delete"
-      block = cacheBlocks[cacheBlocks.length - 2]
-    } else {
-      command = "create"
-      block = topLevelBlocks[topLevelBlocks.length - 2]
-    }
-    cacheBlocks = topLevelBlocks
-
-    fetcher("/api/block/save", {
-      method: "POST",
-      body: JSON.stringify({
-        head: {
-          pageId
-        },
-        body: {
-          operations: [
-            {
-              command,
-              arg: block
-            }
-          ]
-        } as SaveRequestData
-      })
+    saveData({
+      pageId,
+      operations: {
+        type: "block",
+        arg: topLevelBlocks
+      }
     })
     pageId && UpdatePageInfo(pageId, {
       blocks: editor.topLevelBlocks

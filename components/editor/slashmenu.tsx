@@ -4,6 +4,7 @@ import { blockSchema } from "./block-schema";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { addPageInfo } from "@/lib/models/init-db";
 import { UpdatePageInfo } from "@/lib/models/update-page-info";
+import { addNewPage, saveData } from "@/lib/data-source/page";
 
 export function insertOrUpdateBlock(
   editor: BlockNoteEditor,
@@ -38,11 +39,25 @@ export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
     UpdatePageInfo(pageId, {
       blocks: editor.topLevelBlocks
     })
+    saveData({
+      pageId,
+      operations: {
+        type: "block",
+        arg: editor.topLevelBlocks
+      }
+    })
+    addNewPage({
+      pageId,
+      blockId: childBlock.id,
+      spaceId: useBoundStore.getState().workspaceId
+    }).then(() => {
+      window.location.href = `/${childBlock.id}`
+    })
     addPageInfo({
       parentId: pageId,
       id: childBlock.id
     })
-    window.location.href = `/${childBlock.id}`
+    // window.location.href = `/${childBlock.id}`
 
   },
   aliases: ["page"],

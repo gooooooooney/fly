@@ -7,15 +7,24 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 export type Command = "create" | "update" | "delete"
 export type SaveParams = {
   pageId: string
-  block: BlockNoteEditor['topLevelBlocks'][number]
-  command: Command
+  operations: Operation
 }
 
 export type Operation = {
-  command: Command,
-  arg: BlockNoteEditor['topLevelBlocks'][number]
+  // command: Command,
+  type: "block"
+  arg: BlockNoteEditor['topLevelBlocks']
+} | {
+  type: "property"
+  arg: {
+    title?: string
+    emoji?: string
+    cover?: string
+    editable?: boolean
+  }
+
 }
 
 export type SaveRequestData = {
-  operations: Operation[]
+  operations: Operation
 }
