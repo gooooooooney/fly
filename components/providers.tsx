@@ -11,7 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <NextUIProvider>
       < Toaster richColors />
       <NextThemesProvider attribute="class" defaultTheme="dark">
-        <SessionProvider>{children}</SessionProvider>;
+        <SessionProvider>{children}</SessionProvider>
       </NextThemesProvider>
     </NextUIProvider>
   )

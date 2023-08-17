@@ -104,13 +104,14 @@ model Properties {
 }
 
 model Block {
-  id      String  @id
-  type    Type
-  content Json    @db.Json
-  props   Json    @db.Json
-  page    Page?   @relation(fields: [pageId], references: [id])
-  pageId  String
-  propsId String?
+  id       String  @id
+  type     Type
+  children Json    @db.Json
+  content  Json    @db.Json
+  props    Json    @db.Json
+  page     Page?   @relation(fields: [pageId], references: [id])
+  pageId   String
+  propsId  String?
 }
 
 enum Type {

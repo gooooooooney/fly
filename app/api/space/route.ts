@@ -1,7 +1,23 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
-import { redirect } from "next/navigation";
+
+
+export interface AddSpaceResponse {
+  head: {
+    spaceId: string;
+    pageId: string;
+  };
+  body: {
+    page: {
+      id: string;
+      properties: {
+        title: string;
+        emoji: string;
+      };
+    };
+  };
+}
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -29,17 +45,26 @@ export async function POST(request: Request) {
             }
           }
         },
-        
+
       }
     },
     select: {
-      pages: true
+      pages: true,
+      id: true
     }
   })
   if (!wp) {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
-  console.log(wp)
-  redirect(`/${wp.pages[0].id}`)
-  // return new NextResponse(JSON.stringify(wp), { status: 200 });
+  // console.log(wp)
+  // redirect(`/${wp.pages[0].id}`)
+  return NextResponse.json({
+    head: {
+      spaceId: wp.id,
+      pageId: wp.pages[0].id
+    },
+    body: {
+      page: wp.pages[0]
+    }
+  });
 }

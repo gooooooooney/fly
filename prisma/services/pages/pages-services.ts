@@ -7,7 +7,8 @@ export async function getPageById(pageId: string) {
     },
     include: {
       properties: true,
-      children: true
+      children: true,
+      blocks: true,
     }
   })
   return page
@@ -123,11 +124,13 @@ export async function save({
               type: block.type,
               props: block.props,
               content: block.content,
+              children: block.children,
               pageId,
             },
             update: {
               type: block.type,
               props: block.props,
+              children: block.children,
               content: block.content,
             }
           })

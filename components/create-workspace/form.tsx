@@ -1,21 +1,24 @@
 "use client"
+import { AddSpaceResponse } from "@/app/api/space/route";
 import { fetcher } from "@/lib/utils";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
 import { Avatar, Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import useSWRMutation from "swr/mutation"
 
 const addSpace = (url: string, {arg}: {arg: {avatar: string, name: string}}) => {
-  return fetcher(url, {
+  return fetcher<AddSpaceResponse>(url, {
     method: "POST",
     body: JSON.stringify(arg)
-  }).then(res => res.json())
+  })
 }
 
 export function WorkspaceForm() {
   const [avatarSrc, setAvatarSrc] = useState("https://api.dicebear.com/6.x/lorelei/svg?seed=Chester")
+  const router = useRouter()
   const [name, setName] = useState("")
   const {trigger, isMutating} = useSWRMutation("/api/space", addSpace)
 
@@ -27,6 +30,11 @@ export function WorkspaceForm() {
     }
     trigger({avatar: avatarSrc, name}).catch(err => {
       toast.error(err.message)
+    }).then(res => {
+      if (res) {
+        router.push(`/${res.head.pageId}`)
+      }
+      
     })
   }
   return (
@@ -37,6 +45,7 @@ export function WorkspaceForm() {
         <Input
           value={name}
           onChange={e => setName(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && handleCreate()}
           autoFocus
           label="Name"
           placeholder="Enter your space name"
@@ -74,7 +83,6 @@ export function WorkspaceForm() {
           onClick={handleCreate}
           isLoading={isMutating}
           disabled={isMutating}
-          onKeyDown={e => e.key === "Enter" && handleCreate()}
           color="primary"
           variant="ghost"
           fullWidth>

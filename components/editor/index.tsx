@@ -11,10 +11,16 @@ import { Block } from "@blocknote/core";
 import { CustomBlockSchema } from "./block-schema";
 import { SaveRequestData } from "@/types";
 import { saveData } from "@/lib/data-source/page";
-
-let cacheBlocks = [] as BlockNoteEditor["topLevelBlocks"]
 const Editor = dynamic(() => import("@/components/editor/editor"), { ssr: false })
-export const EditorWrapper = () => {
+
+interface EditorWrapperProps {
+  // blocks: BlockNoteEditor["topLevelBlocks"]
+}
+
+
+
+export const EditorWrapper = (props: EditorWrapperProps) => {
+  // const { blocks } = props
   const [editable, setEditor, pageId] = useStore(useBoundStore, (state) => [state.editable, state.setEditor, state.pageId])
   const { theme } = useTheme()
   const handleEditorRead = useCallback((editor: BlockNoteEditor | null) => {
@@ -48,6 +54,7 @@ export const EditorWrapper = () => {
 
   const handleOnEditorContentChange = _.debounce((editor: BlockNoteEditor) => {
     const topLevelBlocks = editor.topLevelBlocks
+    console.log(topLevelBlocks)
     saveData({
       pageId,
       operations: {
@@ -61,6 +68,7 @@ export const EditorWrapper = () => {
   }, 2000)
   return (
     <Editor
+      // initialContent={blocks}
       theme={theme as "light" | "dark"}
       editable={editable}
       onEditorContentChange={handleOnEditorContentChange}

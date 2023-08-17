@@ -59,6 +59,7 @@ export const createContentSlice: StateCreator<
       return ({ ...state, cover })
     }),
     setTitle: (title) => set((state) => {
+      console.log(state)
       saveData({
         pageId: state.pageId,
         operations: {

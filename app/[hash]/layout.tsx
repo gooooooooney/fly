@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
-import { getPageMenus } from "@/prisma/services/pages/pages-services";
+import { getPageById, getPageMenus } from "@/prisma/services/pages/pages-services";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { StoreInitializer } from "./store-initializer";
 
@@ -22,22 +22,35 @@ export default async function PageLayout(
     redirect("/signin");
   }
   const wps = await getWorkspacesByUserId(session.user.id);
+  if (wps.length === 0) {
+    redirect("/create-workspace");
+  }
+  const page = await getPageById(props.params.hash)
+  if (!page) {
+    redirect("/")
+  }
   const activeWp = wps.find((wp) => wp.isActive) || wps[0];
-  const menus = await getPageMenus(activeWp.id!);
-  useBoundStore.setState({
+  const menus = await getPageMenus(activeWp.id);
+  const value = {
     workspaceId: activeWp.id!,
-  })
+    blocks: page.blocks as any,
+    pageId: page.id,
+    icon: page.properties?.emoji,
+    title: page.properties?.title,
+    cover: page.properties?.cover,
+    editable: page.properties?.editable,
+    
+  }
+  useBoundStore.setState(value)
 
   return (
     <section className="flex h-screen">
       {/* https://stackoverflow.com/questions/76349135/how-to-persist-and-set-global-state-for-client-from-server-in-nextjs-13-4 */}
       <StoreInitializer
-        value={{
-          workspaceId: activeWp.id!
-        }}
+        value={value}
       />
       <Sidebar
-        menus={menus}
+        menus={menus as any}
         name={activeWp.name}
         avatar={activeWp.avatar!}
         email={session.user.email!}

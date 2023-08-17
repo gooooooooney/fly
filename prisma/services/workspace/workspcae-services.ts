@@ -6,7 +6,11 @@ export async function getWorkspacesByUserId(userId: string) {
     include: {
       workspaces: {
         include: {
-          pages: true
+          pages: {
+            include: {
+              properties: true
+            }
+          }
         }
       }
     }

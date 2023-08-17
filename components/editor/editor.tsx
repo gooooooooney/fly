@@ -22,6 +22,7 @@ import { CustomSlashMenu } from "./custom-slash-menu";
 import { useTheme } from "next-themes";
 interface EditorProps {
   editable: boolean;
+  // initialContent: BlockNoteEditor["topLevelBlocks"]
   theme: "light" | "dark";
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   onEditorContentChange?: (editor: BlockNoteEditor) => void;
@@ -30,11 +31,13 @@ interface EditorProps {
 
 export default function Editor({
   editable,
+  
   onEditorReady,
   onEditorContentChange,
   onTextCursorPositionChange,
 }: EditorProps) {
   const initialContent = useStore(useBoundStore, (state) => state.blocks);
+  console.log(initialContent)
   const {theme} = useTheme()
   const editor = useBlockNote(
     {

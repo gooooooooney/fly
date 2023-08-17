@@ -27,10 +27,7 @@ async function getLocalEmojis() {
 
 
 export default async function BlockPage({ params }: { params: { hash: string } }) {
-  const page = await getPageById(params.hash)
-  if (!page) {
-    redirect("/")
-  }
+
   return (
     <>
       <Helmet id={params.hash} />

@@ -15,7 +15,7 @@ function Helmet({ id }: { id: string }) {
   const [emoji, title, setPageId] = useStore(useBoundStore, (state) => [state.icon, state.title, state.setPageId])
 
   useEffect(() => {
-    initDb(id)
+    // initDb(id)
     // setPageId(id)
   }, [id])
 
