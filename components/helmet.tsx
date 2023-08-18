@@ -2,21 +2,24 @@
 import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useEffect } from "react";
-import { db } from "@/lib/models/db";
-import { initDb } from "@/lib/models/init-db";
+import useSWR from "swr";
+import { fetcher } from "@/lib/utils";
+import { PageResponse } from "@/app/api/page/get/route";
 
 
 const getShortcutIcon = (icon: string) => {
   return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${icon}</text></svg>`
 }
 
+
+
 function Helmet({ id }: { id: string }) {
 
   const [emoji, title, setPageId] = useStore(useBoundStore, (state) => [state.icon, state.title, state.setPageId])
 
+
   useEffect(() => {
-    // initDb(id)
-    // setPageId(id)
+    setPageId(id)
   }, [id])
 
   useEffect(() => {

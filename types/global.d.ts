@@ -10,4 +10,7 @@ declare global {
     head:RequestDataHead,
     body:T
   }
+
+  type ReturnTypePromiseFunc<T> = T extends (...args: any) => Promise<infer V> ? V : T;
+
 }

@@ -20,6 +20,7 @@ import { blockSchema } from "./block-schema";
 import { CustomSideMenu } from "./custom-side-menu";
 import { CustomSlashMenu } from "./custom-slash-menu";
 import { useTheme } from "next-themes";
+import { usePageInit } from "@/hooks/use-page-init";
 interface EditorProps {
   editable: boolean;
   // initialContent: BlockNoteEditor["topLevelBlocks"]
@@ -28,27 +29,27 @@ interface EditorProps {
   onEditorContentChange?: (editor: BlockNoteEditor) => void;
   onTextCursorPositionChange?: (editor: BlockNoteEditor) => void;
 }
-
+let count = 0
 export default function Editor({
   editable,
-  
+
   onEditorReady,
   onEditorContentChange,
   onTextCursorPositionChange,
 }: EditorProps) {
-  const initialContent = useStore(useBoundStore, (state) => state.blocks);
-  console.log(initialContent)
-  const {theme} = useTheme()
+  console.log('render editor', count++)
+  const { data } = usePageInit()
+  const { theme } = useTheme()
   const editor = useBlockNote(
     {
       editable,
       blockSchema: blockSchema,
       slashMenuItems: [
         ...getDefaultReactSlashMenuItems(blockSchema),
-        
+
         insertPageItem,
       ],
-      initialContent: initialContent.length > 0 ? initialContent : undefined,
+      initialContent: data?.body?.blocks && data?.body?.blocks.length > 0 ? data.body.blocks as BlockNoteEditor["topLevelBlocks"] : undefined,
       domAttributes: {
         blockContainer: {
           class: "!bg-background text-primary",
@@ -63,7 +64,7 @@ export default function Editor({
       onEditorContentChange,
       onTextCursorPositionChange,
     },
-    [ initialContent]
+    [data?.body?.blocks]
   );
 
   useEffect(() => {
@@ -74,7 +75,7 @@ export default function Editor({
 
   return (
     <div className="flex-grow flex flex-col">
-      <BlockNoteView className="w-full"  theme={theme as "light" | "dark"}  editor={editor}>
+      <BlockNoteView className="w-full" theme={theme as "light" | "dark"} editor={editor}>
         <FormattingToolbarPositioner
           editor={editor}
           formattingToolbar={FormattingToolbar}

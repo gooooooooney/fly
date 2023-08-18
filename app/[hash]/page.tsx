@@ -27,7 +27,6 @@ async function getLocalEmojis() {
 
 
 export default async function BlockPage({ params }: { params: { hash: string } }) {
-
   return (
     <>
       <Helmet id={params.hash} />

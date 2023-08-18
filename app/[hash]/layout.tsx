@@ -9,6 +9,7 @@ import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-ser
 import { getPageById, getPageMenus } from "@/prisma/services/pages/pages-services";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { StoreInitializer } from "./store-initializer";
+import { OutHookConfigurator } from "@/components/OutHook";
 
 export default async function PageLayout(
   props: PropsWithChildren & {
@@ -31,24 +32,25 @@ export default async function PageLayout(
   }
   const activeWp = wps.find((wp) => wp.isActive) || wps[0];
   const menus = await getPageMenus(activeWp.id);
-  const value = {
-    workspaceId: activeWp.id!,
-    blocks: page.blocks as any,
-    pageId: page.id,
-    icon: page.properties?.emoji,
-    title: page.properties?.title,
-    cover: page.properties?.cover,
-    editable: page.properties?.editable,
-    
-  }
-  useBoundStore.setState(value)
+  // const value = {
+  //   workspaceId: activeWp.id!,
+  //   // blocks: page.blocks as any,
+  //   pageId: page.id,
+  //   icon: page.properties?.emoji,
+  //   title: page.properties?.title,
+  //   cover: page.properties?.cover,
+  //   editable: page.properties?.editable,
+
+  // }
+  // useBoundStore.setState(value)
 
   return (
     <section className="flex h-screen">
       {/* https://stackoverflow.com/questions/76349135/how-to-persist-and-set-global-state-for-client-from-server-in-nextjs-13-4 */}
-      <StoreInitializer
+      {/* <StoreInitializer
         value={value}
-      />
+      /> */}
+      <OutHookConfigurator />
       <Sidebar
         menus={menus as any}
         name={activeWp.name}

@@ -8,7 +8,15 @@ export async function getPageById(pageId: string) {
     include: {
       properties: true,
       children: true,
-      blocks: true,
+      blocks: {
+        select: {
+          id: true,
+          type: true,
+          props: true,
+          content: true,
+          children: true,
+        }
+      },
     }
   })
   return page
@@ -147,50 +155,53 @@ export async function save({
       case "block":
         return await saveBlocks(operations.arg)
       case "property":
-        return await tx.page.upsert({
+
+      // 更新页面属性
+        const res = await tx.page.update({
           where: {
-            id: pageId
-          },
-          create: {
-            properties: {
-              create: {
-                title: operations.arg.title,
-                emoji: operations.arg.emoji,
-                cover: operations.arg.cover,
-              }
+            id: pageId,
+            parentId: {
+              not: null
             }
           },
-          update: {
+          data: {
             properties: {
               update: {
                 title: operations.arg.title,
                 emoji: operations.arg.emoji,
                 cover: operations.arg.cover,
-
               },
 
             },
-            parent: {
-              update: {
-                blocks: {
-                  update: {
-                    where: {
-                      id: pageId,
-                    },
-                    data: {
-                      props: {
-                        title: operations.arg.title,
-                        emoji: operations.arg.emoji,
-                        cover: operations.arg.cover,
-                      }
-                    }
-                  }
+          },
+        })
+        if (res.parentId) {
+          // 查询父级页面
+          const block = await tx.block.findUnique({
+            where: {
+              id: pageId
+            }
+          })
+          // 更新父级页面blocks里的页面属性
+          if (block) {
+            await tx.block.update({
+              where: {
+                id: pageId
+              },
+              data: {
+                props: {
+                  ...block.props as any,
+                  title: operations.arg.title,
+                  emoji: operations.arg.emoji,
+                  cover: operations.arg.cover,
                 }
               }
-            }
+            })
           }
-        })
+        }
+
     }
+
 
   })
 }
