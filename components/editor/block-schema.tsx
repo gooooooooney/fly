@@ -13,6 +13,12 @@ export const PageBlock = createReactBlockSpec({
         },
         title: {
             default: "Untitled"
+        },
+        cover: {
+            default: ""
+        },
+        editable: {
+            default: "1"
         }
     },
     containsInlineContent: true,

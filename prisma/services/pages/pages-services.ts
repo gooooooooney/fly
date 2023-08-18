@@ -167,6 +167,25 @@ export async function save({
                 emoji: operations.arg.emoji,
                 cover: operations.arg.cover,
 
+              },
+
+            },
+            parent: {
+              update: {
+                blocks: {
+                  update: {
+                    where: {
+                      id: pageId,
+                    },
+                    data: {
+                      props: {
+                        title: operations.arg.title,
+                        emoji: operations.arg.emoji,
+                        cover: operations.arg.cover,
+                      }
+                    }
+                  }
+                }
               }
             }
           }
