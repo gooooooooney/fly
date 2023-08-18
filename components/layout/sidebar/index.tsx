@@ -12,6 +12,7 @@ import { SubMenu } from "./submenu";
 interface MenuProps {
   title: string;
   emoji: string;
+  id: string;
   children: MenuProps[];
 }
 
@@ -28,13 +29,13 @@ export const Sidebar: FC<SidebarProps> = (props) => {
   const renderChildren = (menus: MenuProps[]) => {
     return menus.map((menu) => {
       if (menu.children.length === 0) {
-        return <MenuItem key={menu.title}  >
+        return <MenuItem key={menu.id}  >
           <span>{menu.emoji}</span>
           <span className="ml-1">{menu.title}</span>
         </MenuItem>;
       } else {
         return (
-          <SubMenu key={menu.title} label={menu.title} >
+          <SubMenu key={menu.id} label={menu.title} >
             {renderChildren(menu.children)}
           </SubMenu>
         );

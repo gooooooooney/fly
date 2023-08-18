@@ -32,25 +32,10 @@ export default async function PageLayout(
   }
   const activeWp = wps.find((wp) => wp.isActive) || wps[0];
   const menus = await getPageMenus(activeWp.id);
-  // const value = {
-  //   workspaceId: activeWp.id!,
-  //   // blocks: page.blocks as any,
-  //   pageId: page.id,
-  //   icon: page.properties?.emoji,
-  //   title: page.properties?.title,
-  //   cover: page.properties?.cover,
-  //   editable: page.properties?.editable,
 
-  // }
-  // useBoundStore.setState(value)
 
   return (
-    <section className="flex h-screen">
-      {/* https://stackoverflow.com/questions/76349135/how-to-persist-and-set-global-state-for-client-from-server-in-nextjs-13-4 */}
-      {/* <StoreInitializer
-        value={value}
-      /> */}
-      <OutHookConfigurator />
+    <section data-spaceid={page.workspaceId} id="spaceid"  className="flex h-screen">
       <Sidebar
         menus={menus as any}
         name={activeWp.name}

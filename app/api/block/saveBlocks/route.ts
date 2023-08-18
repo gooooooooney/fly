@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { save } from "@/prisma/services/pages/pages-services";
-import { SaveRequestData } from "@/types";
+import { SaveBlocksParams } from "@/types";
+import { saveBlocks } from "@/prisma/services/pages/pages-services";
 
 
 export async function POST(request: Request) {
@@ -10,16 +10,16 @@ export async function POST(request: Request) {
   if (!session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
-  const requestBody = await request.json() as HttpRequestData<SaveRequestData>;
+  const requestBody = await request.json() as HttpRequestData<SaveBlocksParams>;
   console.log(requestBody)
 
   if (!requestBody.head.pageId) {
     return new NextResponse("Bad Request", { status: 400 });
   }
   try {
-    const count = await save({
+    const count = await saveBlocks({
       pageId: requestBody.head.pageId,
-      operations: requestBody.body.operations,
+      blocks: requestBody.body.blocks,
     })
     return NextResponse.json({
       head: {},

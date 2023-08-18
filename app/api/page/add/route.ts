@@ -13,6 +13,9 @@ export async function POST(request: Request) {
   if (!head || !body) {
     return new NextResponse("Bad Request", { status: 400 });
   }
+  if (!head.blockId || !head.spaceId || !head.pageId) {
+    return new NextResponse("Bad Request", { status: 400 });
+  }
   const page = addNewPage({
     blockId: head.blockId!,
     spaceId: head.spaceId!,

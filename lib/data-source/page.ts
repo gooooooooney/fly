@@ -1,22 +1,32 @@
-import { SaveRequestData } from "@/types";
+import { SaveBlocksParams, SavePropertyParams } from "@/types";
 import { fetcher } from "../utils";
 
-interface ClientSaveRequestData extends SaveRequestData {
-  pageId: string
-}
 
-export function saveData(params: ClientSaveRequestData) {
-  const { pageId, operations } = params
 
-  return fetcher("/api/block/save", {
+export function saveBlocks(params: SaveBlocksParams) {
+  const { pageId, blocks } = params
+
+  return fetcher("/api/block/saveBlocks", {
     method: "POST",
     body: JSON.stringify({
       head: {
         pageId
       },
       body: {
-        operations,
-      } as SaveRequestData
+        blocks,
+      } 
+    })
+  })
+}
+
+export async function saveProperty(data: SavePropertyParams) {
+  return await fetcher("/api/block/saveProperty", {
+    method: "POST",
+    body: JSON.stringify({
+      head: {
+        pageId: data.pageId
+      },
+      body: data,
     })
   })
 }

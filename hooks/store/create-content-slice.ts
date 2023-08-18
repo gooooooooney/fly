@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand"
 import _ from "lodash"
 import { UpdatePageInfo } from "@/lib/models/update-page-info"
-import { saveData } from "@/lib/data-source/page"
+import { saveProperty } from "@/lib/data-source/page"
 
 
 
@@ -33,26 +33,20 @@ export const createContentSlice: StateCreator<
     editable: true,
     setPageId: (pageId) => set((state) => ({ ...state, pageId })),
     setEditable: (editable) => set((state) => {
-      saveData({
+      saveProperty({
         pageId: state.pageId,
-        operations: {
-          type: "property",
-          arg: {
-            editable
-          }
+        data: {
+          editable,
         }
       })
       UpdatePageInfo(state.pageId, { editable })
       return ({ ...state, editable })
     }),
     setCover: (cover) => set((state) => {
-      saveData({
+      saveProperty({
         pageId: state.pageId,
-        operations: {
-          type: "property",
-          arg: {
-            cover
-          }
+        data: {
+          cover
         }
       })
       UpdatePageInfo(state.pageId, { "properties.cover": cover })
@@ -60,26 +54,20 @@ export const createContentSlice: StateCreator<
     }),
     setTitle: (title) => set((state) => {
       console.log(state)
-      saveData({
+      saveProperty({
         pageId: state.pageId,
-        operations: {
-          type: "property",
-          arg: {
-            title
-          }
+        data: {
+          title
         }
       })
       UpdatePageInfo(state.pageId, { "properties.title": title })
       return ({ ...state, title })
     }),
     setIcon: (icon) => set((state) => {
-      saveData({
+      saveProperty({
         pageId: state.pageId,
-        operations: {
-          type: "property",
-          arg: {
-            emoji: icon
-          }
+        data: {
+          emoji: icon
         }
       })
       UpdatePageInfo(state.pageId, { "properties.icon": icon })

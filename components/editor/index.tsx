@@ -6,21 +6,19 @@ import dynamic from "next/dynamic";
 import { useCallback } from "react";
 import { UpdatePageInfo } from "@/lib/models/update-page-info";
 import _ from "lodash";
-import { fetcher } from "@/lib/utils";
-import { Block } from "@blocknote/core";
-import { CustomBlockSchema } from "./block-schema";
-import { SaveRequestData } from "@/types";
-import { saveData } from "@/lib/data-source/page";
+import { saveBlocks } from "@/lib/data-source/page";
+import { usePageInit } from "@/hooks/use-page-init";
 const Editor = dynamic(() => import("@/components/editor/editor"), { ssr: false })
 
 interface EditorWrapperProps {
-  // blocks: BlockNoteEditor["topLevelBlocks"]
+  blocks: BlockNoteEditor["topLevelBlocks"]
 }
 
 
 
 export const EditorWrapper = (props: EditorWrapperProps) => {
   // const { blocks } = props
+  // const {data} = usePageInit()
   const [editable, setEditor, pageId] = useStore(useBoundStore, (state) => [state.editable, state.setEditor, state.pageId])
   const { theme } = useTheme()
   const handleEditorRead = useCallback((editor: BlockNoteEditor | null) => {
@@ -55,12 +53,9 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   const handleOnEditorContentChange = _.debounce((editor: BlockNoteEditor) => {
     const topLevelBlocks = editor.topLevelBlocks
     console.log(topLevelBlocks)
-    saveData({
+    saveBlocks({
       pageId,
-      operations: {
-        type: "block",
-        arg: topLevelBlocks
-      }
+      blocks: topLevelBlocks
     })
     pageId && UpdatePageInfo(pageId, {
       blocks: editor.topLevelBlocks
@@ -68,7 +63,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   }, 2000)
   return (
     <Editor
-      // initialContent={blocks}
+      initialContent={props.blocks as any|| []}
       theme={theme as "light" | "dark"}
       editable={editable}
       onEditorContentChange={handleOnEditorContentChange}

@@ -1,15 +1,20 @@
 import { PageResponse } from "@/app/api/page/get/route"
 import { fetcher } from "@/lib/utils"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname } from "next/navigation"
 import useSWR from "swr"
+import { useBoundStore } from "./store/useBoundStore"
+import useStore from "./use-store"
+import { useEffect } from "react"
 
 
-const init = async (url: string, id: string) => {
-  return await fetcher(url + id) as PageResponse
+export const init = async (url: string) => {
+  return await fetcher(url) as PageResponse
 }
 
 
 export function usePageInit() {
-  const id = usePathname().split("/").pop()
-  return useSWR(id ? ["/api/page/get?pageId=", id] : null, ([url, id]) => init(url, id))
+  // const id = usePathname().split("/").pop()
+  const pageId = useStore(useBoundStore, s => s.pageId)
+  return useSWR(() => "/api/page/get?pageId="+pageId, init)
+
 }

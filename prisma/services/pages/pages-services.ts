@@ -1,4 +1,4 @@
-import { SaveParams } from "@/types"
+import { SaveBlocksParams, SavePropertyParams } from "@/types"
 
 export async function getPageById(pageId: string) {
   const page = await prisma?.page.findUnique({
@@ -64,10 +64,12 @@ export async function getPageMenus(workspaceId: string, blockId?: string) {
 
   return pages.map(page => {
     return {
+      id: page.id,
       title: page.properties?.title,
       emoji: page.properties?.emoji,
       children: page.children?.map(child => {
         return {
+          id: child.id,
           title: child.properties?.title,
           emoji: child.properties?.emoji,
           children: []
@@ -86,122 +88,137 @@ export async function addNewPage({
   spaceId: string
   parentId?: string
 }) {
-  return await prisma?.page.create({
-    data: {
-      id: blockId,
-      workspaceId: spaceId,
-      parentId,
-      properties: {
-        create: {
-
+  try {
+    return await prisma?.page.create({
+      data: {
+        id: blockId,
+        parentId,
+        workspaceId: spaceId,
+        properties: {
+          create: {
+          
+          },
         },
-      },
-    }
-  })
+        
+      }
+    })
+    // return await prisma?.workspace.update({
+    //   where: {
+    //     id: spaceId
+    //   },
+    //   data: {
+    //     pages: {
+    //       create: {
+    //         id: blockId,
+    //         parentId,
+    //       }
+    //     }
+    //   }
+    // })
+  } catch (error) {
+    console.log(error)
+    return null
+  }
 }
 
 
+export async function updateBlockProps({ pageId, data }: SavePropertyParams) {
+  // 查询当前页面是否是子页面
+  const subPage = await prisma?.block.findUnique({
+    where: {
+      id: pageId
+    },
+  })
+  if (subPage) {
+    prisma?.block.update({
+      where: {
+        id: pageId
+      },
+      data: {
+        props: {
+          ...subPage.props as any,
+          title: data.title,
+          emoji: data.emoji,
+          cover: data.cover,
+        }
+      }
+    })
+  }
+}
 
-export async function save({
-  pageId,
-  operations
-}: SaveParams) {
+export async function saveProperty({ pageId, data }: SavePropertyParams) {
+  try {
+    return await prisma?.$transaction(async tx => {
 
-
-  return prisma?.$transaction(async tx => {
-    const saveBlocks = async (blocks: BlockNoteEditor["topLevelBlocks"]) => {
-      const ids = blocks.map(b => b.id)
-      await tx.block.deleteMany({
+      updateBlockProps({ pageId, data })
+      // 更新页面属性
+      return await tx.page.update({
         where: {
-          pageId,
-          id: {
-            notIn: ids
+          id: pageId,
+        },
+        data: {
+          properties: {
+            update: {
+              title: data.title,
+              emoji: data.emoji,
+              cover: data.cover,
+            }
           }
         }
       })
 
-      try {
-        await Promise.all(blocks.map(async (block) => {
-          await tx.block.upsert({
-            where: {
-              pageId,
-              id: block.id
-            },
-            create: {
-              id: block.id,
-              type: block.type,
-              props: block.props,
-              content: block.content,
-              children: block.children,
-              pageId,
-            },
-            update: {
-              type: block.type,
-              props: block.props,
-              children: block.children,
-              content: block.content,
-            }
-          })
-        }))
-        return true
-      } catch (error) {
-        console.log(error)
-        return false
-      }
-    }
+    })
+  } catch (error) {
+    console.log(error)
+    return null
+  }
+}
 
-    const type = operations.type
-    switch (type) {
-      case "block":
-        return await saveBlocks(operations.arg)
-      case "property":
+export async function saveBlocks({
+  pageId,
+  blocks
+}: SaveBlocksParams) {
 
-      // 更新页面属性
-        const res = await tx.page.update({
-          where: {
-            id: pageId,
-            parentId: {
-              not: null
-            }
-          },
-          data: {
-            properties: {
-              update: {
-                title: operations.arg.title,
-                emoji: operations.arg.emoji,
-                cover: operations.arg.cover,
-              },
 
-            },
-          },
-        })
-        if (res.parentId) {
-          // 查询父级页面
-          const block = await tx.block.findUnique({
-            where: {
-              id: pageId
-            }
-          })
-          // 更新父级页面blocks里的页面属性
-          if (block) {
-            await tx.block.update({
-              where: {
-                id: pageId
-              },
-              data: {
-                props: {
-                  ...block.props as any,
-                  title: operations.arg.title,
-                  emoji: operations.arg.emoji,
-                  cover: operations.arg.cover,
-                }
-              }
-            })
-          }
+  return prisma?.$transaction(async tx => {
+
+    const ids = blocks.map(b => b.id)
+    await tx.block.deleteMany({
+      where: {
+        pageId,
+        id: {
+          notIn: ids
         }
+      }
+    })
 
+    try {
+      await Promise.all(blocks.map(async (block) => {
+        await tx.block.upsert({
+          where: {
+            pageId,
+            id: block.id
+          },
+          create: {
+            id: block.id,
+            type: block.type,
+            props: block.props,
+            content: block.content,
+            children: block.children,
+            pageId,
+          },
+          update: {
+            type: block.type,
+            props: block.props,
+            children: block.children,
+            content: block.content,
+          }
+        })
+      }))
+      return true
+    } catch (error) {
+      console.log(error)
+      return false
     }
-
-
   })
 }

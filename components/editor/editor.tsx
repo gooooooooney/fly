@@ -23,23 +23,23 @@ import { useTheme } from "next-themes";
 import { usePageInit } from "@/hooks/use-page-init";
 interface EditorProps {
   editable: boolean;
-  // initialContent: BlockNoteEditor["topLevelBlocks"]
+  initialContent: BlockNoteEditor["topLevelBlocks"];
   theme: "light" | "dark";
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   onEditorContentChange?: (editor: BlockNoteEditor) => void;
   onTextCursorPositionChange?: (editor: BlockNoteEditor) => void;
 }
-let count = 0
+let count = 0;
 export default function Editor({
   editable,
-
+  initialContent,
   onEditorReady,
   onEditorContentChange,
   onTextCursorPositionChange,
 }: EditorProps) {
-  console.log('render editor', count++)
-  const { data } = usePageInit()
-  const { theme } = useTheme()
+  console.log("render editor", count++);
+
+  const { theme } = useTheme();
   const editor = useBlockNote(
     {
       editable,
@@ -49,7 +49,7 @@ export default function Editor({
 
         insertPageItem,
       ],
-      initialContent: data?.body?.blocks && data?.body?.blocks.length > 0 ? data.body.blocks as BlockNoteEditor["topLevelBlocks"] : undefined,
+      initialContent: initialContent.length === 0 ? [{ type: "paragraph" }] : initialContent,
       domAttributes: {
         blockContainer: {
           class: "!bg-background text-primary",
@@ -64,10 +64,11 @@ export default function Editor({
       onEditorContentChange,
       onTextCursorPositionChange,
     },
-    [data?.body?.blocks]
+    [initialContent]
   );
 
   useEffect(() => {
+    console.log("editor", editor);
     if (editor) {
       editor.isEditable = editable;
     }
@@ -75,7 +76,11 @@ export default function Editor({
 
   return (
     <div className="flex-grow flex flex-col">
-      <BlockNoteView className="w-full" theme={theme as "light" | "dark"} editor={editor}>
+      <BlockNoteView
+        className="w-full"
+        theme={theme as "light" | "dark"}
+        editor={editor}
+      >
         <FormattingToolbarPositioner
           editor={editor}
           formattingToolbar={FormattingToolbar}
