@@ -1,6 +1,6 @@
 import { OutHookConfigurator } from "@/components/OutHook";
 import { EditorWrapper } from "@/components/editor";
-import Helmet from "@/components/helmet";
+// import Helmet from "@/components/helmet";
 import Cover from "@/components/page/cover";
 import IconAndCover from "@/components/page/icon-cover";
 import { PageTitle } from "@/components/page/page-title";
@@ -39,7 +39,7 @@ export default async function BlockPage({
   }
   return (
     <>
-      <Helmet id={params.hash} />
+      {/* <Helmet id={params.hash} /> */}
       {/* https://stackoverflow.com/questions/76349135/how-to-persist-and-set-global-state-for-client-from-server-in-nextjs-13-4 */}
       <OutHookConfigurator />
       <>
@@ -47,9 +47,7 @@ export default async function BlockPage({
           className="h-screen   w-full flex flex-col items-center z-1 overflow-auto max-h-full "
         >
           <Cover />
-          <br />
-          {page.id}
-          <div className="max-w-3xl flex flex-col w-full flex-grow ">
+          <section className="max-w-3xl flex flex-col w-full flex-grow ">
             <div className="flex flex-col w-full">
               <div className="group">
                 <IconAndCover id={params.hash} />
@@ -59,9 +57,11 @@ export default async function BlockPage({
             <Separator />
 
             <section className=" flex-grow flex flex-col mt-8">
-              <EditorWrapper blocks={page?.blocks as any} />
+              <EditorWrapper 
+              // blocks={page?.blocks as any} 
+              />
             </section>
-          </div>
+          </section>
         </section>
       </>
     </>

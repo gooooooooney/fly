@@ -8,6 +8,8 @@ import SidebarHeader from "./sidebar-header";
 import { Icons } from "@/components/icons";
 import { FC } from "react";
 import { SubMenu } from "./submenu";
+import { useSpace } from "@/hooks/use-space";
+import { WorkspaceInfo } from "@/prisma/services/workspace/workspcae-services";
 
 interface MenuProps {
   title: string;
@@ -17,15 +19,23 @@ interface MenuProps {
 }
 
 interface SidebarProps {
-  name: string;
-  avatar: string;
+  // name: string;
+  // avatar: string;
+  wps: WorkspaceInfo;
   email: string;
-  menus: MenuProps[]
+  // menus: MenuProps[]
 }
 
 export const Sidebar: FC<SidebarProps> = (props) => {
   const collapsed = useStore(useBoundStore, (state) => state.collapsed);
 
+  // const spaceId = document.querySelector("#spaceid")?.getAttribute("data-spaceid")!
+  // console.log(spaceId)
+  // const {data, isLoading, error} = useSpace(spaceId)
+  // if (!data) {
+  //   return null
+  // }
+  const activeWp = props.wps.find(wp => wp.isActive)!
   const renderChildren = (menus: MenuProps[]) => {
     return menus.map((menu) => {
       if (menu.children.length === 0) {
@@ -47,15 +57,15 @@ export const Sidebar: FC<SidebarProps> = (props) => {
   return (
     <SidebarRoot collapsed={collapsed} collapsedWidth="0">
       <SidebarHeader
-        name={props.name}
-        avatar={props.avatar}
+        name={activeWp.name}
+        avatar={activeWp.avatar || ""}
         email={props.email}
       />
       <Menu>
         <SubMenu icon={<Icons.HomeIcon />} label="我的主页">
-          {
+          {/* {
             renderChildren(props.menus)
-          }
+          } */}
         </SubMenu>
         <MenuItem icon={<Icons.QuestionMarkIcon />}>帮助中心</MenuItem>
       </Menu>

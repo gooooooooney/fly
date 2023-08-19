@@ -12,9 +12,8 @@ export const init = async (url: string) => {
 }
 
 
-export function usePageInit() {
+export function usePageInit(pageId: string) {
   // const id = usePathname().split("/").pop()
-  const pageId = useStore(useBoundStore, s => s.pageId)
-  return useSWR(() => "/api/page/get?pageId="+pageId, init)
+  return useSWR(pageId ? () => "/api/page/get?pageId="+pageId : null, init)
 
 }

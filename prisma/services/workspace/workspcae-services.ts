@@ -1,3 +1,7 @@
+
+
+export type WorkspaceInfo = ReturnTypePromiseFunc<typeof getWorkspacesByUserId>
+
 export async function getWorkspacesByUserId(userId: string) {
   const user = await prisma?.user.findUnique({
     where: {
@@ -6,11 +10,7 @@ export async function getWorkspacesByUserId(userId: string) {
     include: {
       workspaces: {
         include: {
-          pages: {
-            include: {
-              properties: true
-            }
-          }
+          pages: {}
         }
       }
     }
@@ -21,4 +21,14 @@ export async function getWorkspacesByUserId(userId: string) {
   return user.workspaces
 }
 
+export async function getWorkspaceById(workspaceId: string) {
+  const workspace = await prisma?.workspace.findUnique({
+    where: {
+      id: workspaceId,
+      
+    },
+    
+  })
+  return workspace
+}
 

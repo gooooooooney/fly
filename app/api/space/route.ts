@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
+import { getWorkspaceById } from "@/prisma/services/workspace/workspcae-services";
 
 
 export interface AddSpaceResponse {
@@ -40,8 +41,7 @@ export async function POST(request: Request) {
         create: {
           properties: {
             create: {
-              title: "Untitled",
-              emoji: "📝",
+              
             }
           }
         },
@@ -67,4 +67,32 @@ export async function POST(request: Request) {
       page: wp.pages[0]
     }
   });
+}
+
+
+export type GetSpaceResponse = HttpRequestData<ReturnTypePromiseFunc<typeof getWorkspaceById>>
+
+export async function GET(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse("Unauthorized", { status: 403 });
+  }
+  const spaceId = new URL(request.url).searchParams.get("spaceId");
+
+  try {
+    const space = await getWorkspaceById(spaceId!)
+    if (!space) {
+      return NextResponse.json({
+        head: {},
+        body: {}
+      })
+    }
+    return NextResponse.json({
+      head: { spaceId: space.id },
+      body: space
+    })
+  } catch (error) {
+    console.log(error)
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
 }

@@ -1,35 +1,42 @@
-"use client"
-
+"use client";
 
 import { useBoundStore } from "@/hooks/store/useBoundStore";
+import { usePageInit } from "@/hooks/use-page-init";
+import { useEffect } from "react";
 import { useStore } from "zustand";
 
-
-
 export const PageTitle = ({ id }: { id: string }) => {
-  const [title, setTitle, editable, editor] = useStore(useBoundStore, (state) => [
+  const { data } = usePageInit(id);
+
+  const [title, setTitle, editable] = useStore(useBoundStore, (state) => [
     state.title,
     state.setTitle,
     state.editable,
-    state.editor,
-  ])
+  ]);
+  const [editor, setWorkspaceId] = useBoundStore((state) => [state.editor, state.setWorkspaceId]);
+  useEffect(() => {
+    if (data) {
+      setTitle(data?.body?.properties?.title || "");
+      setWorkspaceId(data?.body?.workspaceId || "")
+    }
+  }, [data]);
   const handleEnter = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault()
+      e.preventDefault();
       editor?.insertBlocks(
         [
           {
-            type: "paragraph"
-          }
+            type: "paragraph",
+          },
         ],
         editor?.topLevelBlocks[0]
-      )
-      editor?.focus()
+      );
+      editor?.focus();
     }
-  }
+  };
+  if (!data) return null;
   return (
-    <div className="my-4"
-    >
+    <div className="my-4">
       {/* <h1
         suppressContentEditableWarning={true}
         onKeyDown={handleEnter}
@@ -42,14 +49,16 @@ export const PageTitle = ({ id }: { id: string }) => {
       >
         {title}
       </h1> */}
-      <input placeholder="Untitled"
+      <input
+        placeholder="Untitled"
         type="text"
         value={title}
         onKeyDown={handleEnter}
         className="outline-none bg-background scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
         onChange={(e) => {
-          setTitle(e.target.value)
-        }} />
+          setTitle(e.target.value);
+        }}
+      />
     </div>
-  )
-}
+  );
+};

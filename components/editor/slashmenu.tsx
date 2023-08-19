@@ -2,8 +2,6 @@ import { ReactSlashMenuItem } from "@blocknote/react"
 import { Icons } from "../icons";
 import { blockSchema } from "./block-schema";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { addPageInfo } from "@/lib/models/init-db";
-import { UpdatePageInfo } from "@/lib/models/update-page-info";
 import { addNewPage, saveBlocks } from "@/lib/data-source/page";
 import OutHook from "../OutHook";
 
@@ -36,26 +34,17 @@ export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
     insertOrUpdateBlock(editor, {
       type: "page",
     })
-    // 避免editor onEditorContentChange事件未触发 导致blocks未更新
-    UpdatePageInfo(pageId, {
-      blocks: editor.topLevelBlocks
-    })
     saveBlocks({
       pageId,
       blocks: editor.topLevelBlocks
     })
     OutHook.useRouter.push(`/${childBlock.id}`)
-    const spaceId = document.querySelector("#spaceid")?.getAttribute("data-spaceid")!
+    // const spaceId = document.querySelector("#spaceid")?.getAttribute("data-spaceid")!
     addNewPage({
       pageId,
       blockId: childBlock.id,
-      spaceId,
+      spaceId: useBoundStore.getState().workspaceId,
     })
-    addPageInfo({
-      parentId: pageId,
-      id: childBlock.id
-    })
-    // window.location.href = `/${childBlock.id}`
 
   },
   aliases: ["page"],

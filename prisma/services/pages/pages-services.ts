@@ -84,7 +84,7 @@ export async function addNewPage({
   spaceId,
   parentId
 }: {
-  blockId: string
+  blockId?: string
   spaceId: string
   parentId?: string
 }) {
@@ -96,10 +96,10 @@ export async function addNewPage({
         workspaceId: spaceId,
         properties: {
           create: {
-          
+
           },
         },
-        
+
       }
     })
     // return await prisma?.workspace.update({
@@ -130,7 +130,7 @@ export async function updateBlockProps({ pageId, data }: SavePropertyParams) {
     },
   })
   if (subPage) {
-    prisma?.block.update({
+    const res = await prisma?.block.update({
       where: {
         id: pageId
       },
@@ -151,21 +151,40 @@ export async function saveProperty({ pageId, data }: SavePropertyParams) {
     return await prisma?.$transaction(async tx => {
 
       updateBlockProps({ pageId, data })
-      // 更新页面属性
-      return await tx.page.update({
+      return await tx.properties.upsert({
         where: {
-          id: pageId,
+          pageId: pageId,
         },
-        data: {
-          properties: {
-            update: {
-              title: data.title,
-              emoji: data.emoji,
-              cover: data.cover,
-            }
-          }
+        create: {
+          pageId: pageId,
+          title: data.title,
+          emoji: data.emoji,
+          cover: data.cover,
+        },
+        update: {
+          title: data.title,
+          emoji: data.emoji,
+          cover: data.cover,
         }
       })
+      // 更新页面属性
+      // return await tx.page.upsert({
+      //   where: {
+      //     id: pageId,
+      //   },
+      //   create: {
+
+      //   },
+      //   update: {
+      //     properties: {
+      //       update: {
+      //         title: data.title,
+      //         emoji: data.emoji,
+      //         cover: data.cover,
+      //       }
+      //     }
+      //   }
+      // })
 
     })
   } catch (error) {
@@ -183,14 +202,14 @@ export async function saveBlocks({
   return prisma?.$transaction(async tx => {
 
     const ids = blocks.map(b => b.id)
-    await tx.block.deleteMany({
-      where: {
-        pageId,
-        id: {
-          notIn: ids
-        }
-      }
-    })
+    // await tx.block.deleteMany({
+    //   where: {
+    //     pageId,
+    //     id: {
+    //       notIn: ids
+    //     }
+    //   }
+    // })
 
     try {
       await Promise.all(blocks.map(async (block) => {

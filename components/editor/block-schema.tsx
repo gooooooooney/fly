@@ -8,11 +8,11 @@ export const PageBlock = createReactBlockSpec({
     type: "page",
     propSchema: {
         ...defaultProps,
-        icon: {
+        emoji: {
             default: "📄"
         },
         title: {
-            default: "Untitled"
+            default: ""
         },
         cover: {
             default: ""
@@ -29,8 +29,8 @@ export const PageBlock = createReactBlockSpec({
                     href={`/${block.id}`}
                     isBlock
                     className="data-[focus-visible=true]:outline-0 after:rounded-sm  hover:after:bg-primary/10 flex cursor-pointer " >
-                    <span className="mr-1">{block.props.icon}</span>
-                    <span className="underline">{block.props.title}</span>
+                    <span className="mr-1">{block.props.emoji}</span>
+                    <span className="underline">{block.props.title || "Untitled"}</span>
                     <InlineContent className="hidden" />
                 </Link>
 

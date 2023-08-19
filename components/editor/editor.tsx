@@ -10,17 +10,15 @@ import {
 } from "@blocknote/react";
 import "./index.css";
 import "@blocknote/core/style.css";
-import { useStore } from "zustand";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
 import FormattingToolbar from "./formatting-toolbar";
 import { useEffect } from "react";
 import { insertPageItem } from "./slashmenu";
 import { blockSchema } from "./block-schema";
 
 import { CustomSideMenu } from "./custom-side-menu";
-import { CustomSlashMenu } from "./custom-slash-menu";
 import { useTheme } from "next-themes";
 import { usePageInit } from "@/hooks/use-page-init";
+import { useBoundStore } from "@/hooks/store/useBoundStore";
 interface EditorProps {
   editable: boolean;
   initialContent: BlockNoteEditor["topLevelBlocks"];
@@ -38,6 +36,8 @@ export default function Editor({
   onTextCursorPositionChange,
 }: EditorProps) {
   console.log("render editor", count++);
+  // so many rerenders
+  // const setEditor = useBoundStore.getState().setEditor
 
   const { theme } = useTheme();
   const editor = useBlockNote(
@@ -58,18 +58,20 @@ export default function Editor({
           class: "!bg-background !ps-0 !pe-0",
         },
       },
-      onEditorReady: (editor) => {
-        onEditorReady?.(editor);
-      },
+      // onEditorReady: (editor) => {
+      //   onEditorReady?.(editor);
+      // },
       onEditorContentChange,
       onTextCursorPositionChange,
     },
-    [initialContent]
+    [initialContent, editable]
   );
 
   useEffect(() => {
-    console.log("editor", editor);
     if (editor) {
+      console.log("editor", editor);
+      // setEditor(editor)
+      // onEditorReady?.(editor);
       editor.isEditable = editable;
     }
   }, [editable, editor]);

@@ -1,6 +1,5 @@
 import { StateCreator } from "zustand"
 import _ from "lodash"
-import { UpdatePageInfo } from "@/lib/models/update-page-info"
 import { saveProperty } from "@/lib/data-source/page"
 
 
@@ -39,7 +38,6 @@ export const createContentSlice: StateCreator<
           editable,
         }
       })
-      UpdatePageInfo(state.pageId, { editable })
       return ({ ...state, editable })
     }),
     setCover: (cover) => set((state) => {
@@ -49,7 +47,6 @@ export const createContentSlice: StateCreator<
           cover
         }
       })
-      UpdatePageInfo(state.pageId, { "properties.cover": cover })
       return ({ ...state, cover })
     }),
     setTitle: (title) => set((state) => {
@@ -60,7 +57,6 @@ export const createContentSlice: StateCreator<
           title
         }
       })
-      UpdatePageInfo(state.pageId, { "properties.title": title })
       return ({ ...state, title })
     }),
     setIcon: (icon) => set((state) => {
@@ -70,7 +66,6 @@ export const createContentSlice: StateCreator<
           emoji: icon
         }
       })
-      UpdatePageInfo(state.pageId, { "properties.icon": icon })
 
       return ({ ...state, icon })
     }),

@@ -14,6 +14,7 @@ import { Slider } from "@/components/ui/slider"
 
 function Cover() {
 
+
   const [cover, setCover] = useStore(useBoundStore, (state) => [state.cover, state.setCover])
 
   const [originalY, setOriginalY] = useState(50)

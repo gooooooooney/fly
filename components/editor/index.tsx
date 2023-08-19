@@ -4,28 +4,30 @@ import { useStore } from "zustand"
 import { useTheme } from "next-themes"
 import dynamic from "next/dynamic";
 import { useCallback } from "react";
-import { UpdatePageInfo } from "@/lib/models/update-page-info";
 import _ from "lodash";
 import { saveBlocks } from "@/lib/data-source/page";
 import { usePageInit } from "@/hooks/use-page-init";
+import Link from "next/link";
 const Editor = dynamic(() => import("@/components/editor/editor"), { ssr: false })
 
 interface EditorWrapperProps {
-  blocks: BlockNoteEditor["topLevelBlocks"]
+  // blocks: BlockNoteEditor["topLevelBlocks"]
 }
 
 
 
 export const EditorWrapper = (props: EditorWrapperProps) => {
   // const { blocks } = props
-  // const {data} = usePageInit()
-  const [editable, setEditor, pageId] = useStore(useBoundStore, (state) => [state.editable, state.setEditor, state.pageId])
+  const [editable] = useStore(useBoundStore, (state) => [state.editable])
+  const [setEditor, pageId] = useBoundStore((state) => [state.setEditor, state.pageId])
+  const {data} = usePageInit(pageId)
+
   const { theme } = useTheme()
-  const handleEditorRead = useCallback((editor: BlockNoteEditor | null) => {
+  const handleEditorReady = useCallback((editor: BlockNoteEditor | null) => {
     if (editor) {
       setEditor(editor)
     }
-  }, [setEditor])
+  }, [])
 
   const handleTextCursorPositionChange = (editor: BlockNoteEditor) => {
     const currentBlock = editor.getTextCursorPosition().block
@@ -57,17 +59,22 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
       pageId,
       blocks: topLevelBlocks
     })
-    pageId && UpdatePageInfo(pageId, {
-      blocks: editor.topLevelBlocks
-    })
   }, 2000)
   return (
     <Editor
-      initialContent={props.blocks as any|| []}
+      initialContent={data?.body?.blocks as any|| []}
       theme={theme as "light" | "dark"}
       editable={editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
-      onEditorReady={handleEditorRead} />
+      // onEditorReady={handleEditorReady} 
+      />
+    // <>
+    // {data?.body?.blocks?.map((block: any) => {
+    //   return <Link href={block.id} key={block.id}>
+    //     {block.type}
+    //   </Link>
+    // })}
+    // </>
   )
 }
