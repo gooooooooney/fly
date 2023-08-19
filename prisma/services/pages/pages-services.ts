@@ -202,14 +202,14 @@ export async function saveBlocks({
   return prisma?.$transaction(async tx => {
 
     const ids = blocks.map(b => b.id)
-    // await tx.block.deleteMany({
-    //   where: {
-    //     pageId,
-    //     id: {
-    //       notIn: ids
-    //     }
-    //   }
-    // })
+    await tx.block.deleteMany({
+      where: {
+        pageId,
+        id: {
+          notIn: ids
+        }
+      }
+    })
 
     try {
       await Promise.all(blocks.map(async (block) => {
