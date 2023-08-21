@@ -1,4 +1,4 @@
-import { SaveBlocksParams, SavePropertyParams } from "@/types"
+import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types"
 import prisma from "@/lib/prisma"
 
 export async function getPageById(pageId: string) {
@@ -234,6 +234,57 @@ export async function saveBlocks({
             content: block.content,
           }
         })
+      }))
+      return true
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  })
+}
+
+export async function save({
+  pageId,
+  operations
+}: SaveParams) {
+  return await prisma.$transaction(async tx => {
+    try {
+      await Promise.all(operations.map(async (operation) => {
+        if (operation.command === "delete") {
+          await Promise.all(operation.data.map(async (block) => {
+            await tx.block.delete({
+              where: {
+                pageId,
+                id: block.id
+              }
+            })
+          }))
+        }
+        if (operation.command === "update" || operation.command === "insert") {
+          await Promise.all(operation.data.map(async (block) => {
+            await tx.block.upsert({
+              where: {
+                pageId,
+                id: block.id
+              },
+              create: {
+                id: block.id,
+                type: block.type,
+                props: block.props,
+                content: block.content,
+                children: block.children,
+                pageId,
+              },
+              update: {
+                content: block.content,
+                type: block.type,
+                props: block.props,
+                children: block.children,
+              }
+            })
+          }))
+        }
+
       }))
       return true
     } catch (error) {

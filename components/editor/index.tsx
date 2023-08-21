@@ -5,7 +5,7 @@ import { useTheme } from "next-themes"
 import dynamic from "next/dynamic";
 import { useCallback } from "react";
 import _ from "lodash";
-import { saveBlocks } from "@/lib/data-source/page";
+import { save, saveBlocks } from "@/lib/data-source/page";
 import { usePageInit } from "@/hooks/use-page-init";
 import Link from "next/link";
 const Editor = dynamic(() => import("@/components/editor/editor"), { ssr: false })
@@ -14,7 +14,7 @@ interface EditorWrapperProps {
   // blocks: BlockNoteEditor["topLevelBlocks"]
 }
 
-
+let beforeBlocks = [] as BlockNoteEditor["topLevelBlocks"]
 
 export const EditorWrapper = (props: EditorWrapperProps) => {
   // const { blocks } = props
@@ -54,10 +54,48 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
 
   const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
     const topLevelBlocks = editor.topLevelBlocks
-    saveBlocks({
-      pageId,
-      blocks: topLevelBlocks
-    })
+    const currentBlock = editor.getTextCursorPosition().block
+    const filterBlocks = (blocks: Block[]) => {
+      return blocks.filter(block => (block.type === "paragraph" && block.content.length >0) || block.type !== "paragraph")
+    }
+
+    // add block
+    const addedBlocks = topLevelBlocks.filter(block => !beforeBlocks.some(b => b.id === block.id))
+    
+
+    // remove block
+    const removedBlocks = beforeBlocks.filter(block => !topLevelBlocks.some(b => b.id === block.id))
+
+    beforeBlocks = topLevelBlocks
+
+    if (addedBlocks.length > 0) {
+      console.log("addedBlocks", addedBlocks)
+    } 
+    if (removedBlocks.length > 0) {
+      console.log("removedBlocks", removedBlocks)
+    } 
+    console.log("currentBlock", currentBlock)
+    // save({
+    //   pageId,
+    //   operations: [
+    //     {
+    //       command: "insert",
+    //       data: addedBlocks
+    //     },
+    //     {
+    //       command: "delete",
+    //       data: removedBlocks
+    //     },
+    //     {
+    //       command: "update",
+    //       data: [currentBlock]
+    //     }
+    //   ]
+    // })
+    // saveBlocks({
+    //   pageId,
+    //   blocks: topLevelBlocks
+    // })
   }
   return (
     <Editor

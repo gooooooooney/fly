@@ -1,4 +1,4 @@
-import { SaveBlocksParams, SavePropertyParams } from "@/types";
+import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types";
 import { fetcher } from "../utils";
 
 
@@ -14,7 +14,19 @@ export function saveBlocks(params: SaveBlocksParams) {
       },
       body: {
         blocks,
-      } 
+      }
+    })
+  })
+}
+
+export function save(params: SaveParams) {
+  return fetcher("/api/block/save", {
+    method: "POST",
+    body: JSON.stringify({
+      head: {
+        pageId: params.pageId
+      },
+      body: params
     })
   })
 }

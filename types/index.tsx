@@ -4,7 +4,7 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-export type Command = "create" | "update" | "delete";
+export type Command = "insert" | "update" | "delete";
 export type SaveBlocksParams = {
   pageId: string;
   blocks: BlockNoteEditor["topLevelBlocks"];
@@ -19,3 +19,14 @@ export type SavePropertyParams = {
     editable?: boolean;
   };
 };
+
+interface Operation {
+  command: Command;
+  data: Block[]
+}
+
+export type SaveParams = {
+  pageId: string;
+  operations: Operation[];
+
+}
