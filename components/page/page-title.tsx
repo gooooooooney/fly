@@ -2,11 +2,13 @@
 
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { usePageInit } from "@/hooks/use-page-init";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { saveProperty } from "@/lib/data-source/page";
 import { useEffect } from "react";
 import { useStore } from "zustand";
 
 export const PageTitle = ({ id }: { id: string }) => {
-  const { data } = usePageInit(id);
+  const { data } = usePageInit();
 
   const [title, setTitle, editable] = useStore(useBoundStore, (state) => [
     state.title,
@@ -14,12 +16,22 @@ export const PageTitle = ({ id }: { id: string }) => {
     state.editable,
   ]);
   const [editor, setWorkspaceId] = useBoundStore((state) => [state.editor, state.setWorkspaceId]);
+  const pageId = useUuidPathname()
   useEffect(() => {
     if (data) {
       setTitle(data?.body?.properties?.title || "");
       setWorkspaceId(data?.body?.workspaceId || "")
     }
   }, [data]);
+  const setPageTitle = (title: string) => {
+    setTitle(title);
+    saveProperty({
+      pageId,
+      data: {
+        title
+      }
+    })
+  }
   const handleEnter = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -56,7 +68,7 @@ export const PageTitle = ({ id }: { id: string }) => {
         onKeyDown={handleEnter}
         className="outline-none bg-background scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
         onChange={(e) => {
-          setTitle(e.target.value);
+          setPageTitle(e.currentTarget.value)
         }}
       />
     </div>

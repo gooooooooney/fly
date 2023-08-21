@@ -34,7 +34,7 @@ export default async function PageLayout(
       <body className={cn("text-primary")}>
         <Providers>
           <section className=" h-screen">
-            <section id="spaceid" className="flex h-screen">
+            <section className="flex h-screen">
               <Sidebar wps={wps} email={session.user.email!} />
               <section className="flex flex-col w-full">
                 <Nav />

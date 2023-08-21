@@ -1,4 +1,5 @@
 import { SaveBlocksParams, SavePropertyParams } from "@/types"
+import prisma from "@/lib/prisma"
 
 export async function getPageById(pageId: string) {
   const page = await prisma?.page.findUnique({

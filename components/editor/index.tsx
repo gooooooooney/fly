@@ -20,7 +20,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   // const { blocks } = props
   const [editable] = useStore(useBoundStore, (state) => [state.editable])
   const [setEditor, pageId] = useBoundStore((state) => [state.setEditor, state.pageId])
-  const {data} = usePageInit(pageId)
+  const {data} = usePageInit()
 
   const { theme } = useTheme()
   const handleEditorReady = useCallback((editor: BlockNoteEditor | null) => {
@@ -52,14 +52,13 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     }
   }
 
-  const handleOnEditorContentChange = _.debounce((editor: BlockNoteEditor) => {
+  const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
     const topLevelBlocks = editor.topLevelBlocks
-    console.log(topLevelBlocks)
     saveBlocks({
       pageId,
       blocks: topLevelBlocks
     })
-  }, 2000)
+  }
   return (
     <Editor
       initialContent={data?.body?.blocks as any|| []}

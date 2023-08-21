@@ -38,7 +38,7 @@ export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
       pageId,
       blocks: editor.topLevelBlocks
     })
-    OutHook.useRouter.push(`/${childBlock.id}`)
+    // OutHook.useRouter.push(`/${childBlock.id}`)
     // const spaceId = document.querySelector("#spaceid")?.getAttribute("data-spaceid")!
     addNewPage({
       pageId,

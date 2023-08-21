@@ -5,6 +5,7 @@ import useSWR from "swr"
 import { useBoundStore } from "./store/useBoundStore"
 import useStore from "./use-store"
 import { useEffect } from "react"
+import { useUuidPathname } from "./useUuidPathname"
 
 
 export const init = async (url: string) => {
@@ -12,8 +13,10 @@ export const init = async (url: string) => {
 }
 
 
-export function usePageInit(pageId: string) {
-  // const id = usePathname().split("/").pop()
-  return useSWR(pageId ? () => "/api/page/get?pageId="+pageId : null, init)
+export function usePageInit() {
+  const id = usePathname().split("/").pop()
+  useUuidPathname()
+  
+  return useSWR(id ? () => "/api/page/get?pageId="+id : null, init)
 
 }

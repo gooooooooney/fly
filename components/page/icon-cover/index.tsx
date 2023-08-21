@@ -12,9 +12,10 @@ import { Icons } from "@/components/icons";
 import { usePageInit } from "@/hooks/use-page-init";
 import { useEffect } from "react";
 import { useClientInit } from "@/components/useClientInit";
+import { saveProperty } from "@/lib/data-source/page";
 
 function IconAndCover({ id }: { id: string }) {
-  const { data } = usePageInit(id);
+  const { data } = usePageInit();
   useClientInit(id)
 
   const { emoji, setCover, cover, setIcon } = useStore(
@@ -37,11 +38,23 @@ function IconAndCover({ id }: { id: string }) {
     const randomEmoji = randomEmojiList[Random(0, randomEmojiList.length - 1)];
 
     setIcon(randomEmoji);
+    saveProperty({
+      pageId: id,
+      data: {
+        emoji: randomEmoji
+      }
+    })
   };
   const handleRandomCover = () => {
     const randomCover = covers[Random(0, covers.length - 1)];
 
     setCover(randomCover.urls.full);
+    saveProperty({
+      pageId: id,
+      data: {
+        cover: randomCover.urls.full
+      }
+    })
   };
   return (
     <>

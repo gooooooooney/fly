@@ -1,4 +1,5 @@
 
+import prisma from "@/lib/prisma"
 
 export type WorkspaceInfo = ReturnTypePromiseFunc<typeof getWorkspacesByUserId>
 

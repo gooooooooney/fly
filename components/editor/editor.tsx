@@ -58,9 +58,9 @@ export default function Editor({
           class: "!bg-background !ps-0 !pe-0",
         },
       },
-      // onEditorReady: (editor) => {
-      //   onEditorReady?.(editor);
-      // },
+      onEditorReady: (editor) => {
+        onEditorReady?.(editor);
+      },
       onEditorContentChange,
       onTextCursorPositionChange,
     },

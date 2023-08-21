@@ -11,17 +11,29 @@ import ImagePicker from "./icon-cover/image-picker";
 import { Icons } from "../icons";
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider"
+import { saveProperty } from "@/lib/data-source/page";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
 
 function Cover() {
 
 
   const [cover, setCover] = useStore(useBoundStore, (state) => [state.cover, state.setCover])
+  const pageId = useUuidPathname()
 
   const [originalY, setOriginalY] = useState(50)
   const [y, setY] = useState(50)
 
   const [showSlider, setShowSlider] = useState(false)
 
+  const removeCover = () => {
+    setCover("");
+    saveProperty({
+      pageId,
+        data: {
+        cover: ""
+      }
+    })
+  }
 
   return (
     <>
@@ -59,7 +71,7 @@ function Cover() {
                   </Popover>
 
                   <Button onClick={() => setShowSlider(true)} variant="shadow" className="mx-2 z-[11]" size="sm">Reposition</Button>
-                  <Button onClick={() => setCover("")} className="z-[11]" isIconOnly variant="shadow" size="sm">
+                  <Button onClick={() => removeCover()} className="z-[11]" isIconOnly variant="shadow" size="sm">
                     <Icons.TrashIcon />
                   </Button>
                 </div>

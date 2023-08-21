@@ -32,41 +32,15 @@ export const createContentSlice: StateCreator<
     editable: true,
     setPageId: (pageId) => set((state) => ({ ...state, pageId })),
     setEditable: (editable) => set((state) => {
-      saveProperty({
-        pageId: state.pageId,
-        data: {
-          editable,
-        }
-      })
       return ({ ...state, editable })
     }),
     setCover: (cover) => set((state) => {
-      saveProperty({
-        pageId: state.pageId,
-        data: {
-          cover
-        }
-      })
       return ({ ...state, cover })
     }),
     setTitle: (title) => set((state) => {
-      console.log(state)
-      saveProperty({
-        pageId: state.pageId,
-        data: {
-          title
-        }
-      })
       return ({ ...state, title })
     }),
     setIcon: (icon) => set((state) => {
-      saveProperty({
-        pageId: state.pageId,
-        data: {
-          emoji: icon
-        }
-      })
-
       return ({ ...state, icon })
     }),
   })
