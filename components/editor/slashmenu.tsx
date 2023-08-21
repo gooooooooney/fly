@@ -1,14 +1,11 @@
-import { ReactSlashMenuItem } from "@blocknote/react"
+import { ReactSlashMenuItem } from "@blocknote/react";
 import { Icons } from "../icons";
 import { blockSchema } from "./block-schema";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { addNewPage, saveBlocks } from "@/lib/data-source/page";
+import { addNewPage, save, saveBlocks } from "@/lib/data-source/page";
 import OutHook from "../OutHook";
 
-export function insertOrUpdateBlock(
-  editor: BlockNoteEditor,
-  block: any
-) {
+export function insertOrUpdateBlock(editor: BlockNoteEditor, block: any) {
   const currentBlock = editor.getTextCursorPosition().block;
   if (
     (currentBlock.content.length === 1 &&
@@ -24,28 +21,36 @@ export function insertOrUpdateBlock(
   }
 }
 
-
 // Custom Slash Menu item which executes the above function.
 export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
   name: "Page",
   execute: (editor) => {
     const childBlock = editor.getTextCursorPosition().block;
-    const pageId = useBoundStore.getState().pageId
+    const pageId = useBoundStore.getState().pageId;
+    const workspaceId = useBoundStore.getState().workspaceId;
     insertOrUpdateBlock(editor, {
       type: "page",
-    })
-    saveBlocks({
-      pageId,
-      blocks: editor.topLevelBlocks
-    })
+    });
+    // saveBlocks({
+    //   pageId,
+    //   blocks: editor.topLevelBlocks
+    // })
+    // save({
+    //   pageId,
+    //   operations: [
+    //     {
+    //       command: "insert",
+    //       data: [childBlock],
+    //     },
+    //   ],
+    // });
     // OutHook.useRouter.push(`/${childBlock.id}`)
     // const spaceId = document.querySelector("#spaceid")?.getAttribute("data-spaceid")!
     addNewPage({
       pageId,
       blockId: childBlock.id,
       spaceId: useBoundStore.getState().workspaceId,
-    })
-
+    });
   },
   aliases: ["page"],
   group: "Basic blocks",

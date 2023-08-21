@@ -4,18 +4,23 @@ import prisma from "@/lib/prisma"
 export async function getPageById(pageId: string) {
   const page = await prisma?.page.findUnique({
     where: {
-      id: pageId
+      id: pageId,
+      
     },
     include: {
       properties: true,
       children: true,
       blocks: {
+        orderBy: {
+          order: "asc",
+        },
         select: {
           id: true,
           type: true,
           props: true,
           content: true,
           children: true,
+          order: true,
         }
       },
     }
@@ -131,6 +136,17 @@ export async function updateBlockProps({ pageId, data }: SavePropertyParams) {
     },
   })
   if (subPage) {
+    const props = {} as any
+    if (data.cover) {
+      props["cover"] = data.cover
+    }
+    if (data.emoji) {
+      props["emoji"] = data.emoji
+    }
+    if (data.title) {
+      props["title"] = data.title
+    }
+
     const res = await prisma?.block.update({
       where: {
         id: pageId
@@ -138,9 +154,7 @@ export async function updateBlockProps({ pageId, data }: SavePropertyParams) {
       data: {
         props: {
           ...subPage.props as any,
-          title: data.title,
-          emoji: data.emoji,
-          cover: data.cover,
+          ...props
         }
       }
     })
@@ -151,7 +165,7 @@ export async function saveProperty({ pageId, data }: SavePropertyParams) {
   try {
     return await prisma?.$transaction(async tx => {
 
-      updateBlockProps({ pageId, data })
+      await updateBlockProps({ pageId, data })
       return await tx.properties.upsert({
         where: {
           pageId: pageId,
@@ -213,28 +227,28 @@ export async function saveBlocks({
     })
 
     try {
-      await Promise.all(blocks.map(async (block) => {
-        await tx.block.upsert({
-          where: {
-            pageId,
-            id: block.id
-          },
-          create: {
-            id: block.id,
-            type: block.type,
-            props: block.props,
-            content: block.content,
-            children: block.children,
-            pageId,
-          },
-          update: {
-            type: block.type,
-            props: block.props,
-            children: block.children,
-            content: block.content,
-          }
-        })
-      }))
+      // await Promise.all(blocks.map(async (block) => {
+      //   await tx.block.upsert({
+      //     where: {
+      //       pageId,
+      //       id: block.id
+      //     },
+      //     create: {
+      //       id: block.id,
+      //       type: block.type,
+      //       props: block.props,
+      //       content: block.content,
+      //       children: block.children,
+      //       pageId,
+      //     },
+      //     update: {
+      //       type: block.type,
+      //       props: block.props,
+      //       children: block.children,
+      //       content: block.content,
+      //     }
+      //   })
+      // }))
       return true
     } catch (error) {
       console.log(error)
@@ -273,6 +287,7 @@ export async function save({
                 props: block.props,
                 content: block.content,
                 children: block.children,
+                order: block.order,
                 pageId,
               },
               update: {
@@ -280,6 +295,7 @@ export async function save({
                 type: block.type,
                 props: block.props,
                 children: block.children,
+                order: block.order,
               }
             })
           }))

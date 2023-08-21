@@ -5,9 +5,21 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useStore } from "zustand";
 import { LIST } from "@/constatns/emojis";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { saveProperty } from "@/lib/data-source/page";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
 
 function EmojiPicker() {
+    const pageId = useUuidPathname()
     const setEmoji = useStore(useBoundStore, (state) => state.setIcon)
+    const setIcon = (emoji: string) => {
+        setEmoji(emoji)
+        saveProperty({ 
+            pageId,
+            data: {
+                emoji
+            }
+         })
+    }
 
     return (
         <Tabs variant="underlined" size="sm" aria-label="Options">
@@ -17,7 +29,7 @@ function EmojiPicker() {
                         {LIST.map((list, index) => (
                             <div className="flex w-full flex-wrap" key={index}>
                                 {list.map((emoji, index) => (
-                                    <span onClick={() => setEmoji(emoji)}  key={index} className=" w-7 h-7 p-1 cursor-pointer text-xl">{emoji}</span>
+                                    <span onClick={() => setIcon(emoji)}  key={index} className=" w-7 h-7 p-1 cursor-pointer text-xl">{emoji}</span>
                                 ))}
                             </div>
                         ))}

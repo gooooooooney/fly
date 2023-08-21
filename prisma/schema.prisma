@@ -95,7 +95,7 @@ model Page {
 
 model Properties {
   pageId   String  @unique
-  page     Page?    @relation(fields: [pageId], references: [id])
+  page     Page?   @relation(fields: [pageId], references: [id])
   id       String  @id @default(cuid())
   cover    String  @default("")
   title    String  @default("")
@@ -112,6 +112,7 @@ model Block {
   page     Page?   @relation(fields: [pageId], references: [id])
   pageId   String
   propsId  String?
+  order    Int     
 }
 
 enum Type {

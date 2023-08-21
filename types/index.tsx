@@ -20,9 +20,9 @@ export type SavePropertyParams = {
   };
 };
 
-interface Operation {
+export interface Operation {
   command: Command;
-  data: Block[]
+  data: (Block & {order: number})[]
 }
 
 export type SaveParams = {
