@@ -1,12 +1,6 @@
 import { SignInCard } from "@/components/sign-in"
 
 
-const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
 
 export default function Page() {
 

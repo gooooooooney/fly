@@ -66,13 +66,14 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   };
 
   const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
+    // When the editor is first loaded, the content is empty, so skip the first time.
     if (first) {
       first = false;
       return;
     }
-    if (path !== pageId) return
+    if (path !== pageId) return;
     let topLevelBlocks = editor.topLevelBlocks;
-    if (topLevelBlocks.length === 0) return
+    if (topLevelBlocks.length === 0) return;
     // const lastBlock = topLevelBlocks[topLevelBlocks.length - 1];
     // console.log("lastBlock", lastBlock);
     // if (lastBlock.type == "paragraph" && lastBlock.content.length === 0) {
@@ -81,7 +82,10 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     const blockList = topLevelBlocks.map((block, index) => ({
       ...block,
       prevBlockId: index === 0 ? null : topLevelBlocks[index - 1].id,
-      nextBlockId: index === topLevelBlocks.length - 1 ? null : topLevelBlocks[index + 1].id,
+      nextBlockId:
+        index === topLevelBlocks.length - 1
+          ? null
+          : topLevelBlocks[index + 1].id,
     }));
     console.log("blockList", blockList);
 
@@ -89,24 +93,24 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     const currentBlock = blockList.find(
       (block) => editor.getTextCursorPosition().block.id === block.id
     );
-    const currentAssociatedBlock = [] as BlockWithOrder[]
+    // const currentAssociatedBlock = [] as BlockWithOrder[];
 
-    if (currentBlock?.prevBlockId) {
-      const prevBlock = blockList.find(
-        (block) => block.id === currentBlock.prevBlockId
-      );
-      if (prevBlock) {
-        currentAssociatedBlock.push(prevBlock)
-      }
-    }
-    if (currentBlock?.nextBlockId) {
-      const nextBlock = blockList.find(
-        (block) => block.id === currentBlock.nextBlockId
-      );
-      if (nextBlock) {
-        currentAssociatedBlock.push(nextBlock)
-      }
-    }
+    // if (currentBlock?.prevBlockId) {
+    //   const prevBlock = blockList.find(
+    //     (block) => block.id === currentBlock.prevBlockId
+    //   );
+    //   if (prevBlock) {
+    //     currentAssociatedBlock.push(prevBlock);
+    //   }
+    // }
+    // if (currentBlock?.nextBlockId) {
+    //   const nextBlock = blockList.find(
+    //     (block) => block.id === currentBlock.nextBlockId
+    //   );
+    //   if (nextBlock) {
+    //     currentAssociatedBlock.push(nextBlock);
+    //   }
+    // }
     // end current block
     const filterBlocks = (blocks: Block[]) => {
       return blocks.filter(
@@ -119,19 +123,19 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     // add block
     const addedBlocks = blockList.filter(
       (block) => !beforeBlocks.some((b) => b.id === block.id)
-    )
-    const addedAssociatedBlocks = [] as BlockWithOrder[]
-    addedBlocks.forEach(block => {
+    );
+    const addedAssociatedBlocks = [] as BlockWithOrder[];
+    addedBlocks.forEach((block) => {
       if (block.prevBlockId) {
-        const prevBlock = blockList.find(b => b.id === block.prevBlockId)
+        const prevBlock = blockList.find((b) => b.id === block.prevBlockId);
         if (prevBlock) {
-          addedAssociatedBlocks.push(prevBlock)
+          addedAssociatedBlocks.push(prevBlock);
         }
       }
       if (block.nextBlockId) {
-        const nextBlock = blockList.find(b => b.id === block.nextBlockId)
+        const nextBlock = blockList.find((b) => b.id === block.nextBlockId);
         if (nextBlock) {
-          addedAssociatedBlocks.push(nextBlock)
+          addedAssociatedBlocks.push(nextBlock);
         }
       }
     });
@@ -141,18 +145,18 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     const removedBlocks = beforeBlocks.filter(
       (block) => !blockList.some((b) => b.id === block.id)
     );
-    const removedAssociatedBlocks = [] as BlockWithOrder[]
-    removedBlocks.forEach(block => {
+    const removedAssociatedBlocks = [] as BlockWithOrder[];
+    removedBlocks.forEach((block) => {
       if (block.prevBlockId) {
-        const prevBlock = blockList.find(b => b.id === block.prevBlockId)
+        const prevBlock = blockList.find((b) => b.id === block.prevBlockId);
         if (prevBlock) {
-          removedAssociatedBlocks.push(prevBlock)
+          removedAssociatedBlocks.push(prevBlock);
         }
       }
       if (block.nextBlockId) {
-        const nextBlock = blockList.find(b => b.id === block.nextBlockId)
+        const nextBlock = blockList.find((b) => b.id === block.nextBlockId);
         if (nextBlock) {
-          removedAssociatedBlocks.push(nextBlock)
+          removedAssociatedBlocks.push(nextBlock);
         }
       }
     });
@@ -171,31 +175,18 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     if (removedBlocks.length > 0) {
       operations.push({
         command: "delete",
-        data: [...removedBlocks, ...removedAssociatedBlocks],
+        data: [...removedBlocks],
       });
     }
-    if (currentBlock) {
-      operations.push({
-        command: "update",
-        data: [currentBlock],
-      });
-    }
-
-    if (addedBlocks.length > 0) {
-      console.log("addedBlocks", addedBlocks);
-    }
-    if (removedBlocks.length > 0) {
-      console.log("removedBlocks", removedBlocks);
-    }
-    console.log("topLevelBlocks", blockList);
+    operations.push({
+      command: "update",
+      // Compatible nesting and indentation of bullet lists and ordered lists.
+      data: currentBlock ? [currentBlock, ...removedAssociatedBlocks] : removedAssociatedBlocks,
+    });
     save({
       pageId,
       operations,
     });
-    // saveBlocks({
-    //   pageId,
-    //   blocks: topLevelBlocks
-    // })
   };
   return (
     <Editor
@@ -204,7 +195,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
       editable={editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
-    // onEditorReady={handleEditorReady}
+      // onEditorReady={handleEditorReady}
     />
     // <>
     // {data?.body?.blocks?.map((block: any) => {

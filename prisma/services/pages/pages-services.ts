@@ -31,6 +31,7 @@ export async function getPageById(pageId: string) {
     map[item.id] = item;
     return map;
   }, {} as Record<string, typeof page['blocks'][number]>);
+  console.log("idMap=", idMap)
 
   // Initialize an array to store nodes without incoming edges (prevBlockId === null)
   const startNodes = dataArray.filter(item => item.prevBlockId === null && item.nextBlockId !== null);
@@ -48,7 +49,7 @@ export async function getPageById(pageId: string) {
       queue.push(idMap[nextNodeId]);
     }
   }
-  console.log(sortedArray)
+  // console.log(sortedArray)
   return {
     ...page,
     blocks: sortedArray.map(b => ({

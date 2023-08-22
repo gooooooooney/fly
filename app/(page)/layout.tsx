@@ -3,12 +3,9 @@ import { Sidebar } from "@/components/layout/sidebar";
 import PageTransitionLayout from "@/components/page-transition-layout";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import "@/styles/globals.css";
 import { PropsWithChildren } from "react";
 import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
-import {
-  getPageById,
-  getPageMenus,
-} from "@/prisma/services/pages/pages-services";
 import { Providers } from "@/components/providers";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { cn } from "@/lib/utils";
