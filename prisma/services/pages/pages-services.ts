@@ -5,27 +5,60 @@ export async function getPageById(pageId: string) {
   const page = await prisma?.page.findUnique({
     where: {
       id: pageId,
-      
+
     },
     include: {
       properties: true,
       children: true,
       blocks: {
-        orderBy: {
-          order: "asc",
-        },
         select: {
           id: true,
           type: true,
           props: true,
           content: true,
           children: true,
-          order: true,
+          prevBlockId: true,
+          nextBlockId: true,
         }
       },
     }
   })
-  return page
+  if (!page?.blocks) return null
+
+  const dataArray = page.blocks
+  // Create a map with IDs as keys for faster access
+  const idMap = dataArray.reduce((map, item) => {
+    map[item.id] = item;
+    return map;
+  }, {} as Record<string, typeof page['blocks'][number]>);
+
+  // Initialize an array to store nodes without incoming edges (prevBlockId === null)
+  const startNodes = dataArray.filter(item => item.prevBlockId === null && item.nextBlockId !== null);
+
+  // Perform topological sort
+  const sortedArray = [];
+  const queue = [...startNodes];
+
+  while (queue.length > 0) {
+    const currentNode = queue.shift();
+    sortedArray.push(currentNode);
+
+    const nextNodeId = currentNode?.nextBlockId;
+    if (nextNodeId && idMap[nextNodeId]) {
+      queue.push(idMap[nextNodeId]);
+    }
+  }
+  console.log(sortedArray)
+  return {
+    ...page,
+    blocks: sortedArray.map(b => ({
+      id: b?.id,
+      type: b?.type,
+      props: b?.props,
+      content: b?.content,
+      children: b?.children,
+    }))
+  }
 }
 
 export async function getAllPage(pageId: string) {
@@ -276,6 +309,7 @@ export async function save({
         }
         if (operation.command === "update" || operation.command === "insert") {
           await Promise.all(operation.data.map(async (block) => {
+            console.log("---->",block)
             await tx.block.upsert({
               where: {
                 pageId,
@@ -287,7 +321,8 @@ export async function save({
                 props: block.props,
                 content: block.content,
                 children: block.children,
-                order: block.order,
+                prevBlockId: block.prevBlockId,
+                nextBlockId: block.nextBlockId,
                 pageId,
               },
               update: {
@@ -295,7 +330,8 @@ export async function save({
                 type: block.type,
                 props: block.props,
                 children: block.children,
-                order: block.order,
+                prevBlockId: block.prevBlockId,
+                nextBlockId: block.nextBlockId,
               }
             })
           }))

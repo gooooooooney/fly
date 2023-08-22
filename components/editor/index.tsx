@@ -18,6 +18,7 @@ interface EditorWrapperProps {
   // blocks: BlockNoteEditor["topLevelBlocks"]
 }
 
+let first = true;
 let beforeBlocks = [] as BlockWithOrder[];
 
 export const EditorWrapper = (props: EditorWrapperProps) => {
@@ -29,7 +30,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     state.setEditor,
     state.pageId,
   ]);
-  
+
   const { data } = usePageInit();
 
   const { theme } = useTheme();
@@ -65,14 +66,48 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   };
 
   const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
+    if (first) {
+      first = false;
+      return;
+    }
     if (path !== pageId) return
-    const topLevelBlocks = editor.topLevelBlocks.map((block, index) => ({
+    let topLevelBlocks = editor.topLevelBlocks;
+    if (topLevelBlocks.length === 0) return
+    // const lastBlock = topLevelBlocks[topLevelBlocks.length - 1];
+    // console.log("lastBlock", lastBlock);
+    // if (lastBlock.type == "paragraph" && lastBlock.content.length === 0) {
+    //   topLevelBlocks.pop()
+    // }
+    const blockList = topLevelBlocks.map((block, index) => ({
       ...block,
-      order: index,
+      prevBlockId: index === 0 ? null : topLevelBlocks[index - 1].id,
+      nextBlockId: index === topLevelBlocks.length - 1 ? null : topLevelBlocks[index + 1].id,
     }));
-    const currentBlock = topLevelBlocks.find(
+    console.log("blockList", blockList);
+
+    // current block
+    const currentBlock = blockList.find(
       (block) => editor.getTextCursorPosition().block.id === block.id
     );
+    const currentAssociatedBlock = [] as BlockWithOrder[]
+
+    if (currentBlock?.prevBlockId) {
+      const prevBlock = blockList.find(
+        (block) => block.id === currentBlock.prevBlockId
+      );
+      if (prevBlock) {
+        currentAssociatedBlock.push(prevBlock)
+      }
+    }
+    if (currentBlock?.nextBlockId) {
+      const nextBlock = blockList.find(
+        (block) => block.id === currentBlock.nextBlockId
+      );
+      if (nextBlock) {
+        currentAssociatedBlock.push(nextBlock)
+      }
+    }
+    // end current block
     const filterBlocks = (blocks: Block[]) => {
       return blocks.filter(
         (block) =>
@@ -82,29 +117,61 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     };
 
     // add block
-    const addedBlocks = topLevelBlocks.filter(
+    const addedBlocks = blockList.filter(
       (block) => !beforeBlocks.some((b) => b.id === block.id)
-    );
+    )
+    const addedAssociatedBlocks = [] as BlockWithOrder[]
+    addedBlocks.forEach(block => {
+      if (block.prevBlockId) {
+        const prevBlock = blockList.find(b => b.id === block.prevBlockId)
+        if (prevBlock) {
+          addedAssociatedBlocks.push(prevBlock)
+        }
+      }
+      if (block.nextBlockId) {
+        const nextBlock = blockList.find(b => b.id === block.nextBlockId)
+        if (nextBlock) {
+          addedAssociatedBlocks.push(nextBlock)
+        }
+      }
+    });
+    // end add block
 
     // remove block
     const removedBlocks = beforeBlocks.filter(
-      (block) => !topLevelBlocks.some((b) => b.id === block.id)
+      (block) => !blockList.some((b) => b.id === block.id)
     );
+    const removedAssociatedBlocks = [] as BlockWithOrder[]
+    removedBlocks.forEach(block => {
+      if (block.prevBlockId) {
+        const prevBlock = blockList.find(b => b.id === block.prevBlockId)
+        if (prevBlock) {
+          removedAssociatedBlocks.push(prevBlock)
+        }
+      }
+      if (block.nextBlockId) {
+        const nextBlock = blockList.find(b => b.id === block.nextBlockId)
+        if (nextBlock) {
+          removedAssociatedBlocks.push(nextBlock)
+        }
+      }
+    });
+    // end remove block
 
-    beforeBlocks = topLevelBlocks;
+    beforeBlocks = blockList;
 
     const operations: Operation[] = [];
 
     if (addedBlocks.length > 0) {
       operations.push({
         command: "insert",
-        data: addedBlocks,
+        data: [...addedBlocks, ...addedAssociatedBlocks],
       });
     }
     if (removedBlocks.length > 0) {
       operations.push({
         command: "delete",
-        data: removedBlocks,
+        data: [...removedBlocks, ...removedAssociatedBlocks],
       });
     }
     if (currentBlock) {
@@ -120,7 +187,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     if (removedBlocks.length > 0) {
       console.log("removedBlocks", removedBlocks);
     }
-    console.log("topLevelBlocks", topLevelBlocks);
+    console.log("topLevelBlocks", blockList);
     save({
       pageId,
       operations,
@@ -137,7 +204,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
       editable={editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
-      // onEditorReady={handleEditorReady}
+    // onEditorReady={handleEditorReady}
     />
     // <>
     // {data?.body?.blocks?.map((block: any) => {

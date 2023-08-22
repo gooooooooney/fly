@@ -17,8 +17,6 @@ import { blockSchema } from "./block-schema";
 
 import { CustomSideMenu } from "./custom-side-menu";
 import { useTheme } from "next-themes";
-import { usePageInit } from "@/hooks/use-page-init";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
 interface EditorProps {
   editable: boolean;
   initialContent: BlockNoteEditor["topLevelBlocks"];

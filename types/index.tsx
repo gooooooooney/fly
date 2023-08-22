@@ -22,7 +22,7 @@ export type SavePropertyParams = {
 
 export interface Operation {
   command: Command;
-  data: (Block & {order: number})[]
+  data: BlockWithOrder[]
 }
 
 export type SaveParams = {

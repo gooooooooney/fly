@@ -26,6 +26,7 @@ export const PageBlock = createReactBlockSpec({
         return (
             <>
                 <Link as={NextLink}
+                    contentEditable={false}
                     href={`/${block.id}`}
                     isBlock
                     className="data-[focus-visible=true]:outline-0 after:rounded-sm  hover:after:bg-primary/10 flex cursor-pointer " >

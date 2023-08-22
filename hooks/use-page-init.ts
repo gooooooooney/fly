@@ -17,6 +17,8 @@ export function usePageInit() {
   const id = usePathname().split("/").pop()
   useUuidPathname()
   
-  return useSWR(id ? () => "/api/page/get?pageId="+id : null, init)
+  return useSWR(id ? () => "/api/page/get?pageId="+id : null, init, {
+    revalidateOnFocus: false,
+  })
 
 }
