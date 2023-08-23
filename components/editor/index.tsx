@@ -67,10 +67,10 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
 
   const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
     // When the editor is first loaded, the content is empty, so skip the first time.
-
-    if (path !== pageId) return;
+    // console.log("render change", editor.topLevelBlocks)
+    // if (path !== pageId) return;
     let topLevelBlocks = editor.topLevelBlocks;
-    if (topLevelBlocks.length === 0) return;
+    // if (topLevelBlocks.length === 0) return;
     const blockList = topLevelBlocks.map((block, index) => ({
       ...block,
       prevBlockId: index === 0 ? null : topLevelBlocks[index - 1].id,
@@ -79,11 +79,12 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
           ? null
           : topLevelBlocks[index + 1].id,
     }));
-    if (first) {
-      first = false;
-      beforeBlocks = blockList;
-      return;
-    }
+    // if (first) {
+    //   first = false;
+    //   beforeBlocks = blockList;
+    //   console.log("beforeBlocks", beforeBlocks)
+    //   return;
+    // }
     const currentBlockId = editor.getTextCursorPosition().block.id;
     // current block
     let currentBlock: BlockWithOrder | undefined
@@ -187,7 +188,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     if (addedBlocks.length > 0) {
       operations.push({
         command: "insert",
-        data: [...addedBlocks, ...addedAssociatedBlocks],
+        data: _.uniqBy([...addedBlocks, ...addedAssociatedBlocks], "id"),
       });
     }
     if (removedBlocks.length > 0) {
@@ -199,7 +200,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     operations.push({
       command: "update",
       // Compatible nesting and indentation of bullet lists and ordered lists.
-      data: currentBlock ? [currentBlock, ...removedAssociatedBlocks] : removedAssociatedBlocks,
+      data: _.uniqBy((currentBlock ? [currentBlock, ...removedAssociatedBlocks] : removedAssociatedBlocks), "id"),
     });
     save({
       pageId,

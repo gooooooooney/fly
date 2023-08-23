@@ -104,16 +104,18 @@ model Properties {
 }
 
 model Block {
-  id          String  @id
+  id          String  @id @unique
   type        Type
-  children    Json    @db.Json
+  parentId    String?
+  parent      Block?  @relation("ParentChildBlock", fields: [parentId], references: [id])
+  children    Block[] @relation("ParentChildBlock")
   content     Json    @db.Json
   props       Json    @db.Json
   page        Page?   @relation(fields: [pageId], references: [id])
-  pageId      String
+  pageId      String?
   propsId     String?
-  prevBlockId String? 
-  nextBlockId String? 
+  prevBlockId String?
+  nextBlockId String?
 }
 
 enum Type {

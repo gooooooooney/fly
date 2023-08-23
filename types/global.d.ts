@@ -3,7 +3,7 @@ import { CustomBlockSchema } from "@/components/editor/block-schema";
 declare global {
   type BlockNoteEditor = import("@blocknote/core").BlockNoteEditor<CustomBlockSchema>
   type Block = import("@blocknote/core").Block<CustomBlockSchema>
-  type BlockWithOrder =  Block & { prevBlockId: string | null, nextBlockId: string | null }
+  type BlockWithOrder =  Block & { prevBlockId?: string | null, nextBlockId?: string | null }
 
   interface HttpRequestDataHead {
 

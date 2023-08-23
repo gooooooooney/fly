@@ -27,6 +27,7 @@ export interface Operation {
 
 export type SaveParams = {
   pageId: string;
+  parentId?: string;
   operations: Operation[];
 
 }

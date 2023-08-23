@@ -1,11 +1,35 @@
 import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types"
 import prisma from "@/lib/prisma"
 
+async function getNestedComments(id: string) {
+  const blocks = await prisma.block.findUnique({
+    where: { id: id },
+    include: { children: true },
+  });
+
+  if (!blocks) {
+    return null;
+  }
+
+  const nestedComment = {
+    ...blocks,
+    children: [] as typeof blocks['children'],
+  };
+
+  for (const childComment of blocks.children) {
+    const nestedChild = await getNestedComments(childComment.id);
+
+    nestedChild && nestedComment.children.push(nestedChild);
+  }
+
+  return nestedComment;
+}
+
+
 export async function getPageById(pageId: string) {
   const page = await prisma?.page.findUnique({
     where: {
       id: pageId,
-
     },
     include: {
       properties: true,
@@ -15,15 +39,25 @@ export async function getPageById(pageId: string) {
           id: true,
           type: true,
           props: true,
-          content: true,
           children: true,
+          content: true,
           prevBlockId: true,
           nextBlockId: true,
         }
       },
-    }
+    },
+    
   })
-  if (!page?.blocks) return null
+  if (!page) return null
+  if (!page.blocks) return null
+  
+
+  for (const block of page.blocks) {
+    const children = await getNestedComments(block.id);
+    block.children = children?.children || [];
+  }
+
+  
 
   const dataArray = page.blocks
   // Create a map with IDs as keys for faster access
@@ -31,7 +65,6 @@ export async function getPageById(pageId: string) {
     map[item.id] = item;
     return map;
   }, {} as Record<string, typeof page['blocks'][number]>);
-  console.log("idMap=", idMap)
 
   // Initialize an array to store nodes without incoming edges (prevBlockId === null)
   const startNodes = dataArray.filter(item => item.prevBlockId === null && item.nextBlockId !== null);
@@ -293,19 +326,33 @@ export async function saveBlocks({
 
 export async function save({
   pageId,
-  operations
+  operations,
+  parentId
 }: SaveParams) {
   return await prisma.$transaction(async tx => {
     try {
       await Promise.all(operations.map(async (operation) => {
         if (operation.command === "delete") {
           await Promise.all(operation.data.map(async (block) => {
-            await tx.block.delete({
+           const del = await tx.block.delete({
               where: {
                 pageId,
                 id: block.id
+              },
+              include: {
+                children: true
               }
             })
+            if (del.children.length) {
+              console.log(del.children)
+              save({
+                pageId,
+                operations: [{
+                  command: operation.command,
+                  data: del.children as any,
+                }]
+              })
+            }
           }))
         }
         if (operation.command === "update" || operation.command === "insert") {
@@ -320,20 +367,30 @@ export async function save({
                 type: block.type,
                 props: block.props,
                 content: block.content,
-                children: block.children,
-                prevBlockId: block.prevBlockId,
-                nextBlockId: block.nextBlockId,
+                parentId: parentId ? parentId : null,
+                prevBlockId: parentId ? undefined : block.prevBlockId,
+                nextBlockId: parentId ? undefined : block.nextBlockId,
                 pageId,
               },
               update: {
                 content: block.content,
                 type: block.type,
+                parentId: parentId ? parentId : null,
                 props: block.props,
-                children: block.children,
-                prevBlockId: block.prevBlockId,
-                nextBlockId: block.nextBlockId,
+                prevBlockId: parentId ? undefined : block.prevBlockId,
+                nextBlockId: parentId ? undefined : block.nextBlockId,
               }
             })
+            if (block.children.length) {
+               save({
+                pageId,
+                parentId: block.id,
+                operations: [{
+                  command: operation.command,
+                  data: block.children,
+                }]
+              })
+            }
           }))
         }
 
