@@ -3,12 +3,9 @@ import { Sidebar } from "@/components/layout/sidebar";
 import PageTransitionLayout from "@/components/page-transition-layout";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import "@/styles/globals.css";
 import { PropsWithChildren } from "react";
 import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
-import { Providers } from "@/components/providers";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { cn } from "@/lib/utils";
 
 export default async function PageLayout(
   props: PropsWithChildren & {
@@ -27,9 +24,6 @@ export default async function PageLayout(
   }
 
   return (
-    <html lang="en">
-      <body className={cn("text-primary")}>
-        <Providers>
           <section className=" h-screen">
             <section className="flex h-screen">
               <Sidebar wps={wps} email={session.user.email!} />
@@ -43,8 +37,5 @@ export default async function PageLayout(
               </section>
             </section>
           </section>
-        </Providers>
-      </body>
-    </html>
   );
 }
