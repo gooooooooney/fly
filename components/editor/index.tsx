@@ -179,6 +179,8 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     // end remove block
 
     beforeBlocks = blockList;
+    console.log("blockList", blockList);
+    console.log("currentBlock", currentBlock);
 
     const operations: Operation[] = [];
 

@@ -14,7 +14,8 @@ export function insertOrUpdateBlock(editor: BlockNoteEditor, block: any) {
     currentBlock.content.length === 0
   ) {
     editor.updateBlock(currentBlock, block);
-    editor.setTextCursorPosition(editor.getTextCursorPosition().nextBlock!);
+    const {block:  b, nextBlock} = editor.getTextCursorPosition()
+    editor.setTextCursorPosition(nextBlock || b);
   } else {
     editor.insertBlocks([block], currentBlock, "after");
     editor.setTextCursorPosition(editor.getTextCursorPosition().nextBlock!);
@@ -27,7 +28,6 @@ export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
   execute: (editor) => {
     const childBlock = editor.getTextCursorPosition().block;
     const pageId = useBoundStore.getState().pageId;
-    const workspaceId = useBoundStore.getState().workspaceId;
     insertOrUpdateBlock(editor, {
       type: "page",
     });
