@@ -67,7 +67,6 @@ export default function Editor({
 
   useEffect(() => {
     if (editor) {
-      console.log("editor", editor);
       // setEditor(editor)
       // onEditorReady?.(editor);
       editor.isEditable = editable;

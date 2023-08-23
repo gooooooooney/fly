@@ -11,7 +11,6 @@ const getShortcutIcon = (icon: string) => {
 };
 
 export function useClientInit(id: string) {
-  console.log("render helmet");
   const [emoji, title, setPageId] = useBoundStore((state) => [
     state.icon,
     state.title,

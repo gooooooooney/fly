@@ -10,6 +10,7 @@ import { usePageInit } from "@/hooks/use-page-init";
 import Link from "next/link";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { Operation } from "@/types";
+import { BlockList } from "net";
 const Editor = dynamic(() => import("@/components/editor/editor"), {
   ssr: false,
 });
@@ -23,7 +24,6 @@ let beforeBlocks = [] as BlockWithOrder[];
 
 export const EditorWrapper = (props: EditorWrapperProps) => {
   const path = useUuidPathname();
-  console.log(path);
   // const { blocks } = props
   const [editable] = useStore(useBoundStore, (state) => [state.editable]);
   const [setEditor, pageId] = useBoundStore((state) => [
@@ -67,18 +67,10 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
 
   const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
     // When the editor is first loaded, the content is empty, so skip the first time.
-    if (first) {
-      first = false;
-      return;
-    }
+
     if (path !== pageId) return;
     let topLevelBlocks = editor.topLevelBlocks;
     if (topLevelBlocks.length === 0) return;
-    // const lastBlock = topLevelBlocks[topLevelBlocks.length - 1];
-    // console.log("lastBlock", lastBlock);
-    // if (lastBlock.type == "paragraph" && lastBlock.content.length === 0) {
-    //   topLevelBlocks.pop()
-    // }
     const blockList = topLevelBlocks.map((block, index) => ({
       ...block,
       prevBlockId: index === 0 ? null : topLevelBlocks[index - 1].id,
@@ -87,12 +79,36 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
           ? null
           : topLevelBlocks[index + 1].id,
     }));
-    console.log("blockList", blockList);
-
+    if (first) {
+      first = false;
+      beforeBlocks = blockList;
+      return;
+    }
+    const currentBlockId = editor.getTextCursorPosition().block.id;
     // current block
-    const currentBlock = blockList.find(
-      (block) => editor.getTextCursorPosition().block.id === block.id
-    );
+    let currentBlock: BlockWithOrder | undefined
+
+    const findCurrentRootBlock = (block: any): any => {
+      if (block.id === currentBlockId) return true
+      if (block.children) {
+        for (let i = 0; i < block.children.length; i++) {
+          const b = block.children[i];
+          if (findCurrentRootBlock(b)) {
+            return true
+          }
+        }
+        return false
+      }
+    };
+
+    // Compatible nesting and indentation of bullet lists and ordered lists.
+    for (let i = 0; i < blockList.length; i++) {
+      const block = blockList[i];
+      if (findCurrentRootBlock(block)) {
+        currentBlock = block
+      }
+    }
+
     // const currentAssociatedBlock = [] as BlockWithOrder[];
 
     // if (currentBlock?.prevBlockId) {
@@ -195,7 +211,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
       editable={editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
-      // onEditorReady={handleEditorReady}
+    // onEditorReady={handleEditorReady}
     />
     // <>
     // {data?.body?.blocks?.map((block: any) => {

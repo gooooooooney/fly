@@ -310,7 +310,6 @@ export async function save({
         }
         if (operation.command === "update" || operation.command === "insert") {
           await Promise.all(operation.data.map(async (block) => {
-            console.log("---->",block)
             await tx.block.upsert({
               where: {
                 pageId,
