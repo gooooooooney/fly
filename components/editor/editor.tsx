@@ -49,7 +49,7 @@ export default function Editor({
 
         insertPageItem,
       ],
-      initialContent: initialContent.length === 0 ? [{ type: "paragraph" }] : initialContent,
+      initialContent: initialContent.length === 0 ? undefined : initialContent,
       domAttributes: {
         blockContainer: {
           class: "!bg-background text-primary",
@@ -61,13 +61,10 @@ export default function Editor({
       onEditorReady: (editor) => {
         onEditorReady?.(editor);
       },
-      onEditorContentChange: e => {
-        onEditorContentChange?.(e)
-        console.log("onEditorContentChange")
-      },
+      onEditorContentChange,
       onTextCursorPositionChange,
     },
-    [editable, initialContent]
+    [editable, pageId, onEditorContentChange, initialContent]
   );
 
   useEffect(() => {

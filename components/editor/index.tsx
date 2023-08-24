@@ -3,9 +3,9 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useStore } from "zustand";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
-import { useCallback } from "react";
+import { useEffect, useState } from "react";
 import _ from "lodash";
-import { save,  } from "@/lib/data-source/page";
+import { save } from "@/lib/data-source/page";
 import { usePageInit } from "@/hooks/use-page-init";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { Operation } from "@/types";
@@ -18,29 +18,27 @@ interface EditorWrapperProps {
   // blocks: BlockNoteEditor["topLevelBlocks"]
 }
 
-
-
 export const EditorWrapper = (props: EditorWrapperProps) => {
-  let first = true;
+  
+
   let beforeBlocks = [] as BlockWithOrder[];
+  const [shouldUpdateContent, setShouldUpdateContent] = useState(false)
+  const { data } = usePageInit();
+
   const path = useUuidPathname();
+  useEffect(() => {
+    setShouldUpdateContent(true)
+  }, [data])
   // const { blocks } = props
   const [editable] = useStore(useBoundStore, (state) => [state.editable]);
 
 
-  const { data, isLoading } = usePageInit();
-
   const { theme } = useTheme();
-  
 
-  // if (data) {
-  //   first = true;
-  // }
-  if (!data?.body?.blocks) return null
-  beforeBlocks = data?.body?.blocks as any
+  if (!data?.body?.blocks) return null;
+  beforeBlocks = data?.body?.blocks as any;
 
   const handleTextCursorPositionChange = (editor: BlockNoteEditor) => {
-    
     const currentBlock = editor.getTextCursorPosition().block;
     if (currentBlock.type === "page") {
       // Retrieve all blocks before the current block and reverse them.
@@ -66,15 +64,10 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   };
 
   const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
-    // When the editor is first loaded, the content is empty, so skip the first time.
-    // console.log("render change", editor.topLevelBlocks)
-    // console.log("first =", first)
-    // if (first) {
-    //   first = false;
-    //   beforeBlocks = editor.topLevelBlocks;
-    //   return;
-    // }
-    
+    // 避免第一次渲染的时候触发导致调用save接口
+    if (!shouldUpdateContent) {
+      return
+    }
     let topLevelBlocks = editor.topLevelBlocks;
     // if (topLevelBlocks.length === 0) return;
     const blockList = topLevelBlocks.map((block, index) => ({
@@ -86,47 +79,42 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
           : topLevelBlocks[index + 1].id,
     }));
 
- 
-    let currentBlock: BlockWithOrder | undefined
+    let currentBlock: BlockWithOrder | undefined;
 
     // 判断是否交换了block 交换了就把所有的block都更新
     const hasOrderChanged = function () {
-      return (blockList.length === beforeBlocks.length) &&
-        areArraysEqual(beforeBlocks, blockList, (a, b) => a.id === b.id) == false
-    }
-    const isOrderChanged = hasOrderChanged()
+      return (
+        blockList.length === beforeBlocks.length &&
+        areArraysEqual(beforeBlocks, blockList, (a, b) => a.id === b.id) ==
+          false
+      );
+    };
+    const isOrderChanged = hasOrderChanged();
     const currentBlockId = editor.getTextCursorPosition().block.id;
     // current block
 
     const findCurrentRootBlock = (block: any): any => {
-      if (block.id === currentBlockId) return true
+      if (block.id === currentBlockId) return true;
       if (block.children) {
         for (let i = 0; i < block.children.length; i++) {
           const b = block.children[i];
           if (findCurrentRootBlock(b)) {
-            return true
+            return true;
           }
         }
-        return false
+        return false;
       }
     };
-
 
     // Compatible nesting and indentation of bullet lists and ordered lists.
     for (let i = 0; i < blockList.length; i++) {
       const block = blockList[i];
       if (findCurrentRootBlock(block)) {
-        currentBlock = block
+        currentBlock = block;
       }
     }
     // end current block
-    const filterBlocks = (blocks: Block[]) => {
-      return blocks.filter(
-        (block) =>
-          (block.type === "paragraph" && block.content.length > 0) ||
-          block.type !== "paragraph"
-      );
-    };
+
 
     // add block
     const addedBlocks = blockList.filter(
@@ -172,7 +160,11 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
 
     beforeBlocks = blockList;
 
-    const updateBlocks = [...removedAssociatedBlocks, ...addedBlocks, ...addedAssociatedBlocks]
+    const updateBlocks = [
+      ...removedAssociatedBlocks,
+      ...addedBlocks,
+      ...addedAssociatedBlocks,
+    ];
 
     const operations: Operation[] = [];
 
@@ -191,13 +183,14 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     operations.push({
       command: "update",
       // Compatible nesting and indentation of bullet lists and ordered lists.
-      data: isOrderChanged ? blockList : _.uniqBy(currentBlock ?
-        [currentBlock, ...updateBlocks]
-        :
-        updateBlocks, "id"),
+      data: isOrderChanged
+        ? blockList
+        : _.uniqBy(
+            currentBlock ? [currentBlock, ...updateBlocks] : updateBlocks,
+            "id"
+          ),
     });
-    console.log(operations, "operations")
-    if (first) {}
+
     save({
       pageId: path,
       operations,
@@ -210,7 +203,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
       editable={editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
-    // onEditorReady={handleEditorReady}
+      // onEditorReady={handleEditorReady}
     />
     // <>
     // {data?.body?.blocks?.map((block: any) => {
