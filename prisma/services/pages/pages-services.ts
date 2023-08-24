@@ -1,7 +1,7 @@
 import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types"
 import prisma from "@/lib/prisma"
 
-async function getNestedComments(id: string) {
+async function getNestedBlocks(id: string) {
   const blocks = await prisma.block.findUnique({
     where: { id: id },
     include: { children: true },
@@ -11,18 +11,18 @@ async function getNestedComments(id: string) {
     return null;
   }
 
-  const nestedComment = {
+  const nestedBlock = {
     ...blocks,
     children: [] as typeof blocks['children'],
   };
 
-  for (const childComment of blocks.children) {
-    const nestedChild = await getNestedComments(childComment.id);
+  for (const childBlock of blocks.children) {
+    const nestedChild = await getNestedBlocks(childBlock.id);
 
-    nestedChild && nestedComment.children.push(nestedChild);
+    nestedChild && nestedBlock.children.push(nestedChild);
   }
 
-  return nestedComment;
+  return nestedBlock;
 }
 
 
@@ -53,8 +53,8 @@ export async function getPageById(pageId: string) {
   
 
   for (const block of page.blocks) {
-    const children = await getNestedComments(block.id);
-    block.children = children?.children || [];
+    const children = await getNestedBlocks(block.id);
+    block.children = children?.children.length ? children.children : block.children;
   }
 
   
@@ -368,8 +368,8 @@ export async function save({
                 props: block.props,
                 content: block.content,
                 parentId: parentId ? parentId : null,
-                prevBlockId: parentId ? undefined : block.prevBlockId,
-                nextBlockId: parentId ? undefined : block.nextBlockId,
+                prevBlockId: parentId ? undefined : block.prevBlockId ? block.prevBlockId : null,
+                nextBlockId: parentId ? undefined : block.nextBlockId ? block.nextBlockId : null,
                 pageId,
               },
               update: {
@@ -377,8 +377,10 @@ export async function save({
                 type: block.type,
                 parentId: parentId ? parentId : null,
                 props: block.props,
-                prevBlockId: parentId ? undefined : block.prevBlockId,
-                nextBlockId: parentId ? undefined : block.nextBlockId,
+                // when block.prevBlockId is null, it means the block is the first block
+                // so we need to set prevBlockId to null
+                prevBlockId: parentId ? undefined : block.prevBlockId ? block.prevBlockId : null,
+                nextBlockId: parentId ? undefined : block.nextBlockId ? block.nextBlockId : null,
               }
             })
             if (block.children.length) {

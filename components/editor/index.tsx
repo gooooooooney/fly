@@ -5,12 +5,11 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import { useCallback } from "react";
 import _ from "lodash";
-import { save, saveBlocks } from "@/lib/data-source/page";
+import { save,  } from "@/lib/data-source/page";
 import { usePageInit } from "@/hooks/use-page-init";
-import Link from "next/link";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { Operation } from "@/types";
-import { BlockList } from "net";
+import { areArraysEqual } from "@/lib/array";
 const Editor = dynamic(() => import("@/components/editor/editor"), {
   ssr: false,
 });
@@ -19,28 +18,29 @@ interface EditorWrapperProps {
   // blocks: BlockNoteEditor["topLevelBlocks"]
 }
 
-let first = true;
-let beforeBlocks = [] as BlockWithOrder[];
+
 
 export const EditorWrapper = (props: EditorWrapperProps) => {
+  let first = true;
+  let beforeBlocks = [] as BlockWithOrder[];
   const path = useUuidPathname();
   // const { blocks } = props
   const [editable] = useStore(useBoundStore, (state) => [state.editable]);
-  const [setEditor, pageId] = useBoundStore((state) => [
-    state.setEditor,
-    state.pageId,
-  ]);
 
-  const { data } = usePageInit();
+
+  const { data, isLoading } = usePageInit();
 
   const { theme } = useTheme();
-  const handleEditorReady = useCallback((editor: BlockNoteEditor | null) => {
-    if (editor) {
-      setEditor(editor);
-    }
-  }, []);
+  
+
+  // if (data) {
+  //   first = true;
+  // }
+  if (!data?.body?.blocks) return null
+  beforeBlocks = data?.body?.blocks as any
 
   const handleTextCursorPositionChange = (editor: BlockNoteEditor) => {
+    
     const currentBlock = editor.getTextCursorPosition().block;
     if (currentBlock.type === "page") {
       // Retrieve all blocks before the current block and reverse them.
@@ -68,7 +68,13 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
     // When the editor is first loaded, the content is empty, so skip the first time.
     // console.log("render change", editor.topLevelBlocks)
-    // if (path !== pageId) return;
+    // console.log("first =", first)
+    // if (first) {
+    //   first = false;
+    //   beforeBlocks = editor.topLevelBlocks;
+    //   return;
+    // }
+    
     let topLevelBlocks = editor.topLevelBlocks;
     // if (topLevelBlocks.length === 0) return;
     const blockList = topLevelBlocks.map((block, index) => ({
@@ -79,15 +85,18 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
           ? null
           : topLevelBlocks[index + 1].id,
     }));
-    // if (first) {
-    //   first = false;
-    //   beforeBlocks = blockList;
-    //   console.log("beforeBlocks", beforeBlocks)
-    //   return;
-    // }
+
+ 
+    let currentBlock: BlockWithOrder | undefined
+
+    // 判断是否交换了block 交换了就把所有的block都更新
+    const hasOrderChanged = function () {
+      return (blockList.length === beforeBlocks.length) &&
+        areArraysEqual(beforeBlocks, blockList, (a, b) => a.id === b.id) == false
+    }
+    const isOrderChanged = hasOrderChanged()
     const currentBlockId = editor.getTextCursorPosition().block.id;
     // current block
-    let currentBlock: BlockWithOrder | undefined
 
     const findCurrentRootBlock = (block: any): any => {
       if (block.id === currentBlockId) return true
@@ -102,6 +111,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
       }
     };
 
+
     // Compatible nesting and indentation of bullet lists and ordered lists.
     for (let i = 0; i < blockList.length; i++) {
       const block = blockList[i];
@@ -109,25 +119,6 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
         currentBlock = block
       }
     }
-
-    // const currentAssociatedBlock = [] as BlockWithOrder[];
-
-    // if (currentBlock?.prevBlockId) {
-    //   const prevBlock = blockList.find(
-    //     (block) => block.id === currentBlock.prevBlockId
-    //   );
-    //   if (prevBlock) {
-    //     currentAssociatedBlock.push(prevBlock);
-    //   }
-    // }
-    // if (currentBlock?.nextBlockId) {
-    //   const nextBlock = blockList.find(
-    //     (block) => block.id === currentBlock.nextBlockId
-    //   );
-    //   if (nextBlock) {
-    //     currentAssociatedBlock.push(nextBlock);
-    //   }
-    // }
     // end current block
     const filterBlocks = (blocks: Block[]) => {
       return blocks.filter(
@@ -180,17 +171,17 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     // end remove block
 
     beforeBlocks = blockList;
-    console.log("blockList", blockList);
-    console.log("currentBlock", currentBlock);
+
+    const updateBlocks = [...removedAssociatedBlocks, ...addedBlocks, ...addedAssociatedBlocks]
 
     const operations: Operation[] = [];
 
-    if (addedBlocks.length > 0) {
-      operations.push({
-        command: "insert",
-        data: _.uniqBy([...addedBlocks, ...addedAssociatedBlocks], "id"),
-      });
-    }
+    // if (addedBlocks.length > 0) {
+    //   operations.push({
+    //     command: "insert",
+    //     data: _.uniqBy([...addedBlocks, ...addedAssociatedBlocks], "id"),
+    //   });
+    // }
     if (removedBlocks.length > 0) {
       operations.push({
         command: "delete",
@@ -200,10 +191,15 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     operations.push({
       command: "update",
       // Compatible nesting and indentation of bullet lists and ordered lists.
-      data: _.uniqBy((currentBlock ? [currentBlock, ...removedAssociatedBlocks] : removedAssociatedBlocks), "id"),
+      data: isOrderChanged ? blockList : _.uniqBy(currentBlock ?
+        [currentBlock, ...updateBlocks]
+        :
+        updateBlocks, "id"),
     });
+    console.log(operations, "operations")
+    if (first) {}
     save({
-      pageId,
+      pageId: path,
       operations,
     });
   };

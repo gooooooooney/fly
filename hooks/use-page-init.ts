@@ -2,10 +2,8 @@ import { PageResponse } from "@/app/api/page/get/route"
 import { fetcher } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import useSWR from "swr"
-import { useBoundStore } from "./store/useBoundStore"
-import useStore from "./use-store"
-import { useEffect } from "react"
 import { useUuidPathname } from "./useUuidPathname"
+import { useEffect, useRef } from "react"
 
 
 export const init = async (url: string) => {
@@ -16,9 +14,12 @@ export const init = async (url: string) => {
 export function usePageInit() {
   const id = usePathname().split("/").pop()
   useUuidPathname()
-  
-  return useSWR(id ? () => "/api/page/get?pageId="+id : null, init, {
+    
+  const res = useSWR(id ? () => "/api/page/get?pageId="+id : null, init, {
     revalidateOnFocus: false,
   })
+
+
+  return res
 
 }

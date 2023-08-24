@@ -17,6 +17,7 @@ import { blockSchema } from "./block-schema";
 
 import { CustomSideMenu } from "./custom-side-menu";
 import { useTheme } from "next-themes";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
 interface EditorProps {
   editable: boolean;
   initialContent: BlockNoteEditor["topLevelBlocks"];
@@ -36,6 +37,7 @@ export default function Editor({
   console.log("render editor", count++);
   // so many rerenders
   // const setEditor = useBoundStore.getState().setEditor
+  const pageId = useUuidPathname()
 
   const { theme } = useTheme();
   const editor = useBlockNote(
@@ -59,10 +61,13 @@ export default function Editor({
       onEditorReady: (editor) => {
         onEditorReady?.(editor);
       },
-      onEditorContentChange,
+      onEditorContentChange: e => {
+        onEditorContentChange?.(e)
+        console.log("onEditorContentChange")
+      },
       onTextCursorPositionChange,
     },
-    [initialContent, editable]
+    [editable, initialContent]
   );
 
   useEffect(() => {
