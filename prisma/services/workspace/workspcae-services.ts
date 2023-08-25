@@ -26,7 +26,6 @@ export async function getWorkspaceById(workspaceId: string) {
   const workspace = await prisma?.workspace.findUnique({
     where: {
       id: workspaceId,
-      
     },
     
   })

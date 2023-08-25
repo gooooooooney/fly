@@ -1,5 +1,6 @@
 import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types"
 import prisma from "@/lib/prisma"
+import { Nullable } from "unsplash-js/dist/helpers/typescript";
 
 async function getNestedBlocks(id: string) {
   const blocks = await prisma.block.findUnique({
@@ -111,11 +112,13 @@ export async function getAllPage(pageId: string) {
   })
 }
 
-export async function getPageMenus(workspaceId: string, blockId?: string) {
-  const where: any = {
+export async function getRootPageMenus(workspaceId: string, blockId?: string) {
+  
+  const where: NonNullable<Parameters<typeof prisma["page"]["findMany"]>[number]>["where"] = {
     workspace: {
-      id: workspaceId
+      id: workspaceId,
     },
+    parentId: null,
   }
   if (blockId) {
     where.id = blockId

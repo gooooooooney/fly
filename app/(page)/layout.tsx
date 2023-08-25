@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import Navigation from "@/components/layout/navigation";
 
 export default async function PageLayout(
   props: PropsWithChildren & {
@@ -27,6 +28,7 @@ export default async function PageLayout(
           <section className=" h-screen">
             <section className="flex h-screen">
               <Sidebar wps={wps} email={session.user.email!} />
+              {/* <Navigation/> */}
               <section className="flex flex-col w-full">
                 <Nav />
                 <main className="w-full h-full relative overflow-y-auto overflow-x-hidden max-h-full">

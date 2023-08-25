@@ -14,6 +14,8 @@ import {
   RxDragHandleDots2,
   RxPlus,
   RxEnvelopeClosed,
+  RxChevronRight,
+  RxChevronDown,
 } from "react-icons/rx";
 
 export const SunFilledIcon = ({
@@ -128,6 +130,8 @@ export const Icons = {
   MoonFilledIcon,
   Face: RxFace,
   ChevronsUpDownIcon: HiOutlineChevronUpDown,
+  ChevronRightIcon: RxChevronRight,
+  ChevronDownIcon: RxChevronDown,
   CodeIcon: RiCodeSSlashFill,
   HomeIcon: RxHome,
   QuestionMarkIcon: RxQuestionMark,
