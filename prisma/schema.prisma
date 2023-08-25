@@ -82,7 +82,7 @@ model Workspace {
 model Page {
   id          String      @id @default(uuid())
   children    Page[]      @relation("ParentChildPage")
-  parent      Page?       @relation("ParentChildPage", fields: [parentId], references: [id])
+  parent      Page?       @relation("ParentChildPage", fields: [parentId], references: [id], onDelete: Cascade)
   parentId    String?
   workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
@@ -95,7 +95,7 @@ model Page {
 
 model Properties {
   pageId   String  @unique
-  page     Page?   @relation(fields: [pageId], references: [id])
+  page     Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
   id       String  @id @default(cuid())
   cover    String  @default("")
   title    String  @default("")
@@ -107,11 +107,11 @@ model Block {
   id          String  @id @unique
   type        Type
   parentId    String?
-  parent      Block?  @relation("ParentChildBlock", fields: [parentId], references: [id])
+  parent      Block?  @relation("ParentChildBlock", fields: [parentId], references: [id], onDelete: Cascade)
   children    Block[] @relation("ParentChildBlock")
   content     Json    @db.Json
   props       Json    @db.Json
-  page        Page?   @relation(fields: [pageId], references: [id])
+  page        Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId      String?
   propsId     String?
   prevBlockId String?

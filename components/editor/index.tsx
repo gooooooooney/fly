@@ -30,7 +30,6 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     setShouldUpdateContent(true)
   }, [data])
   // const { blocks } = props
-  const [editable] = useStore(useBoundStore, (state) => [state.editable]);
 
 
   const { theme } = useTheme();
@@ -200,7 +199,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     <Editor
       initialContent={(data?.body?.blocks as any) || []}
       theme={theme as "light" | "dark"}
-      editable={editable}
+      editable={!!data.body.properties?.editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
       // onEditorReady={handleEditorReady}

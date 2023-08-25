@@ -46,18 +46,18 @@ export async function getPageById(pageId: string) {
         }
       },
     },
-    
+
   })
   if (!page) return null
   if (!page.blocks) return null
-  
+
 
   for (const block of page.blocks) {
     const children = await getNestedBlocks(block.id);
     block.children = children?.children.length ? children.children : block.children;
   }
 
-  
+
 
   const dataArray = page.blocks
   // Create a map with IDs as keys for faster access
@@ -324,6 +324,20 @@ export async function saveBlocks({
   })
 }
 
+export async function deletePage(pageId: string) {
+  try {
+
+    return await prisma?.page.delete({
+      where: {
+        id: pageId
+      },
+    })
+  } catch (error) {
+    console.log(error)
+    return null
+  }
+}
+
 export async function save({
   pageId,
   operations,
@@ -334,7 +348,10 @@ export async function save({
       await Promise.all(operations.map(async (operation) => {
         if (operation.command === "delete") {
           await Promise.all(operation.data.map(async (block) => {
-           const del = await tx.block.delete({
+            if (block.type === "page") {
+              deletePage(block.id)
+            }
+            const del = await tx.block.delete({
               where: {
                 pageId,
                 id: block.id
@@ -343,16 +360,15 @@ export async function save({
                 children: true
               }
             })
-            if (del.children.length) {
-              console.log(del.children)
-              save({
-                pageId,
-                operations: [{
-                  command: operation.command,
-                  data: del.children as any,
-                }]
-              })
-            }
+            // if (del.children.length) {
+            //   save({
+            //     pageId,
+            //     operations: [{
+            //       command: operation.command,
+            //       data: del.children as any,
+            //     }]
+            //   })
+            // }
           }))
         }
         if (operation.command === "update" || operation.command === "insert") {
@@ -384,7 +400,7 @@ export async function save({
               }
             })
             if (block.children.length) {
-               save({
+              save({
                 pageId,
                 parentId: block.id,
                 operations: [{
