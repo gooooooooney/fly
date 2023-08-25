@@ -44,7 +44,7 @@ export default async function BlockPage({
       <OutHookConfigurator />
       <>
         <section
-          className="h-screen   w-full flex flex-col items-center z-1 overflow-auto max-h-full "
+          className="h-screen  w-full flex flex-col items-center z-1 max-h-full "
         >
           <Cover />
           <section className="max-w-3xl flex flex-col w-full flex-grow ">

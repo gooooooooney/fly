@@ -29,7 +29,7 @@ export default async function PageLayout(
               <Sidebar wps={wps} email={session.user.email!} />
               <section className="flex flex-col w-full">
                 <Nav />
-                <main className="w-full h-full relative max-h-full">
+                <main className="w-full h-full relative overflow-y-auto overflow-x-hidden max-h-full">
                   <PageTransitionLayout key={props.params.hash}>
                     {props.children}
                   </PageTransitionLayout>
