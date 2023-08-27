@@ -112,6 +112,35 @@ export async function getAllPage(pageId: string) {
   })
 }
 
+export async function getChildrenmenus(spaceId: string,pageId: string) {
+  const page = await prisma?.page.findUnique({
+    where: {
+      id: pageId,
+      workspaceId: spaceId,
+    },
+    include: {
+      children: {
+        include: {
+          properties: true,
+        }
+      },
+      properties: true,
+    }
+  })
+  if (!page) {
+    return []
+  }
+  return page.children.map(child => {
+    return {
+      id: child.id,
+      title: child.properties?.title,
+      emoji: child.properties?.emoji,
+      children: []
+    }
+  })
+  
+}
+
 export async function getRootPageMenus(workspaceId: string, blockId?: string) {
   
   const where: NonNullable<Parameters<typeof prisma["page"]["findMany"]>[number]>["where"] = {

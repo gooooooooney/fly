@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
-import { getWorkspaceById } from "@/prisma/services/workspace/workspcae-services";
+import { getWorkspaceById, getWorkspaces, getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
 import prisma from "@/lib/prisma"
 
 
@@ -72,26 +72,18 @@ export async function POST(request: Request) {
 }
 
 
-export type GetSpaceResponse = HttpRequestData<ReturnTypePromiseFunc<typeof getWorkspaceById>>
+export type SpaceResponse = HttpRequestData<ReturnTypePromiseFunc<typeof getWorkspaces>>
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
-  const spaceId = new URL(request.url).searchParams.get("spaceId");
-
   try {
-    const space = await getWorkspaceById(spaceId!)
-    if (!space) {
-      return NextResponse.json({
-        head: {},
-        body: {}
-      })
-    }
+    const spaces = await getWorkspaces(session.user.id)
     return NextResponse.json({
-      head: { spaceId: space.id },
-      body: space
+      head: { },
+      body: spaces
     })
   } catch (error) {
     console.log(error)
