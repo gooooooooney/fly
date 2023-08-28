@@ -75,12 +75,13 @@ export async function POST(request: Request) {
 export type SpaceResponse = HttpRequestData<ReturnTypePromiseFunc<typeof getWorkspaces>>
 
 export async function GET(request: Request) {
+  const searchParams = new URL(request.url).searchParams;
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
   try {
-    const spaces = await getWorkspaces(session.user.id)
+    const spaces = await getWorkspaces(session.user.id, searchParams.get("pageId") ?? "")
     return NextResponse.json({
       head: { },
       body: spaces

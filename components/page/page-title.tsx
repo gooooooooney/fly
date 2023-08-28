@@ -2,6 +2,7 @@
 
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { usePageInit } from "@/hooks/use-page-init";
+import { useSpace } from "@/hooks/use-space";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { saveProperty } from "@/lib/data-source/page";
 import { useEffect } from "react";
@@ -9,6 +10,7 @@ import { useStore } from "zustand";
 
 export const PageTitle = ({ id }: { id: string }) => {
   const { data } = usePageInit();
+  // const { data: spaceData, mutate } = useSpace();
 
   const [title, setTitle, editable] = useStore(useBoundStore, (state) => [
     state.title,
@@ -25,6 +27,7 @@ export const PageTitle = ({ id }: { id: string }) => {
   }, [data]);
   const setPageTitle = (title: string) => {
     setTitle(title);
+    
     saveProperty({
       pageId,
       data: {

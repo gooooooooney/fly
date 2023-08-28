@@ -1,23 +1,25 @@
 import { SpaceResponse } from "@/app/api/space/route";
 import { fetcher } from "@/lib/utils";
 import useSWR from "swr";
+import { useStore } from "zustand";
+import { useBoundStore } from "./store/useBoundStore";
+import { useEffect } from "react";
 
 export async function getSpaceInfo(url: string) {
-  return await fetcher(url) as SpaceResponse
+  return await fetcher(url+ `?pageId=${location.pathname.split("/")[1]}`) as SpaceResponse
 }
 export function useSpace() {
+  const [items, setItems] = useStore(useBoundStore, (state) => [
+    state.menus,
+    state.setMenus,
+  ])!;
 
   const res = useSWR("/api/space", getSpaceInfo);
-  if (!res.data) {
-    return {
-      spaces: null,
-      isLoading: true,
-      swrData: res,
+  useEffect(() => {
+    if (res.data) {
+      console.log(res.data)
+      setItems(res.data.body.activeWorkspace?.pages ?? []);
     }
-  }
-  return {
-    spaces: res.data.body,
-    isLoading: false,
-    swrData: res,
-  }
+  }, [res.data?.body.activeWorkspace?.pages])
+  return res
 } 

@@ -1,7 +1,14 @@
+import { SpaceResponse } from "@/app/api/space/route";
 import { fetcher } from "../utils";
 
-export function getSpaceInfo(spaceId: string) {
-  return fetcher(`/api/space/get?spaceId=${spaceId}`)
+export async function getSpaceInfo() {
+  try {
+    const  res =  await fetcher(`/api/space`) as SpaceResponse
+    return res.body
+  } catch (error) {
+    console.log(error)
+  }
+
 }
 
 export function getRootMenus(spaceId: string) {
