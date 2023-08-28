@@ -28,7 +28,7 @@ export default function Header({ session }: { session: Session | null }) {
     <>
       {/* <SignInModal /> */}
       <Navbar isBordered={false} maxWidth="full">
-        <NavbarContent justify="start">
+        {collapsed && <NavbarContent justify="start">
           <NavbarItem>
             <Button
               variant="light"
@@ -45,7 +45,7 @@ export default function Header({ session }: { session: Session | null }) {
               />
             </Button>
           </NavbarItem>
-        </NavbarContent>
+        </NavbarContent>}
         <NavbarContent justify="end">
           <NavbarItem className="mr-2">
             <ThemeSwitch />

@@ -63,7 +63,7 @@ export default async function PageLayout(
           <section className=" h-screen">
             <section className="flex h-screen">
               {/* <Sidebar wps={wps} email={session.user.email!} /> */}
-              <ListBar items={menus} />
+              <ListBar email={session.user.email!} />
               {/* <Menus /> */}
               {/* <Navigation/> */}
               <section className="flex flex-col w-full">

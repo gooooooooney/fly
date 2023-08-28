@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Listbox,
   ListboxItem,
@@ -8,197 +8,223 @@ import {
   ListboxSection,
 } from "@nextui-org/listbox";
 import { Icons } from "@/components/icons";
-import { useAccordion, useDisclosure } from "@nextui-org/react";
-import { motion } from "framer-motion";
+import { Button, useAccordion, useDisclosure } from "@nextui-org/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import _ from "lodash";
-import { Disclosure } from "@headlessui/react";
+import _, { set } from "lodash";
+import { Disclosure, Transition } from "@headlessui/react";
+import { useSpace } from "@/hooks/use-space";
+import Link from "next/link";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { useStore } from "zustand";
+import { useBoundStore } from "@/hooks/store/useBoundStore";
+import SidebarHeader from "./header";
+import useForceUpdate from "@/hooks/use-force-update";
+import { usePathname, useRouter } from "next/navigation";
 
 export interface MenuProps {
-  title: string;
-  emoji: string;
   id: string;
+  properties: {
+    pageId: string;
+    id: string;
+    cover: string;
+    title: string;
+    emoji: string;
+    editable: boolean;
+  }
+  isActive: boolean;
   itemProps?: Omit<ListboxItemProps, "key">;
   children: MenuProps[];
 }
 
-export function MenuItem({ item }: { item: MenuProps }): React.ReactNode {
-  return (
-    <ListboxItem {...item.itemProps} key={item.id}>
-      {item.title}
-    </ListboxItem>
-  );
-}
 
-export function ExpandableMenuItem({
-  item,
-}: {
-  item: MenuProps;
-}): React.ReactNode {
-  // const { isOpen, onOpenChange } = useDisclosure();
-  // useAccordion(props.id, isOpen, onClose, onOpen)
-  return (
-    <ListboxItem
-      className={cn({
-        // "bg-default-100/80": isOpen,
-        // "h-fit": isOpen,
-      })}
-      key={item.id}
-      startContent={
-        <motion.div
-          // onClick={onOpenChange}
-          animate={
-            {
-              // rotate: isOpen ? 90 : 0,
-            }
-          }
-          transition={{
-            duration: 0.3,
-          }}
-        >
-          <Icons.ChevronRightIcon />
-        </motion.div>
-      }
-      {...item.itemProps}
-    >
-      {item.title}
-      {/* {children} */}
-      {/* {isOpen && <Menu items={item.children} />} */}
-    </ListboxItem>
-  );
-}
+function Toggle({ open, item }: { open: boolean, item: MenuProps }) {
 
-export function Menu({ items }: { items: MenuProps[] }) {
-  // console.log(ListboxItem.type)
-  const { isOpen, onOpenChange } = useDisclosure();
   return (
-    <Listbox items={items}>
-      {
-        ((item: MenuProps) => {
-          if (_.isArray(item.children) && item.children.length > 0) {
-            return <ExpandableMenuItem item={item} />;
-            return (
-              <ListboxItem
-                className={cn({
-                  "bg-default-100/80": isOpen,
-                  "h-fit": isOpen,
-                })}
-                key={item.id}
-                startContent={
-                  <motion.div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onOpenChange();
-                    }}
-                    animate={{
-                      rotate: isOpen ? 90 : 0,
-                    }}
-                    transition={{
-                      duration: 0.3,
-                    }}
-                  >
-                    <Icons.ChevronRightIcon />
-                  </motion.div>
-                }
-                {...item.itemProps}
-              >
-                {item.title}
-                {/* {children} */}
-                {isOpen && <Menu items={item.children} />}
-              </ListboxItem>
-            );
-          }
-          return <MenuItem item={item} />;
-          // return (
-          //   <ListboxItem {...item.itemProps} key={item.id}>
-          //     {item.title}
-          //   </ListboxItem>
-          // );
-        }) as any
-      }
-    </Listbox>
-  );
-}
-
-export function Menus() {
-  const menus = [
-    {
-      title: "我的主页",
-      emoji: "🏠",
-      id: "home",
-      children: [
-        {
-          title: "我的主页",
-          emoji: "🏠",
-          id: "home",
-          children: [
-            {
-              title: "我的主页",
-              emoji: "🏠",
-              id: "home",
-              children: [
-                {
-                  title: "我的主页",
-                  emoji: "🏠",
-                  id: "home",
-                  children: [],
-                },
-              ],
-            },
-          ],
-        },
+    <div className={cn(
+      [
+        "hover:bg-default-100/80",
+        "flex",
+        "group",
+        "items-center",
+        "justify-between",
+        "relative",
+        "py-1.5",
+        "w-full",
+        "box-border",
+        "subpixel-antialiased",
+        "cursor-pointer",
+        "tap-highlight-transparent",
+        "outline-none",
+        "data-[focus-visible=true]:z-10",
+        "data-[focus-visible=true]:outline-2",
+        "data-[focus-visible=true]:outline-focus",
+        "data-[focus-visible=true]:outline-offset-2",
+        "data-[focus-visible=true]:dark:ring-offset-background-content1",
+        "data-[hover=true]:text-default-foreground",
+        "data-[selectable=true]:focus:bg-default",
+        "data-[selectable=true]:focus:text-default-foreground",
+        "px-3",
+        "h-8",
+        "rounded-md"
       ],
-    },
-  ];
-  return <Menu items={menus} />;
+      {
+        "bg-default-100/80": item.isActive,
+      }
+    )}>
+      <Disclosure.Button onClick={() => {
+        console.log("click")
+      }}>
+        <AnimatePresence initial={false} mode="wait">
+          <motion.div
+            className="text-lg"
+            key={open ? "less" : "more"}
+            initial={{
+              rotate: open ? -90 : 90,
+            }}
+            animate={{
+              zIndex: 1,
+              rotate: 0,
+              transition: {
+                type: "tween",
+                duration: 0.15,
+                ease: "circOut",
+              },
+            }}
+            exit={{
+              zIndex: 0,
+              rotate: open ? -90 : 90,
+              transition: {
+                type: "tween",
+                duration: 0.15,
+                ease: "circIn",
+              },
+            }}
+          >
+            {open ? <Icons.TriangleDownIcon /> : <Icons.TriangleRightIcon />}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* <motion.div
+        className="mr-1"
+        animate={{
+          rotate: open ? 90 : 0,
+        }}
+        transition={{
+          duration: 0.1,
+        }}
+      >
+        <Icons.ChevronRightIcon />
+      </motion.div> */}
+      </Disclosure.Button>
+      <Link href={`/${item.id}`} className="flex-1">
+        <span className="mr-1 inline-block w-5 h-5">{item.properties.emoji}</span>
+        {item.properties.title}
+      </Link>
+    </div>
+  )
 }
 
-const menus = [
-  {
-    title: "我的主页",
-    emoji: "🏠",
-    id: "home",
-    children: [
-      {
-        title: "我的主页",
-        emoji: "🏠",
-        id: "home",
-        children: [
-          {
-            title: "我的主页",
-            emoji: "🏠",
-            id: "home",
-            children: [
-              {
-                title: "我的主页",
-                emoji: "🏠",
-                id: "home",
-                children: [],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
+export function ListBar(props: { email: string }) {
 
-export function ListBar({
+  const { spaces } = useSpace()
+  const pageId = useUuidPathname()
+  const [items, setItems] = useState<MenuProps[]>([])
+  const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [
+    state.collapsed,
+    state.setCollapsed,
+  ])!;
+  const activeWp = spaces?.find(wp => wp.isActive)!
+
+  const getItems = (list: any[]): any[] => {
+    return list.map(item => {
+      return {
+        id: item.id,
+        isActive: item.id === pageId,
+        properties: {
+          ...(item.properties ?? {})
+        },
+        children: item.children && item.children.length ? getItems(item.children) : []
+
+      } as any
+    })
+  }
+  useEffect(() => {
+    if (!activeWp) return
+    if (!activeWp.pages) return
+
+    setItems(getItems(activeWp.pages!))
+  }, [activeWp, activeWp.pages, pageId])
+
+  if (!spaces) return null
+
+  return (
+    <Transition
+      show={!collapsed}
+      enter="transition-width transition-opacity duration-300"
+      enterFrom="w-0 opacity-0"
+      enterTo="w-80 opacity-100"
+      leave="transition-width transition-opacity duration-300"
+      leaveFrom="w-80 opacity-100"
+      leaveTo="w-0 opacity-0"
+      className="w-80"
+    >
+      <div className="flex justify-between items-center mt-3 mb-9">
+        <SidebarHeader avatar={activeWp.avatar!} name={activeWp.name} email={props.email} />
+        <div>
+          <Button
+            variant="light"
+            onClick={() => {
+              setCollapsed(!collapsed);
+            }}
+            isIconOnly
+          >
+            <Icons.DoubleArrowLeftIcon
+              className={cn(
+                "transition-transform",
+                collapsed ? "transform rotate-180" : "transform rotate-0"
+              )}
+            />
+          </Button>
+        </div>
+      </div>
+      <Menus items={items} />
+    </Transition>
+
+  )
+}
+
+function SubMenu({ item }: { item: MenuProps }) {
+
+  // const fn = useForceUpdate()
+  // fn()
+  return (
+    <Disclosure.Panel
+      as={Menus}
+      unmount={false}
+      className={cn(
+        "p-0 gap-0 pl-4 pt-[1px]   dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible "
+      )}
+      itemWithoutChildClassName="pl-[12px]"
+      items={item.children}
+    />
+  )
+}
+
+export function Menus({
   items,
+  itemWithoutChildClassName,
   ...props
-}: ListboxProps & { items: MenuProps[] }) {
-  // const { isOpen, onOpenChange, onOpen } = useDisclosure();
-
+}: ListboxProps & { items: MenuProps[], itemWithoutChildClassName?: string, }) {
   return (
     <Listbox
       aria-label="User Menu"
       // onAction={(key) => alert(key)}
-      className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small"
+      className="px-1 gap-0   divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible"
       items={items}
       itemClasses={
         {
-          // base: "px-3  rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
+          base: "rounded-md",
         }
       }
       {...props}
@@ -207,203 +233,39 @@ export function ListBar({
         if (_.isArray(item.children) && item.children.length > 0) {
           return (
             <ListboxItem
-              className="px-0 py-0  rounded-none gap-3 data-[hover=true]:bg-transparent h-fit"
-              key="issues"
+              className="px-0 py-0    data-[hover=true]:bg-transparent h-fit"
+              key={item.id}
             >
               <Disclosure as="div">
                 {({ open }) => (
                   <>
-                    <div className="hover:bg-default-100/80 flex items-centerflex group items-center justify-between relative  py-1.5 w-full box-border subpixel-antialiased cursor-pointer tap-highlight-transparent outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:dark:ring-offset-background-content1 data-[hover=true]:text-default-foreground data-[selectable=true]:focus:bg-default data-[selectable=true]:focus:text-default-foreground px-3 rounded-none gap-3 h-12 ">
-                      <Disclosure.Button>
-                        <motion.div
-                          className=""
-                          animate={{
-                            rotate: open ? 90 : 0,
-                          }}
-                          transition={{
-                            duration: 0.1,
-                          }}
-                        >
-                          <Icons.ChevronRightIcon />
-                        </motion.div>
-                      </Disclosure.Button>
-                      <div className="flex-1">
-                        <span className="mr-2">{item.emoji}</span>
-                        {item.title}
-                      </div>
-                    </div>
-
-                    <Disclosure.Panel
-                      as={ListBar}
-                      className={cn(
-                        {
-                          hidden: !open,
-                        },
-                        "p-0 gap-0 divide-y  dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small "
-                      )}
-                      itemClasses={{
-                        // base: "pr-3 !pl-7  rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
-                      }}
-                      items={item.children}
-                    />
-                    {/* <Disclosure.Panel
-                      as={ListBar}
-                      className={cn(
-                        {
-                          hidden: !isOpen,
-                        },
-                        "p-0 gap-0 divide-y  dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small "
-                      )}
-                      itemClasses={{
-                        base: "pr-3 pl-7  rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
-                      }}
-                      items={item.children}
-                    /> */}
+                    <Toggle open={open} item={item} />
+                    <SubMenu item={item} />
                   </>
                 )}
               </Disclosure>
-
-              {/* <ListBar
-                className={cn({
-                  hidden: !isOpen,
-                },
-                "p-0 gap-0 divide-y  dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small "
-                )}
-                itemClasses={{
-                  base: "pr-3 pl-7  rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
-                }}
-                items={item.children}
-              /> */}
-              {/* <Listbox
-                aria-label="User Menu"
-                onAction={(key) => alert(key)}
-                className="p-0 gap-0 divide-y  dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small "
-                itemClasses={{
-                  base: "pr-3 pl-7  rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
-                }}
-              >
-                <ListboxSection
-                  className={cn({
-                    hidden: !isOpen,
-                  })}
-                >
-                  <ListboxItem
-                    key="issues"
-                    startContent={<Icons.ChevronRightIcon />}
-                  >
-                    Issues
-                  </ListboxItem>
-                  <ListboxItem
-                    key="pull_requests"
-                    startContent={<Icons.ChevronRightIcon />}
-                  >
-                    Pull Requests
-                  </ListboxItem>
-                  <ListboxItem
-                    key="discussions"
-                    startContent={<Icons.ChevronRightIcon />}
-                  >
-                    Discussions
-                  </ListboxItem>
-                  <ListboxItem
-                    key="actions"
-                    startContent={<Icons.ChevronRightIcon />}
-                  >
-                    Actions
-                  </ListboxItem>
-                  <ListboxItem
-                    key="projects"
-                    startContent={<Icons.ChevronRightIcon />}
-                  >
-                    Projects
-                  </ListboxItem>
-                </ListboxSection>
-              </Listbox> */}
             </ListboxItem>
           );
         }
         return (
           <ListboxItem
-            className="px-3  rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80"
-            key="pull_requests"
-            startContent={item.emoji}
+            className={cn(
+              "px-3 pl-[26px]   h-8 data-[hover=true]:bg-default-100/80",
+              itemWithoutChildClassName,
+              {
+                "bg-default-100/80": item.isActive,
+              }
+            )}
+            key={item.id}
+          // startContent={<span className="w-5 h-5">{item.emoji}</span>}
           >
-            {item.title}
+            <Link href={`/${item.id}`} className="flex-1 py-1.5 block">
+              <span className="mr-1 inline-block w-5 h-5">{item.properties.emoji || "📄"}</span>
+              {item.properties.title || "Untitled"}
+            </Link >
           </ListboxItem>
         );
       }}
-      {/* <ListboxItem
-        className="px-0 py-0  rounded-none gap-3 data-[hover=true]:bg-transparent h-fit"
-        key="issues"
-      >
-        <div className="hover:bg-default-100/80 flex items-centerflex group items-center justify-between relative  py-1.5 w-full box-border subpixel-antialiased cursor-pointer tap-highlight-transparent outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:dark:ring-offset-background-content1 data-[hover=true]:text-default-foreground data-[selectable=true]:focus:bg-default data-[selectable=true]:focus:text-default-foreground px-3 rounded-none gap-3 h-12 ">
-          <motion.div
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onOpenChange();
-            }}
-            animate={{
-              rotate: isOpen ? 90 : 0,
-            }}
-            transition={{
-              duration: 0.1,
-            }}
-          >
-            <Icons.ChevronRightIcon />
-          </motion.div>
-          <div className="flex-1">issues111</div>
-        </div>
-        <Listbox
-          aria-label="User Menu"
-          onAction={(key) => alert(key)}
-          className="p-0 gap-0 divide-y  dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small "
-          itemClasses={{
-            base: "pr-3 pl-7  rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
-          }}
-        >
-          <ListboxSection
-            className={cn({
-              hidden: !isOpen,
-            })}
-          >
-            <ListboxItem key="issues" startContent={<Icons.ChevronRightIcon />}>
-              Issues
-            </ListboxItem>
-            <ListboxItem
-              key="pull_requests"
-              startContent={<Icons.ChevronRightIcon />}
-            >
-              Pull Requests
-            </ListboxItem>
-            <ListboxItem
-              key="discussions"
-              startContent={<Icons.ChevronRightIcon />}
-            >
-              Discussions
-            </ListboxItem>
-            <ListboxItem
-              key="actions"
-              startContent={<Icons.ChevronRightIcon />}
-            >
-              Actions
-            </ListboxItem>
-            <ListboxItem
-              key="projects"
-              startContent={<Icons.ChevronRightIcon />}
-            >
-              Projects
-            </ListboxItem>
-          </ListboxSection>
-        </Listbox>
-      </ListboxItem>
-      <ListboxItem
-        className="px-3  rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80"
-        key="pull_requests"
-        startContent={<Icons.ChevronRightIcon />}
-      >
-        Pull Requests
-      </ListboxItem> */}
     </Listbox>
   );
 }

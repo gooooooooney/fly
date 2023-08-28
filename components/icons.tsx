@@ -16,6 +16,9 @@ import {
   RxEnvelopeClosed,
   RxChevronRight,
   RxChevronDown,
+  RxFileText,
+  RxTriangleRight,
+  RxTriangleDown,
 } from "react-icons/rx";
 
 export const SunFilledIcon = ({
@@ -132,6 +135,8 @@ export const Icons = {
   ChevronsUpDownIcon: HiOutlineChevronUpDown,
   ChevronRightIcon: RxChevronRight,
   ChevronDownIcon: RxChevronDown,
+  TriangleRightIcon: RxTriangleRight,
+  TriangleDownIcon: RxTriangleDown,
   CodeIcon: RiCodeSSlashFill,
   HomeIcon: RxHome,
   QuestionMarkIcon: RxQuestionMark,
@@ -139,6 +144,7 @@ export const Icons = {
   ImageIcon: RxImage,
   TrashIcon: RxTrash,
   File: RxFile,
+  FileText: RxFileText,
   DragHandle: RxDragHandleDots2,
   Plus: RxPlus,
   Google,

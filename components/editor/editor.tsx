@@ -11,7 +11,7 @@ import {
 import "./index.css";
 import "@blocknote/core/style.css";
 import FormattingToolbar from "./formatting-toolbar";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { insertPageItem } from "./slashmenu";
 import { blockSchema } from "./block-schema";
 
@@ -27,7 +27,7 @@ interface EditorProps {
   onTextCursorPositionChange?: (editor: BlockNoteEditor) => void;
 }
 let count = 0;
-export default function Editor({
+ function Editor({
   editable,
   initialContent,
   onEditorReady,
@@ -128,3 +128,5 @@ export default function Editor({
     </div>
   );
 }
+
+export default memo(Editor)
