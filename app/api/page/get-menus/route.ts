@@ -1,5 +1,9 @@
-import { getChildrenmenus, getRootPageMenus } from "@/prisma/services/pages/pages-services"
+import { getChildrenMenus, getRootPageMenus } from "@/prisma/services/pages/pages-services"
 import { NextResponse } from "next/server"
+
+
+
+export type ChildrenMenusResponse = HttpRequestData<ReturnTypePromiseFunc<typeof getChildrenMenus>>
 
 export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams
@@ -13,7 +17,7 @@ export async function GET(request: Request) {
     return new NextResponse("pageId is required", { status: 400 })
   }
   try {
-    const menus = await getChildrenmenus(workspaceId, pageId )
+    const menus = await getChildrenMenus(workspaceId, pageId )
     return NextResponse.json({
       head: {},
       body: menus,

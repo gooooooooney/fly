@@ -4,6 +4,8 @@ import { blockSchema } from "./block-schema";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { addNewPage, save, saveBlocks } from "@/lib/data-source/page";
 import OutHook from "../OutHook";
+import { MenuProp } from "@/hooks/store/create-content-slice";
+import _ from "lodash";
 
 export function insertOrUpdateBlock(editor: BlockNoteEditor, block: any) {
   const currentBlock = editor.getTextCursorPosition().block;
@@ -14,7 +16,7 @@ export function insertOrUpdateBlock(editor: BlockNoteEditor, block: any) {
     currentBlock.content.length === 0
   ) {
     editor.updateBlock(currentBlock, block);
-    const {block:  b, nextBlock} = editor.getTextCursorPosition()
+    const { block: b, nextBlock } = editor.getTextCursorPosition()
     editor.setTextCursorPosition(nextBlock || b);
   } else {
     editor.insertBlocks([block], currentBlock, "after");
@@ -28,6 +30,7 @@ export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
   execute: (editor) => {
     const childBlock = editor.getTextCursorPosition().block;
     const pageId = useBoundStore.getState().pageId;
+    const { setMenus, menus } = useBoundStore.getState();
     insertOrUpdateBlock(editor, {
       type: "page",
     });
@@ -46,6 +49,31 @@ export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
     // });
     // OutHook.useRouter.push(`/${childBlock.id}`)
     // const spaceId = document.querySelector("#spaceid")?.getAttribute("data-spaceid")!
+    const addPageToMenus = () => {
+      const item: MenuProp = {
+        id: childBlock.id,
+        title: "",
+        icon: "",
+        isActive: false,
+        hasChildren: false,
+        children: [],
+      }
+      const cloneMenus = _.cloneDeep(menus)
+      const setChild = (menus: MenuProp[]) => {
+        for (const menu of menus) {
+          if (menu.id === pageId) {
+            menu.children = [...menu.children, item]
+            break
+          } else {
+            menu.children && setChild(menu.children)
+          }
+        }
+      }
+      setChild(cloneMenus)
+      setMenus(cloneMenus)
+    }
+
+    addPageToMenus()
     addNewPage({
       pageId,
       blockId: childBlock.id,

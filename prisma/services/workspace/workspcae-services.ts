@@ -1,6 +1,7 @@
 
 import { MenuProp } from "@/hooks/store/create-content-slice"
 import prisma from "@/lib/prisma"
+import { getPageMenus } from "../utils"
 
 export type WorkspaceInfo = ReturnTypePromiseFunc<typeof getWorkspacesByUserId>
 
@@ -23,31 +24,7 @@ export async function getWorkspacesByUserId(userId: string) {
   return user.workspaces
 }
 
-type Page = {
-  properties: {
-    pageId: string;
-    id: string;
-    cover: string;
-    title: string;
-    emoji: string;
-    editable: boolean;
-  } | null;
-  id: string;
-  children: Page[]
-}
 
-function getPageMenus(list: any[], pageId: string): MenuProp[] {
-  return list.map(item => {
-    return {
-      id: item.id,
-      title: item.properties?.title ?? "",
-      icon: item.properties?.emoji ?? "",
-      isActive: item.id === pageId,
-      children: item.children && item.children.length ? getPageMenus(item.children, pageId) : [],
-    }
-  })
-
-}
 export async function getWorkspaces(userId: string, pageId: string) {
   const user = await prisma?.user.findUnique({
     where: {
@@ -81,12 +58,12 @@ export async function getWorkspaces(userId: string, pageId: string) {
       workspaces: [],
     }
   }
-  const workspaces = user.workspaces.map(workspace => {
+  const workspaces = await Promise.all(user.workspaces.map(async workspace => {
     return {
       ...workspace,
-      pages: getPageMenus(workspace.pages, pageId)
+      pages: await getPageMenus(workspace.pages, pageId)
     }
-  })
+  }))
 
   return {
     activeWorkspace: workspaces.find(space => space.isActive)!,

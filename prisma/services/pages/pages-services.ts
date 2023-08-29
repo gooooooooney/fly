@@ -1,6 +1,8 @@
 import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types"
 import prisma from "@/lib/prisma"
 import { Nullable } from "unsplash-js/dist/helpers/typescript";
+import { getPageMenusWithoutPageId } from "../utils";
+import { MenuProp } from "@/hooks/store/create-content-slice";
 
 async function getNestedBlocks(id: string) {
   const blocks = await prisma.block.findUnique({
@@ -112,7 +114,9 @@ export async function getAllPage(pageId: string) {
   })
 }
 
-export async function getChildrenmenus(spaceId: string,pageId: string) {
+
+export async function getChildrenMenus(spaceId: string,pageId: string) {
+  console.log(pageId)
   const page = await prisma?.page.findUnique({
     where: {
       id: pageId,
@@ -122,6 +126,11 @@ export async function getChildrenmenus(spaceId: string,pageId: string) {
       children: {
         include: {
           properties: true,
+          children: {
+            include: {
+              properties: true,
+            }
+          }
         }
       },
       properties: true,
@@ -130,14 +139,7 @@ export async function getChildrenmenus(spaceId: string,pageId: string) {
   if (!page) {
     return []
   }
-  return page.children.map(child => {
-    return {
-      id: child.id,
-      title: child.properties?.title,
-      emoji: child.properties?.emoji,
-      children: []
-    }
-  })
+  return getPageMenusWithoutPageId(page.children)
   
 }
 
@@ -451,4 +453,36 @@ export async function save({
       return false
     }
   })
+}
+
+
+
+
+
+
+export async function findAncestors(nodeId: string, tree: any[] = []): Promise<any[]> {
+  const node = await prisma.page.findUnique({ where: { id: nodeId }, include: {properties: true} });
+
+  if (!node) {
+    return tree;
+  }
+
+  const currentNode: MenuProp = {
+    id: node.id,
+    title: node.properties?.title ?? "",
+    icon: node.properties?.emoji ?? "",
+    hasChildren: await prisma.page.count({
+      where: {
+        parentId: node.id,
+      }
+    }) > 0,
+    isActive: false,
+    children: tree,
+  };
+
+  if (node.parentId !== null) {
+    return findAncestors(node.parentId, [currentNode]);
+  }
+
+  return [currentNode];
 }

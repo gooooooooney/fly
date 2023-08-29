@@ -16,6 +16,7 @@ import { Icons } from "@/components/icons";
 import { Session } from "next-auth";
 import { useSignInModal } from "./sign-in";
 import UserDropdown from "./user";
+import { Breadcrumbs } from "./breadcrumbs";
 
 export default function Header({ session }: { session: Session | null }) {
   const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [
@@ -46,6 +47,11 @@ export default function Header({ session }: { session: Session | null }) {
             </Button>
           </NavbarItem>
         </NavbarContent>}
+        <NavbarContent justify="center">
+          <NavbarItem>
+          <Breadcrumbs />
+          </NavbarItem>
+        </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem className="mr-2">
             <ThemeSwitch />

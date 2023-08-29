@@ -6,6 +6,7 @@ export interface MenuProp {
   id: string;
   title: string;
   icon: string;
+  hasChildren: boolean;
   isActive: boolean;
   children: MenuProp[];
 }
