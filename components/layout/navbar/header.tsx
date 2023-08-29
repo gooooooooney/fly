@@ -1,12 +1,5 @@
 "use client";
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Link,
-  Button,
-} from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
 import { ThemeSwitch } from "./theme-switch";
 // import useStore from "@/hooks/use-store";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
@@ -14,11 +7,12 @@ import { cn } from "@/lib/utils";
 import { useStore } from "zustand";
 import { Icons } from "@/components/icons";
 import { Session } from "next-auth";
-import { useSignInModal } from "./sign-in";
-import UserDropdown from "./user";
 import { Breadcrumbs } from "./breadcrumbs";
+import _ from "lodash";
 
 export default function Header({ session }: { session: Session | null }) {
+
+
   const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [
     state.collapsed,
     state.setCollapsed,
@@ -29,27 +23,29 @@ export default function Header({ session }: { session: Session | null }) {
     <>
       {/* <SignInModal /> */}
       <Navbar isBordered={false} maxWidth="full">
-        {collapsed && <NavbarContent justify="start">
-          <NavbarItem>
-            <Button
-              variant="light"
-              onClick={() => {
-                setCollapsed(!collapsed);
-              }}
-              isIconOnly
-            >
-              <Icons.DoubleArrowLeftIcon
-                className={cn(
-                  "transition-transform",
-                  collapsed ? "transform rotate-180" : "transform rotate-0"
-                )}
-              />
-            </Button>
-          </NavbarItem>
-        </NavbarContent>}
+        {collapsed && (
+          <NavbarContent justify="start">
+            <NavbarItem>
+              <Button
+                variant="light"
+                onClick={() => {
+                  setCollapsed(!collapsed);
+                }}
+                isIconOnly
+              >
+                <Icons.DoubleArrowLeftIcon
+                  className={cn(
+                    "transition-transform",
+                    collapsed ? "transform rotate-180" : "transform rotate-0"
+                  )}
+                />
+              </Button>
+            </NavbarItem>
+          </NavbarContent>
+        )}
         <NavbarContent justify="center">
           <NavbarItem>
-          <Breadcrumbs />
+            <Breadcrumbs />
           </NavbarItem>
         </NavbarContent>
         <NavbarContent justify="end">

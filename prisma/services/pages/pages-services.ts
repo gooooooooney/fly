@@ -460,7 +460,7 @@ export async function save({
 
 
 
-export async function findAncestors(nodeId: string, tree: any[] = []): Promise<any[]> {
+export async function findAncestors(nodeId: string, tree: any[] = []): Promise<MenuProp[]> {
   const node = await prisma.page.findUnique({ where: { id: nodeId }, include: {properties: true} });
 
   if (!node) {

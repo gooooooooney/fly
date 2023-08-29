@@ -2,7 +2,7 @@ import { findAncestors, getAllPage, getPageById } from "@/prisma/services/pages/
 import { NextResponse } from "next/server";
 
 
-export type PageResponse = HttpRequestData<ReturnTypePromiseFunc<typeof getPageById>>
+export type MenusResponse = HttpRequestData<ReturnTypePromiseFunc<typeof findAncestors>>
 
 export async function GET(request: Request) {
   const pageId = new URL(request.url).searchParams.get("pageId")
@@ -10,5 +10,5 @@ export async function GET(request: Request) {
   return NextResponse.json({
     head: {},
     body: res
-  } as PageResponse)
+  } as MenusResponse)
 }
