@@ -95,7 +95,6 @@ export function ListBar(props: { email: string }) {
   }, []);
   useEffect(() => {
     setItems(getItems(items));
-
   }, [pageId]);
 
   if (!actSpace) return null;
@@ -106,13 +105,12 @@ export function ListBar(props: { email: string }) {
       show={!collapsed}
       enter="transition-width transition-opacity duration-300"
       enterFrom="w-0 opacity-0"
-      enterTo="w-80 opacity-100"
+      enterTo="w-60 opacity-100"
       leave="transition-width transition-opacity duration-300"
-      leaveFrom="w-80 opacity-100"
+      leaveFrom="w-60 opacity-100"
       leaveTo="w-0 opacity-0"
-      className="w-80"
     >
-      <div className="flex justify-between items-center mt-3 mb-9">
+      <div className="flex w-60 justify-between items-center mt-3 mb-9">
         <SidebarHeader
           avatar={activeWp?.avatar!}
           name={activeWp?.name ?? ""}

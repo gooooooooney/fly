@@ -11,8 +11,6 @@ import { Breadcrumbs } from "./breadcrumbs";
 import _ from "lodash";
 
 export default function Header({ session }: { session: Session | null }) {
-
-
   const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [
     state.collapsed,
     state.setCollapsed,
@@ -24,26 +22,24 @@ export default function Header({ session }: { session: Session | null }) {
       {/* <SignInModal /> */}
       <Navbar isBordered={false} maxWidth="full">
         {collapsed && (
-          <NavbarContent justify="start">
-            <NavbarItem>
-              <Button
-                variant="light"
-                onClick={() => {
-                  setCollapsed(!collapsed);
-                }}
-                isIconOnly
-              >
-                <Icons.DoubleArrowLeftIcon
-                  className={cn(
-                    "transition-transform",
-                    collapsed ? "transform rotate-180" : "transform rotate-0"
-                  )}
-                />
-              </Button>
-            </NavbarItem>
-          </NavbarContent>
+          <NavbarItem as="div">
+            <Button
+              variant="light"
+              onClick={() => {
+                setCollapsed(!collapsed);
+              }}
+              isIconOnly
+            >
+              <Icons.DoubleArrowLeftIcon
+                className={cn(
+                  "transition-transform",
+                  collapsed ? "transform rotate-180" : "transform rotate-0"
+                )}
+              />
+            </Button>
+          </NavbarItem>
         )}
-        <NavbarContent justify="center">
+        <NavbarContent justify="start">
           <NavbarItem>
             <Breadcrumbs />
           </NavbarItem>
