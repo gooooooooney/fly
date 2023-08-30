@@ -13,12 +13,20 @@ import { useState } from "react";
 import { Slider } from "@/components/ui/slider"
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
+import {useUnmount} from "react-use"
 
 function Cover() {
 
 
   const [cover, setCover] = useStore(useBoundStore, (state) => [state.cover, state.setCover])
   const pageId = useUuidPathname()
+  useUnmount(() => {
+    useBoundStore.setState({
+      icon: "",
+      cover: "",
+      title: "",
+    })
+  })
 
   const [originalY, setOriginalY] = useState(50)
   const [y, setY] = useState(50)

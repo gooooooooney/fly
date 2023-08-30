@@ -6,13 +6,15 @@ import { Menus } from "./menu";
 export function SubMenu({ item }: { item: MenuProp }) {
   return (
     <Disclosure.Panel
-      as={Menus}
+      as="div"
       unmount={false}
-      className={cn(
+
+    >
+      <Menus className={cn(
         "p-0 gap-0 pl-4 pt-[1px]   dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible "
       )}
-      itemWithoutChildClassName="pl-[14px]"
-      items={item.children}
-    />
+        itemWithoutChildClassName="pl-[14px]"
+        items={item.children} />
+    </Disclosure.Panel>
   );
 }

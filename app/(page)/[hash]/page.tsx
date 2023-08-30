@@ -39,9 +39,7 @@ export default async function BlockPage({
   }
   return (
     <>
-      {/* <Helmet id={params.hash} /> */}
-      {/* https://stackoverflow.com/questions/76349135/how-to-persist-and-set-global-state-for-client-from-server-in-nextjs-13-4 */}
-      <OutHookConfigurator />
+      {/* <OutHookConfigurator /> */}
       <>
         <section
           className="h-screen  w-full flex flex-col items-center z-1 max-h-full "

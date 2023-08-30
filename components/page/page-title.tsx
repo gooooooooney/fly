@@ -27,7 +27,7 @@ export const PageTitle = ({ id }: { id: string }) => {
   }, [data]);
   const setPageTitle = (title: string) => {
     setTitle(title);
-    
+
     saveProperty({
       pageId,
       data: {

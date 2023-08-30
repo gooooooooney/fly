@@ -64,7 +64,7 @@ let count = 0;
       onEditorContentChange,
       onTextCursorPositionChange,
     },
-    [editable, pageId, onEditorContentChange, initialContent]
+    
   );
 
   useEffect(() => {

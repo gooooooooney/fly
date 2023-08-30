@@ -3,7 +3,10 @@ import { MenuProp } from "@/hooks/store/create-content-slice";
 export function findMenu(menus: MenuProp[], id: string): MenuProp | undefined {
   for (const menu of menus) {
     if (menu.id === id) return menu
-    if (menu.children) return findMenu(menu.children, id)
+    if (menu.children) {
+      const foundInChildren = findMenu(menu.children, id)
+      if (foundInChildren) return foundInChildren
+    }
   }
 return void 0
 }

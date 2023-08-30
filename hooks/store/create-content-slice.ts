@@ -57,7 +57,6 @@ export const createContentSlice: StateCreator<
     editable: true,
     menus: [],
     setMenus: (menus) => set((state) => {
-      console.log(menus, "menus set")
       return ({ menus })
     }),
     setPageId: (pageId) => set((state) => ({ pageId })),

@@ -16,7 +16,6 @@ import { saveProperty } from "@/lib/data-source/page";
 
 function IconAndCover({ id }: { id: string }) {
   const { data } = usePageInit();
-  useClientInit(id)
 
   const { emoji, setCover, cover, setIcon } = useStore(
     useBoundStore,
@@ -27,6 +26,10 @@ function IconAndCover({ id }: { id: string }) {
       setCover: state.setCover,
     })
   );
+  useClientInit(id)
+
+
+
   useEffect(() => {
     if (data) {
       setIcon(data?.body?.properties?.emoji || "");

@@ -116,7 +116,6 @@ export async function getAllPage(pageId: string) {
 
 
 export async function getChildrenMenus(spaceId: string,pageId: string) {
-  console.log(pageId)
   const page = await prisma?.page.findUnique({
     where: {
       id: pageId,

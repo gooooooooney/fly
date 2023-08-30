@@ -37,25 +37,38 @@ export const PageBlock = createReactBlockSpec({
             const items = useBoundStore.getState().menus
             const setItems = useBoundStore.getState().setMenus
             const item = findMenu(items, block.id)
+            console.log("items =", items)
+            console.log("pageId=", block.id)
+            console.log("result = ", item)
             if (item && item.hasChildren) {
                 const newMenus = _.cloneDeep(items)
 
-                Promise.all(item.children
-                    .filter(v => v.hasChildren && v.children.length === 0)
-                    .map(async (v) =>
-                        v && getChildrenMenus(v.id).then(res => {
-                            const newMenu = _.cloneDeep(v)
-                            newMenu.children = res
-                            return newMenu
-                        })))
-                    .then(res => {
-                        
-                        setIsDataLoaded(true)
-                        res.forEach(v => {
-                            setMenus(newMenus, v)
-                        })
-                        res.length && setItems(newMenus)
-                    })
+                getChildrenMenus(item.id).then(res => {
+                    setIsDataLoaded(true)
+                    const newMenu = _.cloneDeep(item)
+                    newMenu.children = res
+                    setMenus(newMenus, newMenu)
+                    setItems(newMenus)
+                })
+                // Promise.all(item.children
+                //     .filter(v => v.hasChildren && v.children.length === 0)
+                //     .map(async (v) => {
+                //         console.log(v, '----')
+                //         return getChildrenMenus(v.id).then(res => {
+                //             setIsDataLoaded(true)
+                //             const newMenu = _.cloneDeep(v)
+                //             newMenu.children = res
+                //             console.log(res)
+
+                //             return newMenu
+                //         })
+                //     }))
+                //     .then(res => {
+                //         res.forEach(v => {
+                //             setMenus(newMenus, v)
+                //         })
+                //         res.length && setItems(newMenus)
+                //     })
             }
         }
 
