@@ -45,6 +45,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
     "aria-label": `Switch to ${theme === "light" ? "dark" : "light"} mode`,
     onChange,
   });
+  if (isSSR) return null
 
   return (
     <Component

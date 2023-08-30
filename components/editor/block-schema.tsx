@@ -1,7 +1,13 @@
+import { useBoundStore } from "@/hooks/store/useBoundStore";
+import { getChildrenMenus } from "@/lib/data-source/menus";
+import { findMenu, setMenus } from "@/lib/menus";
 import { BlockSchema, defaultBlockSchema, defaultProps } from "@blocknote/core";
 import { createReactBlockSpec, InlineContent } from "@blocknote/react";
 import { Link } from "@nextui-org/link";
+import _ from "lodash";
 import NextLink from "next/link";
+import { useState } from "react";
+
 
 
 export const PageBlock = createReactBlockSpec({
@@ -23,9 +29,40 @@ export const PageBlock = createReactBlockSpec({
     },
     containsInlineContent: true,
     render: ({ block }) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const [isDataLoaded, setIsDataLoaded] = useState(false)
+
+        const handleMouseEnter = () => {
+            if (isDataLoaded) return;
+            const items = useBoundStore.getState().menus
+            const setItems = useBoundStore.getState().setMenus
+            const item = findMenu(items, block.id)
+            if (item && item.hasChildren) {
+                const newMenus = _.cloneDeep(items)
+
+                Promise.all(item.children
+                    .filter(v => v.hasChildren && v.children.length === 0)
+                    .map(async (v) =>
+                        v && getChildrenMenus(v.id).then(res => {
+                            const newMenu = _.cloneDeep(v)
+                            newMenu.children = res
+                            return newMenu
+                        })))
+                    .then(res => {
+                        
+                        setIsDataLoaded(true)
+                        res.forEach(v => {
+                            setMenus(newMenus, v)
+                        })
+                        res.length && setItems(newMenus)
+                    })
+            }
+        }
+
         return (
             <>
                 <Link as={NextLink}
+                    onMouseEnter={handleMouseEnter}
                     contentEditable={false}
                     href={`/${block.id}`}
                     isBlock

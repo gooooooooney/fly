@@ -19,7 +19,7 @@ function mergeMenus(
   sourceMenus: MenuProp[]
 ): MenuProp[] {
   // 创建一个新的数组，避免修改原始数组
-  const mergedMenus: MenuProp[] = [...targetMenus];
+  const mergedMenus: MenuProp[] = _.cloneDeep(targetMenus);
 
   for (const sourceMenu of sourceMenus) {
     // 根据ID查找目标数组中对应的菜单项
@@ -84,9 +84,18 @@ export function ListBar(props: { email: string }) {
         }
       }
     );
+    // getSpaceInfo().then(res => {
+    //   if (res) {
+    //     setActSpace(res?.activeWorkspace);
+    //     setItems(
+    //       res.activeWorkspace?.pages ?? []
+    //     );
+    //   }
+    // })
   }, []);
   useEffect(() => {
     setItems(getItems(items));
+
   }, [pageId]);
 
   if (!actSpace) return null;

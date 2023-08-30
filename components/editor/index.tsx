@@ -27,9 +27,12 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
 
   const path = useUuidPathname();
   useEffect(() => {
-    setShouldUpdateContent(true)
+    if (data) {
+      setTimeout(() => {
+        setShouldUpdateContent(true)
+      },1000);
+    }
   }, [data])
-  // const { blocks } = props
 
 
   const { theme } = useTheme();

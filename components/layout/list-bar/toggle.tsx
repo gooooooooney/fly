@@ -2,41 +2,38 @@ import { Icons } from "@/components/icons";
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { getChildrenMenus } from "@/lib/data-source/menus";
+import { setMenus } from "@/lib/menus";
 import { Disclosure } from "@headlessui/react";
 import { cn } from "@nextui-org/system";
 import { AnimatePresence, motion } from "framer-motion";
 import _ from "lodash";
 import Link from "next/link";
+import { useState } from "react";
 import { useStore } from "zustand";
 
 
 
-function setMenus(menus: MenuProp[], item: MenuProp) {
 
-  for (const menu of menus) {
-    if (menu.id === item.id) {
-      menu.children = item.children
-    } else {
-      setMenus(menu.children, item)
-    }
-  }
-}
 
 export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
   const [items, setItems] = useStore(useBoundStore, (state) => [
     state.menus,
     state.setMenus,
   ])!;
+  const [isDataLoaded, setIsDataLoaded] = useState(false)
+  
   return (
     <div
       onMouseEnter={async () => {
         if (!open) {
+          if (isDataLoaded) return;
           const newMenus = _.cloneDeep(items)
 
           Promise.all(item.children
-            .filter(v => v.hasChildren && v.children.length === 0)
+            .filter(v => v.hasChildren)
             .map(async (v) =>
               v && getChildrenMenus(v.id).then(res => {
+                setIsDataLoaded(true)
                 const newMenu = _.cloneDeep(v)
                 newMenu.children = res
                 return newMenu
@@ -60,6 +57,7 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
       className={cn(
         [
           "hover:bg-default-100/80",
+          "hover:text-default-foreground",
           "flex",
           "group",
           "items-center",
@@ -72,14 +70,6 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
           "cursor-pointer",
           "tap-highlight-transparent",
           "outline-none",
-          "data-[focus-visible=true]:z-10",
-          "data-[focus-visible=true]:outline-2",
-          "data-[focus-visible=true]:outline-focus",
-          "data-[focus-visible=true]:outline-offset-2",
-          "data-[focus-visible=true]:dark:ring-offset-background-content1",
-          "data-[hover=true]:text-default-foreground",
-          "data-[selectable=true]:focus:bg-default",
-          "data-[selectable=true]:focus:text-default-foreground",
           "px-3",
           "h-8",
           "rounded-md",

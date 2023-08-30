@@ -27,7 +27,8 @@ export function Menus({
         if (_.isArray(item.children) && item.children.length > 0) {
           return (
             <ListboxItem
-              className="px-0 py-0    data-[hover=true]:bg-transparent h-fit"
+              textValue={item.title}
+              className="px-0 py-0  data-[hover=true]:bg-transparent data-[hover=true]:text-inherit h-fit"
               key={item.id}
             >
               <Disclosure as="div">
@@ -43,6 +44,7 @@ export function Menus({
         }
         return (
           <ListboxItem
+            textValue={item.title}
             className={cn(
               "px-3 pl-[26px]   h-8 data-[hover=true]:bg-default-100/80",
               itemWithoutChildClassName,

@@ -58,8 +58,6 @@ export async function POST(request: Request) {
   if (!wp) {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
-  // console.log(wp)
-  // redirect(`/${wp.pages[0].id}`)
   return NextResponse.json({
     head: {
       spaceId: wp.id,
