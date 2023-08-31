@@ -19,6 +19,7 @@ import {
   RxFileText,
   RxTriangleRight,
   RxTriangleDown,
+  RxDotsHorizontal,
 } from "react-icons/rx";
 
 export const SunFilledIcon = ({
@@ -149,5 +150,6 @@ export const Icons = {
   Plus: RxPlus,
   Google,
   Github,
-  Email: RxEnvelopeClosed
+  Email: RxEnvelopeClosed,
+  DotsHorizontal: RxDotsHorizontal
 };

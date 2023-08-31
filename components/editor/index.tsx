@@ -23,6 +23,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
 
   let beforeBlocks = [] as BlockWithOrder[];
   const [shouldUpdateContent, setShouldUpdateContent] = useState(false)
+  const [editable, setEditable] = useStore(useBoundStore, s => [s.editable, s.setEditable])
   const { data } = usePageInit();
 
   const path = useUuidPathname();
@@ -204,7 +205,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     <Editor
       initialContent={(data?.body?.blocks as any) || []}
       theme={theme as "light" | "dark"}
-      editable={!!data.body.properties?.editable}
+      editable={editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
       // onEditorReady={handleEditorReady}

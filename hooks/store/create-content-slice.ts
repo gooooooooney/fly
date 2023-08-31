@@ -54,7 +54,7 @@ export const createContentSlice: StateCreator<
     icon: "",
     title: "",
     cover: "",
-    editable: true,
+    editable: false,
     menus: [],
     setMenus: (menus) => set((state) => {
       return ({ menus })

@@ -9,6 +9,7 @@ import { Icons } from "@/components/icons";
 import { Session } from "next-auth";
 import { Breadcrumbs } from "./breadcrumbs";
 import _ from "lodash";
+import { DropdownMenus } from "./dropdown";
 
 export default function Header({ session }: { session: Session | null }) {
   const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [
@@ -45,6 +46,9 @@ export default function Header({ session }: { session: Session | null }) {
           </NavbarItem>
         </NavbarContent>
         <NavbarContent justify="end">
+          <NavbarItem>
+            <DropdownMenus />
+          </NavbarItem>
           <NavbarItem className="mr-2">
             <ThemeSwitch />
           </NavbarItem>

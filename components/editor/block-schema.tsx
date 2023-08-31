@@ -37,9 +37,6 @@ export const PageBlock = createReactBlockSpec({
             const items = useBoundStore.getState().menus
             const setItems = useBoundStore.getState().setMenus
             const item = findMenu(items, block.id)
-            console.log("items =", items)
-            console.log("pageId=", block.id)
-            console.log("result = ", item)
             if (item && item.hasChildren) {
                 const newMenus = _.cloneDeep(items)
 

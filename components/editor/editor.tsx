@@ -64,11 +64,12 @@ let count = 0;
       onEditorContentChange,
       onTextCursorPositionChange,
     },
-    
+    // [editable]
   );
 
   useEffect(() => {
     if (editor) {
+      console.log(editable)
       // setEditor(editor)
       // onEditorReady?.(editor);
       editor.isEditable = editable;

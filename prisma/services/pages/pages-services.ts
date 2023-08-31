@@ -246,6 +246,9 @@ export async function updateBlockProps({ pageId, data }: SavePropertyParams) {
     if (data.title) {
       props["title"] = data.title
     }
+    if (data.editable) {
+      props["editable"] = data.editable
+    }
 
     const res = await prisma?.block.update({
       where: {
@@ -275,11 +278,13 @@ export async function saveProperty({ pageId, data }: SavePropertyParams) {
           title: data.title,
           emoji: data.emoji,
           cover: data.cover,
+          editable: data.editable
         },
         update: {
           title: data.title,
           emoji: data.emoji,
           cover: data.cover,
+          editable: data.editable,
         }
       })
       // 更新页面属性
