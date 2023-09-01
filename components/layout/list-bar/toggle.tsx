@@ -5,12 +5,14 @@ import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { getChildrenMenus } from "@/lib/data-source/menus";
 import { mergeMenus, setMenus } from "@/lib/menus";
 import { Disclosure } from "@headlessui/react";
+import { Button } from "@nextui-org/button";
 import { cn } from "@nextui-org/system";
 import { AnimatePresence, motion } from "framer-motion";
 import _ from "lodash";
 import Link from "next/link";
 import { useState } from "react";
 import { useStore } from "zustand";
+import { ActionMenus } from "./action-menus";
 
 
 
@@ -23,10 +25,12 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
     state.setMenus,
   ])!;
   const [isDataLoaded, setIsDataLoaded] = useState(false)
-  
+  const [showActionMenus, setShowActionMenus] = useState("hidden")
+
   return (
     <div
       onMouseEnter={async () => {
+        setShowActionMenus("block")
         if (!open) {
           if (isDataLoaded) return;
           const newMenus = _.cloneDeep(items)
@@ -47,7 +51,7 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
               res.forEach(v => {
                 setMenus(newMenus, v)
               })
-              res.length &&  setItems(mergeMenus(items, newMenus))
+              res.length && setItems(mergeMenus(items, newMenus))
             })
         }
       }}
@@ -75,6 +79,7 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
           "bg-default-100/80": item.isActive,
         }
       )}
+      onMouseLeave={() => setShowActionMenus("hidden")}
     >
       <Disclosure.Button
 
@@ -125,6 +130,11 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
         <span className="mr-1 inline-block w-5 h-5">{item.icon || "📄"}</span>
         {item.title || "Untitled"}
       </Link>
+      <div className="ml-auto flex items-center">
+        <div className="flex items-center">
+          <ActionMenus pageId={item.id} className={cn(showActionMenus)} />
+        </div>
+      </div>
     </div>
   );
 }

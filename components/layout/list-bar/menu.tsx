@@ -6,6 +6,8 @@ import _ from "lodash";
 import Link from "next/link";
 import { Toggle } from "./toggle";
 import { SubMenu } from "./submenu";
+import { ActionMenus } from "./action-menus";
+import { useState } from "react";
 
 export function Menus({
   items,
@@ -45,6 +47,7 @@ export function Menus({
         return (
           <ListboxItem
             textValue={item.title}
+
             className={cn(
               "px-3 pl-[26px]    h-8 data-[hover=true]:bg-default-100/80",
               itemWithoutChildClassName,
@@ -55,15 +58,34 @@ export function Menus({
             key={item.id}
           // startContent={<span className="w-5 h-5">{item.emoji}</span>}
           >
-            <Link href={`/${item.id}`} className="flex-1 truncate py-1.5 block">
-              <span className="mr-1 inline-block w-5 h-5">
-                {item.icon || "📄"}
-              </span>
-              {item.title || "Untitled"}
-            </Link>
+            <HoverState item={item} />
           </ListboxItem>
         );
       }}
     </Listbox>
   );
+}
+function HoverState({item}: {item:MenuProp}) {
+  const [showActionMenus, setShowActionMenus] = useState("hidden")
+  return (
+    <div
+      onMouseEnter={() => {
+        setShowActionMenus("block")
+      }}
+      onMouseLeave={() => setShowActionMenus("hidden")}
+      className="flex"
+    >
+      <Link href={`/${item.id}`} className="flex-1 truncate py-1.5 block">
+        <span className="mr-1 inline-block w-5 h-5">
+          {item.icon || "📄"}
+        </span>
+        {item.title || "Untitled"}
+      </Link>
+      <div className="ml-auto flex items-center">
+        <div className="flex items-center">
+          <ActionMenus pageId={item.id} className={cn(showActionMenus)} />
+        </div>
+      </div>
+    </div>
+  )
 }
