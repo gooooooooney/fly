@@ -5,19 +5,18 @@ import {
   HyperlinkToolbarPositioner,
   SideMenuPositioner,
   SlashMenuPositioner,
-  getDefaultReactSlashMenuItems,
+  // getDefaultReactSlashMenuItems,
   useBlockNote,
 } from "@blocknote/react";
 import "./index.css";
 import "@blocknote/core/style.css";
 import FormattingToolbar from "./formatting-toolbar";
 import { memo, useEffect } from "react";
-import { insertPageItem } from "./slashmenu";
-import { blockSchema } from "./block-schema";
-
 import { CustomSideMenu } from "./custom-side-menu";
 import { useTheme } from "next-themes";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { getReactSlashMenuItems } from "./slash-menu";
+import { customBlockSchema } from "./blocks/custom-block-schema";
 interface EditorProps {
   editable: boolean;
   initialContent: BlockNoteEditor["topLevelBlocks"];
@@ -37,17 +36,14 @@ let count = 0;
   console.log("render editor", count++);
   // so many rerenders
   // const setEditor = useBoundStore.getState().setEditor
-  const pageId = useUuidPathname()
 
   const { theme } = useTheme();
   const editor = useBlockNote(
     {
       editable,
-      blockSchema: blockSchema,
+      blockSchema: customBlockSchema,
       slashMenuItems: [
-        ...getDefaultReactSlashMenuItems(blockSchema),
-
-        insertPageItem,
+        ...getReactSlashMenuItems(),
       ],
       initialContent: initialContent.length === 0 ? undefined : initialContent,
       domAttributes: {

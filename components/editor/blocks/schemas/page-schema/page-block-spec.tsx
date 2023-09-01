@@ -1,7 +1,7 @@
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { getChildrenMenus } from "@/lib/data-source/menus";
-import { findMenu, setMenus } from "@/lib/menus";
-import { BlockSchema, defaultBlockSchema, defaultProps } from "@blocknote/core";
+import { findMenu, mergeMenus, setMenus } from "@/lib/menus";
+import { defaultProps } from "@blocknote/core";
 import { createReactBlockSpec, InlineContent } from "@blocknote/react";
 import { Link } from "@nextui-org/link";
 import _ from "lodash";
@@ -10,7 +10,7 @@ import { useState } from "react";
 
 
 
-export const PageBlock = createReactBlockSpec({
+export const pageBlockSpec = createReactBlockSpec({
     type: "page",
     propSchema: {
         ...defaultProps,
@@ -45,27 +45,8 @@ export const PageBlock = createReactBlockSpec({
                     const newMenu = _.cloneDeep(item)
                     newMenu.children = res
                     setMenus(newMenus, newMenu)
-                    setItems(newMenus)
+                    setItems(mergeMenus(items, newMenus))
                 })
-                // Promise.all(item.children
-                //     .filter(v => v.hasChildren && v.children.length === 0)
-                //     .map(async (v) => {
-                //         console.log(v, '----')
-                //         return getChildrenMenus(v.id).then(res => {
-                //             setIsDataLoaded(true)
-                //             const newMenu = _.cloneDeep(v)
-                //             newMenu.children = res
-                //             console.log(res)
-
-                //             return newMenu
-                //         })
-                //     }))
-                //     .then(res => {
-                //         res.forEach(v => {
-                //             setMenus(newMenus, v)
-                //         })
-                //         res.length && setItems(newMenus)
-                //     })
             }
         }
 
@@ -88,12 +69,6 @@ export const PageBlock = createReactBlockSpec({
     }
 })
 
-export type PageBlockSpec = typeof PageBlock
+export type PageBlockSpec = typeof pageBlockSpec
 
 
-export const blockSchema = {
-    ...defaultBlockSchema,
-    page: PageBlock
-} satisfies BlockSchema
-
-export type CustomBlockSchema = typeof blockSchema

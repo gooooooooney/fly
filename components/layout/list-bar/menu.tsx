@@ -16,7 +16,7 @@ export function Menus({
     <Listbox
       aria-label="User Menu"
       // onAction={(key) => alert(key)}
-      className="px-1 gap-0   divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible"
+      className="px-1 gap-0   divide-default-300/50 dark:divide-default-100/80 bg-content1 overflow-visible"
       items={items}
       itemClasses={{
         base: "rounded-md",
@@ -46,7 +46,7 @@ export function Menus({
           <ListboxItem
             textValue={item.title}
             className={cn(
-              "px-3 pl-[26px]   h-8 data-[hover=true]:bg-default-100/80",
+              "px-3 pl-[26px]    h-8 data-[hover=true]:bg-default-100/80",
               itemWithoutChildClassName,
               {
                 "bg-default-100/80": item.isActive,
@@ -55,7 +55,7 @@ export function Menus({
             key={item.id}
           // startContent={<span className="w-5 h-5">{item.emoji}</span>}
           >
-            <Link href={`/${item.id}`} className="flex-1 py-1.5 block">
+            <Link href={`/${item.id}`} className="flex-1 truncate py-1.5 block">
               <span className="mr-1 inline-block w-5 h-5">
                 {item.icon || "📄"}
               </span>

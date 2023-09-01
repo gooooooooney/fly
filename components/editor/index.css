@@ -10,3 +10,39 @@
   background: #87837826;
     color: #EB5757;
 }
+[data-level="1"] {
+  --level: 2.875em !important;
+}
+[data-level="2"] {
+  --level: 2em !important;
+}
+[data-level="3"] {
+  --level: 1.875em !important;
+}
+[data-level="4"] {
+  --level: 1.5em;
+}
+[data-level="5"] {
+  --level: 1.25em;
+}
+[data-level="6"] {
+  --level: 1em;
+}
+[data-prev-level="1"] {
+  --level: 3em !important;
+}
+[data-prev-level="2"] {
+  --level: 2em !important;
+}
+[data-prev-level="3"] {
+  --level: 1.5em !important;
+}
+[data-prev-level="4"] {
+  --level: 1.2em;
+}
+[data-prev-level="5"] {
+  --level: 1em;
+}
+[data-prev-level="6"] {
+  --level: .8em;
+}

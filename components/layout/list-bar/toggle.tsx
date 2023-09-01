@@ -1,8 +1,9 @@
 import { Icons } from "@/components/icons";
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { getChildrenMenus } from "@/lib/data-source/menus";
-import { setMenus } from "@/lib/menus";
+import { mergeMenus, setMenus } from "@/lib/menus";
 import { Disclosure } from "@headlessui/react";
 import { cn } from "@nextui-org/system";
 import { AnimatePresence, motion } from "framer-motion";
@@ -16,6 +17,7 @@ import { useStore } from "zustand";
 
 
 export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
+  const pageId = useUuidPathname()
   const [items, setItems] = useStore(useBoundStore, (state) => [
     state.menus,
     state.setMenus,
@@ -35,23 +37,18 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
               v && getChildrenMenus(v.id).then(res => {
                 setIsDataLoaded(true)
                 const newMenu = _.cloneDeep(v)
-                newMenu.children = res
+                newMenu.children = res.map(val => ({
+                  ...val,
+                  isActive: val.id === pageId
+                }))
                 return newMenu
               })))
             .then(res => {
               res.forEach(v => {
                 setMenus(newMenus, v)
               })
-              res.length &&  setItems(newMenus)
+              res.length &&  setItems(mergeMenus(items, newMenus))
             })
-          // if (res) {
-          //   const newMenu = _.cloneDeep(v)
-          //   const newMenus = _.cloneDeep(items)
-          //   newMenu.children = res
-          //   setMenus(newMenus, newMenu)
-          //   setItems(newMenus)
-
-          // }
         }
       }}
       className={cn(
@@ -84,7 +81,7 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
       >
         <AnimatePresence initial={false} mode="wait">
           <motion.div
-            className="text-lg"
+            className="text-lg truncate"
             key={open ? "less" : "more"}
             initial={{
               rotate: open ? -90 : 90,
@@ -108,7 +105,7 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
               },
             }}
           >
-            {open ? <Icons.TriangleDownIcon /> : <Icons.TriangleRightIcon />}
+            {open ? <Icons.ChevronDownIcon /> : <Icons.ChevronRightIcon />}
           </motion.div>
         </AnimatePresence>
 
@@ -124,7 +121,7 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
         <Icons.ChevronRightIcon />
       </motion.div> */}
       </Disclosure.Button>
-      <Link href={`/${item.id}`} className="flex-1">
+      <Link href={`/${item.id}`} className="flex-1 truncate">
         <span className="mr-1 inline-block w-5 h-5">{item.icon || "📄"}</span>
         {item.title || "Untitled"}
       </Link>

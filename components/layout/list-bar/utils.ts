@@ -1,3 +1,4 @@
+import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { getChildrenMenus } from "@/lib/data-source/menus";
 import _ from "lodash";

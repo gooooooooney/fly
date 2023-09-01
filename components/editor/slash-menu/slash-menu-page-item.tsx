@@ -1,11 +1,11 @@
 import { ReactSlashMenuItem } from "@blocknote/react";
-import { Icons } from "../icons";
-import { blockSchema } from "./block-schema";
+import { Icons } from "../../icons";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { addNewPage, save, saveBlocks } from "@/lib/data-source/page";
-import OutHook from "../OutHook";
+import OutHook from "../../OutHook";
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import _ from "lodash";
+import { CustomBlockSchema } from "../blocks/custom-block-schema";
 
 export function insertOrUpdateBlock(editor: BlockNoteEditor, block: any) {
   const currentBlock = editor.getTextCursorPosition().block;
@@ -25,7 +25,7 @@ export function insertOrUpdateBlock(editor: BlockNoteEditor, block: any) {
 }
 
 // Custom Slash Menu item which executes the above function.
-export const insertPageItem: ReactSlashMenuItem<typeof blockSchema> = {
+export const SlashMenuPageItem: ReactSlashMenuItem<CustomBlockSchema> = {
   name: "Page",
   execute: (editor) => {
     const childBlock = editor.getTextCursorPosition().block;
