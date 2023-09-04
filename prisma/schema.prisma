@@ -125,6 +125,7 @@ enum Type {
   bulletListItem
   numberedListItem
   divider
+  callout
 }
 
 enum Role {
