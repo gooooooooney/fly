@@ -101,5 +101,5 @@ export function getReactSlashMenuItems(
 export const slashMenuItems = [
   SlashMenuPageItem,
   SlashMenuDividerItem,
-  // SlashMenuCalloutItem,
+  SlashMenuCalloutItem,
 ]

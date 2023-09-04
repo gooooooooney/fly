@@ -13,31 +13,22 @@ export const CalloutBlockSpec = createReactBlockSpec({
     }
   },
   containsInlineContent: true,
-  render: ({ block,editor }) => {
-   editor.updateBlock(block, {
-    type: "callout",
-    props: {
-      title: "title",
-      icon: "💡"
-    },
-    children: [
-      {
-        type: "paragraph",
-        props: {},
-        content: [
-
-        ]
-      }
-    ]
-
-   })
+  render: ({ block, editor }) => {
     return (
 
       <>
-        <Callout title={block.props.title} icon={block.props.icon}>
-          <div contentEditable></div>
+        <Callout
+          // title={<InlineContent >
+          //   {block.props.title}
+          // </InlineContent>
+          // }
+          className="flex bg-default-100 text-default-foreground items-start text-md rounded-sm max-w-3xl"
+          icon={block.props.icon}>
+          <div className="whitespace-pre-wrap px-1 w-full max-w-full break-words">
+            <InlineContent className="max-w-full break-words" />
+          </div>
         </Callout>
-        <InlineContent className="hidden" />
+
       </>
     );
   }
