@@ -12,7 +12,7 @@ export function Callout({ title, children, icon, ...props }: HTMLAttributes<HTML
     <Alert {...props}>
       {icon && <span className="mr-4 text-2xl">{icon}</span>}
       {title && <AlertTitle>{title}</AlertTitle>}
-      <AlertDescription className="flex flex-col min-w-0 ml-2 w-full">{children}</AlertDescription>
+      <AlertDescription className="flex flex-col min-w-0 w-full">{children}</AlertDescription>
     </Alert>
   )
 }

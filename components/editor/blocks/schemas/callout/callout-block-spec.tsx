@@ -24,7 +24,7 @@ export const CalloutBlockSpec = createReactBlockSpec({
           // }
           className="flex bg-default-100 text-default-foreground items-start text-md rounded-sm max-w-3xl"
           icon={block.props.icon}>
-          <div className="whitespace-pre-wrap px-1 w-full max-w-full break-words">
+          <div className="whitespace-pre-wrap text-base w-full max-w-full break-words">
             <InlineContent className="max-w-full break-words" />
           </div>
         </Callout>
