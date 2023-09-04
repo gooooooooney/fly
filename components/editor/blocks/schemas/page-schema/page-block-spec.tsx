@@ -10,7 +10,7 @@ import { useState } from "react";
 
 
 
-export const pageBlockSpec = createReactBlockSpec({
+export const PageBlockSpec = createReactBlockSpec({
     type: "page",
     propSchema: {
         ...defaultProps,
@@ -69,6 +69,6 @@ export const pageBlockSpec = createReactBlockSpec({
     }
 })
 
-export type PageBlockSpec = typeof pageBlockSpec
+export type PageBlockSpec = typeof PageBlockSpec
 
 

@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { InlineContent, createReactBlockSpec } from "@blocknote/react";
 
-export const dividerBlockSpec = createReactBlockSpec({
+export const DividerBlockSpec = createReactBlockSpec({
   type: "divider",
   propSchema: {
   },
@@ -17,4 +17,4 @@ export const dividerBlockSpec = createReactBlockSpec({
   }
 })
 
-export type DividerBlockSpec = typeof dividerBlockSpec;
+export type DividerBlockSpec = typeof DividerBlockSpec;

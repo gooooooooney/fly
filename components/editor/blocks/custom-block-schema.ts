@@ -1,12 +1,14 @@
 import { DefaultBlockSchema, defaultBlockSchema } from "@blocknote/core";
 import { HeadingBlockContent } from "./heading";
-import { pageBlockSpec, PageBlockSpec } from "./schemas/page-schema/page-block-spec";
-import { DividerBlockSpec, dividerBlockSpec } from "./schemas/divider/divider-block-spec";
+import { PageBlockSpec } from "./schemas/page-schema/page-block-spec";
+import { DividerBlockSpec } from "./schemas/divider/divider-block-spec";
+import { CalloutBlockSpec } from "./schemas/callout/callout-block-spec";
 
 
 export type CustomBlockSpecs = {
   page: PageBlockSpec
   divider: DividerBlockSpec
+  callout: CalloutBlockSpec
 }
 
 export const customBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
@@ -22,8 +24,9 @@ export const customBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
   //   },
   //   node: HeadingBlockContent,
   // },
-  page: pageBlockSpec,
-  divider: dividerBlockSpec,
+  page: PageBlockSpec,
+  divider: DividerBlockSpec,
+  callout: CalloutBlockSpec,
 }
 
 export type CustomBlockSchema = typeof customBlockSchema

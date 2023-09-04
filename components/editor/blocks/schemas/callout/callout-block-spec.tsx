@@ -1,16 +1,42 @@
 import { Separator } from "@/components/ui/separator";
 import { InlineContent, createReactBlockSpec } from "@blocknote/react";
+import { Callout } from "./callout-component";
 
 export const CalloutBlockSpec = createReactBlockSpec({
-  type: "divider",
+  type: "callout",
   propSchema: {
+    title: {
+      default: "",
+    },
+    icon: {
+      default: "💡",
+    }
   },
   containsInlineContent: true,
-  render: ({ block }) => {
+  render: ({ block,editor }) => {
+   editor.updateBlock(block, {
+    type: "callout",
+    props: {
+      title: "title",
+      icon: "💡"
+    },
+    children: [
+      {
+        type: "paragraph",
+        props: {},
+        content: [
+
+        ]
+      }
+    ]
+
+   })
     return (
 
       <>
-        <Separator contentEditable="false" data-id={block.id} className="my-4" />
+        <Callout title={block.props.title} icon={block.props.icon}>
+          <div contentEditable></div>
+        </Callout>
         <InlineContent className="hidden" />
       </>
     );

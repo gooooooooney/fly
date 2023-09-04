@@ -21,6 +21,7 @@ import {
   RxTriangleDown,
   RxDotsHorizontal,
   RxDividerHorizontal,
+  RxChatBubble,
 } from "react-icons/rx";
 
 export const SunFilledIcon = ({
@@ -154,4 +155,5 @@ export const Icons = {
   Email: RxEnvelopeClosed,
   DotsHorizontal: RxDotsHorizontal,
   DividerHorizontal: RxDividerHorizontal,
+  ChatBubble: RxChatBubble,
 };
