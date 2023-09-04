@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@blocknote/core':
     specifier: ^0.9.2
@@ -11,6 +7,12 @@ dependencies:
   '@blocknote/react':
     specifier: ^0.9.2
     version: 0.9.2(@tiptap/pm@2.1.7)(@types/react@18.2.18)(react-dom@18.2.0)(react@18.2.0)
+  '@emoji-mart/data':
+    specifier: ^1.1.2
+    version: 1.1.2
+  '@emoji-mart/react':
+    specifier: ^1.1.1
+    version: 1.1.1(emoji-mart@5.5.2)(react@18.2.0)
   '@headlessui/react':
     specifier: ^1.7.17
     version: 1.7.17(react-dom@18.2.0)(react@18.2.0)
@@ -107,6 +109,9 @@ dependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
+  emoji-mart:
+    specifier: ^5.5.2
+    version: 5.5.2
   eslint:
     specifier: 8.46.0
     version: 8.46.0
@@ -374,6 +379,20 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       '@edge-runtime/primitives': 3.0.3
+    dev: false
+
+  /@emoji-mart/data@1.1.2:
+    resolution: {integrity: sha512-1HP8BxD2azjqWJvxIaWAMyTySeZY0Osr83ukYjltPVkNXeJvTz7yDrPLBtnrD5uqJ3tg4CcLuuBW09wahqL/fg==}
+    dev: false
+
+  /@emoji-mart/react@1.1.1(emoji-mart@5.5.2)(react@18.2.0):
+    resolution: {integrity: sha512-NMlFNeWgv1//uPsvLxvGQoIerPuVdXwK/EUek8OOkJ6wVOWPUizRBJU0hDqWZCOROVpfBgCemaC3m6jDOXi03g==}
+    peerDependencies:
+      emoji-mart: ^5.2
+      react: ^16.8 || ^17 || ^18
+    dependencies:
+      emoji-mart: 5.5.2
+      react: 18.2.0
     dev: false
 
   /@emotion/babel-plugin@11.11.0:
@@ -4808,6 +4827,10 @@ packages:
 
   /electron-to-chromium@1.4.505:
     resolution: {integrity: sha512-0A50eL5BCCKdxig2SsCXhpuztnB9PfUgRMojj5tMvt8O54lbwz3t6wNgnpiTRosw5QjlJB7ixhVyeg8daLQwSQ==}
+
+  /emoji-mart@5.5.2:
+    resolution: {integrity: sha512-Sqc/nso4cjxhOwWJsp9xkVm8OF5c+mJLZJFoFfzRuKO+yWiN7K8c96xmtughYb0d/fZ8UC6cLIQ/p4BR6Pv3/A==}
+    dev: false
 
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -9408,3 +9431,7 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

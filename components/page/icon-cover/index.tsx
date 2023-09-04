@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@nextui-org/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
-import EmojiPicker from "./emoji-picker";
+import { EmojiMartPicker, randomEmoji } from "./emoji-content/emoji-mart";
 import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { LIST } from "@/constatns/emojis";
@@ -13,6 +13,7 @@ import { usePageInit } from "@/hooks/use-page-init";
 import { useEffect } from "react";
 import { useClientInit } from "@/components/useClientInit";
 import { saveProperty } from "@/lib/data-source/page";
+import { EmojiPicker } from "@/components/emoji-picker";
 
 function IconAndCover({ id }: { id: string }) {
   const { data } = usePageInit();
@@ -26,9 +27,17 @@ function IconAndCover({ id }: { id: string }) {
       setCover: state.setCover,
     })
   );
-  useClientInit(id)
+  useClientInit(id);
 
-
+  const setEmoji = (emoji: string) => {
+    setIcon(emoji);
+    saveProperty({
+      pageId: id,
+      data: {
+        emoji,
+      },
+    });
+  };
 
   useEffect(() => {
     if (data) {
@@ -37,16 +46,8 @@ function IconAndCover({ id }: { id: string }) {
     }
   }, [data]);
   const handleRandomIcon = () => {
-    const randomEmojiList = LIST[Random(0, LIST.length - 1)];
-    const randomEmoji = randomEmojiList[Random(0, randomEmojiList.length - 1)];
-
-    setIcon(randomEmoji);
-    saveProperty({
-      pageId: id,
-      data: {
-        emoji: randomEmoji
-      }
-    })
+    const emoji = randomEmoji();
+    setEmoji(emoji);
   };
   const handleRandomCover = () => {
     const randomCover = covers[Random(0, covers.length - 1)];
@@ -55,9 +56,9 @@ function IconAndCover({ id }: { id: string }) {
     saveProperty({
       pageId: id,
       data: {
-        cover: randomCover.urls.full
-      }
-    })
+        cover: randomCover.urls.full,
+      },
+    });
   };
   return (
     <>
@@ -70,19 +71,15 @@ function IconAndCover({ id }: { id: string }) {
             }
           )}
         >
-          <Popover placement="left" radius="sm">
-            <PopoverTrigger>
-              <Button
-                variant="light"
-                className="text-7xl px-0 h-18 w-18 aria-expanded:opacity-100"
-              >
-                {emoji}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-96 items-start">
-              <EmojiPicker />
-            </PopoverContent>
-          </Popover>
+   
+          <EmojiPicker onEmojiSelect={e => setEmoji(e)}>
+            <Button
+              variant="light"
+              className="text-7xl px-0 h-18 w-18 aria-expanded:opacity-100"
+            >
+              {emoji}
+            </Button>
+          </EmojiPicker>
         </div>
       )}
       <section className="my-2">

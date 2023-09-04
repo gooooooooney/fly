@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 
-function EmojiPicker() {
+function EmojiContent() {
     const pageId = useUuidPathname()
     const setEmoji = useStore(useBoundStore, (state) => state.setIcon)
     const setIcon = (emoji: string) => {
@@ -46,4 +46,4 @@ function EmojiPicker() {
         </Tabs>
     )
 }
-export default EmojiPicker
+export default EmojiContent
