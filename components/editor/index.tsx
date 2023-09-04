@@ -42,8 +42,9 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   beforeBlocks = data?.body?.blocks as any;
 
   const handleTextCursorPositionChange = (editor: BlockNoteEditor) => {
+    const CannotRemoveTypeList = ["page", "divider"];
     const currentBlock = editor.getTextCursorPosition().block;
-    if (currentBlock.type === "page") {
+    if (CannotRemoveTypeList.includes(currentBlock.type)) {
       // Retrieve all blocks before the current block and reverse them.
       const blocks = editor.topLevelBlocks
         .slice(0, editor.topLevelBlocks.indexOf(currentBlock))
@@ -53,7 +54,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
       let hasNotPageBlock = false;
       for (let i = 0; i < blocks.length; i++) {
         const block = blocks[i];
-        if (block.type !== "page") {
+        if (!CannotRemoveTypeList.includes(block.type)) {
           hasNotPageBlock = true;
           editor.setTextCursorPosition(block, "end");
           break;

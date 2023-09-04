@@ -5,6 +5,7 @@ import {
   HyperlinkToolbarPositioner,
   SideMenuPositioner,
   SlashMenuPositioner,
+  getDefaultReactSlashMenuItems,
   // getDefaultReactSlashMenuItems,
   useBlockNote,
 } from "@blocknote/react";
@@ -15,8 +16,9 @@ import { memo, useEffect } from "react";
 import { CustomSideMenu } from "./custom-side-menu";
 import { useTheme } from "next-themes";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
-import { getReactSlashMenuItems } from "./slash-menu";
+// import { getReactSlashMenuItems } from "./slash-menu";
 import { customBlockSchema } from "./blocks/custom-block-schema";
+import { slashMenuItems } from "./slash-menu";
 interface EditorProps {
   editable: boolean;
   initialContent: BlockNoteEditor["topLevelBlocks"];
@@ -43,7 +45,9 @@ let count = 0;
       editable,
       blockSchema: customBlockSchema,
       slashMenuItems: [
-        ...getReactSlashMenuItems(),
+        // ...getReactSlashMenuItems(),
+        ...getDefaultReactSlashMenuItems(customBlockSchema),
+        ...slashMenuItems,
       ],
       initialContent: initialContent.length === 0 ? undefined : initialContent,
       domAttributes: {

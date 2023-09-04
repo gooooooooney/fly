@@ -18,6 +18,7 @@ import {
 import { getDefaultSlashMenuItems } from "./default-slash-menu-items";
 import { customBlockSchema, CustomBlockSchema } from "../blocks/custom-block-schema";
 import { SlashMenuPageItem } from "./slash-menu-page-item";
+import { SlashMenuDividerItem } from "./slash-menu-divider-itme";
 
 const extraFields: Record<
   string,
@@ -92,5 +93,11 @@ export function getReactSlashMenuItems(
       ...extraFields[item.name],
     })),
     SlashMenuPageItem,
+    SlashMenuDividerItem,
   ];
 }
+
+export const slashMenuItems = [
+  SlashMenuPageItem,
+  SlashMenuDividerItem,
+]

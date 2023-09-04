@@ -124,6 +124,7 @@ enum Type {
   heading
   bulletListItem
   numberedListItem
+  divider
 }
 
 enum Role {
