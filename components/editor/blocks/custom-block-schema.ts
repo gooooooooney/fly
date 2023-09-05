@@ -5,6 +5,7 @@ import { DividerBlockSpec } from "./schemas/divider/divider-block-spec";
 import { CalloutBlockSpec } from "./schemas/callout/callout-block-spec";
 import { TodoBlockSpec } from "./schemas/todo/todo-block-spec";
 import { CodeBlockSpec } from "./schemas/code-block/node";
+import { CustomSchema } from "./schemas/custom/custom-schema";
 
 
 export type CustomBlockSpecs = {
@@ -12,6 +13,7 @@ export type CustomBlockSpecs = {
   divider: DividerBlockSpec
   callout: CalloutBlockSpec
   todo: TodoBlockSpec
+  custom: CustomSchema
   // codeBlock: CodeBlockSpec
 }
 
@@ -32,6 +34,7 @@ export const CustomBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
   divider: DividerBlockSpec,
   callout: CalloutBlockSpec,
   todo: TodoBlockSpec,
+  custom: CustomSchema,
   // codeBlock: CodeBlockSpec
 }
 

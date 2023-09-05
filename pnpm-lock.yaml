@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@blocknote/core':
     specifier: ^0.9.2
@@ -98,6 +94,9 @@ dependencies:
   '@tiptap/pm':
     specifier: ^2.1.8
     version: 2.1.8
+  '@tiptap/react':
+    specifier: ^2.1.8
+    version: 2.1.8(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)(react-dom@18.2.0)(react@18.2.0)
   '@types/node':
     specifier: 20.4.5
     version: 20.4.5
@@ -332,7 +331,7 @@ packages:
       '@mantine/utils': 6.0.19(react@18.2.0)
       '@tippyjs/react': 4.2.6(react-dom@18.2.0)(react@18.2.0)
       '@tiptap/core': 2.1.7(@tiptap/pm@2.1.8)
-      '@tiptap/react': 2.1.7(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)(react-dom@18.2.0)(react@18.2.0)
+      '@tiptap/react': 2.1.8(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)(react-dom@18.2.0)(react@18.2.0)
       lodash: 4.17.21
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -3352,8 +3351,8 @@ packages:
       '@tiptap/core': 2.1.7(@tiptap/pm@2.1.8)
     dev: false
 
-  /@tiptap/extension-bubble-menu@2.1.7(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8):
-    resolution: {integrity: sha512-VcwwUgiG17TEDZda1JBbyKCHLIBTu8B2OAzYrnd4ZqeRs5KTVAB279o/TVjsLVgEfC+c7IWwhhaPPMoXn/lJ3g==}
+  /@tiptap/extension-bubble-menu@2.1.8(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8):
+    resolution: {integrity: sha512-Na9Maz20jS+3UrHtAGLkfFt3uu+HD9SSK3+3WyNeylkWciJa/qkZKqwhptHrjpin0IHSF2JNche+ZA+hSmnm2Q==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
@@ -3403,8 +3402,8 @@ packages:
       '@tiptap/pm': 2.1.8
     dev: false
 
-  /@tiptap/extension-floating-menu@2.1.7(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8):
-    resolution: {integrity: sha512-K0bO7JKHAvgLM5MkhNgoYcD6SB0Z2tNIFhZHs5SCTuhg7dwduMSM3pC6QBrJGUk99DGsKuMPYQn3c2oG7MLbyQ==}
+  /@tiptap/extension-floating-menu@2.1.8(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8):
+    resolution: {integrity: sha512-lc8bjHGqWSgXKmoU2HAlBFWzu7wnFKb5Vg0R3PECBrOZ9hXkmNA0mHxrvHglwjLtfe7XOfZf4FLySG/5S+BdeQ==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
@@ -3526,8 +3525,8 @@ packages:
       prosemirror-view: 1.31.7
     dev: false
 
-  /@tiptap/react@2.1.7(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-jCs5z/rXZ7mEOTPcJ+r/OSTtLOGBahS7D3xDu3pRX4P0wtWHlprsdptxxlWjkBHLav01XXJ+OtGZTfhWBio1QQ==}
+  /@tiptap/react@2.1.8(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-yTjlin4tOfYNwBdpX4+2CmNxybq2Ms50rX0RIRLABbnCTqhBIKko/eBLFq7DCot/Dwdw6c5Y098/fayKywfJWg==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
@@ -3535,8 +3534,8 @@ packages:
       react-dom: ^17.0.0 || ^18.0.0
     dependencies:
       '@tiptap/core': 2.1.7(@tiptap/pm@2.1.8)
-      '@tiptap/extension-bubble-menu': 2.1.7(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)
-      '@tiptap/extension-floating-menu': 2.1.7(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)
+      '@tiptap/extension-bubble-menu': 2.1.8(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)
+      '@tiptap/extension-floating-menu': 2.1.8(@tiptap/core@2.1.7)(@tiptap/pm@2.1.8)
       '@tiptap/pm': 2.1.8
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -9469,3 +9468,7 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

@@ -22,6 +22,7 @@ import { SlashMenuDividerItem } from "./slash-menu-divider-item";
 import { SlashMenuCalloutItem } from "./slash-menu-callout-item";
 import { SlashMenuTodoItem } from "./slash-menu-todo-item";
 import { SlashMenuCodeBlockItem } from "./slash-menu-code-block-item";
+import { SlashMenuCustomItem } from "./slash-menu-custom.item";
 
 const extraFields: Record<
   string,
@@ -106,4 +107,5 @@ export const slashMenuItems = [
   SlashMenuCalloutItem,
   SlashMenuTodoItem,
   // SlashMenuCodeBlockItem,
+  SlashMenuCustomItem,
 ]
