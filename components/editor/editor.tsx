@@ -17,7 +17,7 @@ import { CustomSideMenu } from "./custom-side-menu";
 import { useTheme } from "next-themes";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 // import { getReactSlashMenuItems } from "./slash-menu";
-import { customBlockSchema } from "./blocks/custom-block-schema";
+import { CustomBlockSchema } from "./blocks/custom-block-schema";
 import { slashMenuItems } from "./slash-menu";
 interface EditorProps {
   editable: boolean;
@@ -43,10 +43,10 @@ let count = 0;
   const editor = useBlockNote(
     {
       editable,
-      blockSchema: customBlockSchema,
+      blockSchema: CustomBlockSchema,
       slashMenuItems: [
         // ...getReactSlashMenuItems(),
-        ...getDefaultReactSlashMenuItems(customBlockSchema),
+        ...getDefaultReactSlashMenuItems(CustomBlockSchema),
         ...slashMenuItems,
       ],
       initialContent: initialContent.length === 0 ? undefined : initialContent,

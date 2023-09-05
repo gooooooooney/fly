@@ -79,6 +79,7 @@ module.exports = {
   },
   plugins: [require("tailwindcss-animate"), nextui({
     prefix: "fly",
+    addCommonColors: true,
     themes: {
       dark: {
         layout: {

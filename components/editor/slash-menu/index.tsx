@@ -16,10 +16,12 @@ import {
   RiText,
 } from "react-icons/ri";
 import { getDefaultSlashMenuItems } from "./default-slash-menu-items";
-import { customBlockSchema, CustomBlockSchema } from "../blocks/custom-block-schema";
+import { CustomBlockSchema } from "../blocks/custom-block-schema";
 import { SlashMenuPageItem } from "./slash-menu-page-item";
-import { SlashMenuDividerItem } from "./slash-menu-divider-itme";
+import { SlashMenuDividerItem } from "./slash-menu-divider-item";
 import { SlashMenuCalloutItem } from "./slash-menu-callout-item";
+import { SlashMenuTodoItem } from "./slash-menu-todo-item";
+import { SlashMenuCodeBlockItem } from "./slash-menu-code-block-item";
 
 const extraFields: Record<
   string,
@@ -87,7 +89,7 @@ const extraFields: Record<
 export function getReactSlashMenuItems(
 ): ReactSlashMenuItem<CustomBlockSchema>[] {
   const slashMenuItems: BaseSlashMenuItem<CustomBlockSchema>[] =
-    getDefaultSlashMenuItems(customBlockSchema);
+    getDefaultSlashMenuItems(CustomBlockSchema);
   return [
     ...slashMenuItems.map((item) => ({
       ...item,
@@ -102,4 +104,6 @@ export const slashMenuItems = [
   SlashMenuPageItem,
   SlashMenuDividerItem,
   SlashMenuCalloutItem,
+  SlashMenuTodoItem,
+  // SlashMenuCodeBlockItem,
 ]

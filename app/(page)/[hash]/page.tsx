@@ -32,11 +32,12 @@ export default async function BlockPage({
 }: {
   params: { hash: string };
 }) {
-  const page = await getPageById(params.hash);
+  // const page = await getPageById(params.hash);
 
-  if (!page) {
-    return null;
-  }
+  // if (!page) {
+  //   return null;
+  // }
+  // console.log(page)
   return (
     <>
       {/* <OutHookConfigurator /> */}

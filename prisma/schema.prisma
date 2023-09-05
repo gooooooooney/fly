@@ -126,6 +126,7 @@ enum Type {
   numberedListItem
   divider
   callout
+  todo
 }
 
 enum Role {
