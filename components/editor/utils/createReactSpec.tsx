@@ -12,6 +12,7 @@ import {
   PropSchema,
   propsToAttributes,
   render,
+  TipTapNodeConfig,
 } from "@blocknote/core";
 import {
   KeyboardShortcutCommand,
@@ -19,6 +20,7 @@ import {
   NodeViewProps,
   NodeViewWrapper,
   ReactNodeViewRenderer,
+  SingleCommands,
 } from "@tiptap/react";
 import { createContext, ElementType, FC, HTMLProps, useContext } from "react";
 
@@ -43,7 +45,7 @@ export type ReactBlockConfig<
   }>;
 } & {
   addCommands?: (commands: any) => any;
-  addKeyboardShortcuts?: (t: any) => {
+  addKeyboardShortcuts?: (props: { commands: SingleCommands }) => {
     [key: string]: KeyboardShortcutCommand;
   };
 };
@@ -114,9 +116,10 @@ export function createCustomReactBlockSpec<
 
     addKeyboardShortcuts() {
       const result = blockConfig.addKeyboardShortcuts
-        ? blockConfig.addKeyboardShortcuts(this)
+        ? blockConfig.addKeyboardShortcuts({
+          commands: this.editor.commands,
+        })
         : {};
-        console.log(result, "result")
       return result;
     },
 

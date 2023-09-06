@@ -68,7 +68,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   };
 
   const handleOnEditorContentChange = (editor: BlockNoteEditor) => {
-    console.log("cache", editor._tiptapEditor)
+    console.log("_tiptapEditor", editor._tiptapEditor)
     console.log("topLevelBlocks", editor.topLevelBlocks)
     console.log("json", editor._tiptapEditor.getJSON())
     // 避免第一次渲染的时候触发导致调用save接口

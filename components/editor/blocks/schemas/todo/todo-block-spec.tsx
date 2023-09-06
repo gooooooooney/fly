@@ -1,9 +1,10 @@
 // import { Checkbox } from "@/components/ui/checkbox";
+import { InlineContent, createCustomReactBlockSpec } from "@/components/editor/utils/createReactSpec";
 import { cn } from "@/lib/utils";
-import { InlineContent, createReactBlockSpec } from "@blocknote/react";
+// import { InlineContent, createReactBlockSpec } from "@blocknote/react";
 import { Checkbox } from "@nextui-org/react";
 
-export const TodoBlockSpec = createReactBlockSpec({
+export const TodoBlockSpec = createCustomReactBlockSpec({
   type: "todo",
   propSchema: {
     completed: {
@@ -11,6 +12,24 @@ export const TodoBlockSpec = createReactBlockSpec({
     }
   },
   containsInlineContent: true,
+  // addKeyboardShortcuts({ commands }) {
+  //   return {
+  //     "Enter": () => {
+
+  //       return commands.first(({ state, chain, commands }) => [
+  //         () =>
+  //           commands.command(() => {
+  //             chain()
+  //               .deleteSelection()
+  //               .BNSplitBlock(state.selection.from, true)
+  //               .run();
+  //             return true
+  //           })
+
+  //       ])
+  //     },
+  //   }
+  // },
   render: ({ block, editor }) => {
     return (
 

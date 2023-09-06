@@ -1,28 +1,19 @@
 import { ReactSlashMenuItem } from "@blocknote/react";
 import { CustomBlockSchema } from "../blocks/custom-block-schema";
 import { Icons } from "@/components/icons";
-import { insertOrUpdateBlock } from "./slash-menu-page-item";
+import { insertOrUpdateBlock } from "../utils/insertOrUpdateBlock";
 
 export const SlashMenuTodoItem: ReactSlashMenuItem<CustomBlockSchema> = {
   name: "todo",
   execute: (editor) => {
-    editor.insertBlocks(
-      [
-        {
-          type: "todo",
-          props: {
-            completed: "0",
-          },
-          content: [
-            {
-              type: "text",
-              text: "Todo",
-              styles: {},
-            }
-          ]
+    insertOrUpdateBlock(
+      editor,
+      {
+        type: "todo",
+        props: {
+          completed: "0",
         },
-      ],
-      editor.getTextCursorPosition().block,
+      },
     )
   },
   icon: <Icons.Checkbox size={18} />,
