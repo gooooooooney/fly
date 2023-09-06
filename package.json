@@ -61,6 +61,7 @@
     "nodemailer": "^6.9.4",
     "pexels": "^1.4.0",
     "postcss": "8.4.27",
+    "prosemirror-model": "^1.19.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",

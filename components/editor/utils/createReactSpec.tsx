@@ -14,6 +14,7 @@ import {
   render,
   TipTapNodeConfig,
 } from "@blocknote/core";
+import { Editor } from "@tiptap/core";
 import {
   KeyboardShortcutCommand,
   NodeViewContent,
@@ -45,7 +46,7 @@ export type ReactBlockConfig<
   }>;
 } & {
   addCommands?: (commands: any) => any;
-  addKeyboardShortcuts?: (props: { commands: SingleCommands }) => {
+  addKeyboardShortcuts?: (props: { editor: Editor }) => {
     [key: string]: KeyboardShortcutCommand;
   };
 };
@@ -117,7 +118,7 @@ export function createCustomReactBlockSpec<
     addKeyboardShortcuts() {
       const result = blockConfig.addKeyboardShortcuts
         ? blockConfig.addKeyboardShortcuts({
-          commands: this.editor.commands,
+          editor: this.editor
         })
         : {};
       return result;
