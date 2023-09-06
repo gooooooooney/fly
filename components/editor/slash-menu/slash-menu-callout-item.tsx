@@ -1,7 +1,7 @@
 import { ReactSlashMenuItem } from "@blocknote/react";
 import { CustomBlockSchema } from "../blocks/custom-block-schema";
 import { Icons } from "@/components/icons";
-import { insertOrUpdateBlock } from "./slash-menu-page-item";
+import { insertOrUpdateBlock } from "../utils/insertOrUpdateBlock";
 
 export const SlashMenuCalloutItem: ReactSlashMenuItem<CustomBlockSchema> = {
   name: "Callout",

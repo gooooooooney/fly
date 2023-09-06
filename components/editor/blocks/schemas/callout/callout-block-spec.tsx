@@ -1,8 +1,10 @@
-import { Separator } from "@/components/ui/separator";
-import { InlineContent, createReactBlockSpec } from "@blocknote/react";
 import { Callout } from "./callout-component";
+import { InlineContent, createCustomReactBlockSpec } from "@/components/editor/utils/createReactSpec";
+import { getBlockInfoFromPos } from "@/components/editor/utils/helper";
+import { BlockName } from "@/constatns/block";
+import {Selection} from "@tiptap/pm/state"
 
-export const CalloutBlockSpec = createReactBlockSpec({
+export const CalloutBlockSpec = createCustomReactBlockSpec({
   type: "callout",
   propSchema: {
     title: {
@@ -13,6 +15,37 @@ export const CalloutBlockSpec = createReactBlockSpec({
     },
   },
   containsInlineContent: true,
+  addKeyboardShortcuts({ editor }) {
+    return {
+      "Mod-Enter": () => {
+        const { node, contentType } = getBlockInfoFromPos(
+          editor.state.doc,
+          editor.state.selection.from
+        )!;
+
+        // If the current block is a callout block, do nothing.
+        if (contentType.name.endsWith(BlockName.CALLOUT)) {
+          return true;
+        }
+        return false;
+      },
+      "Mod-a": () => {
+        const { contentType, startPos, endPos }  = getBlockInfoFromPos(
+          editor.state.doc,
+          editor.state.selection.from
+        )!;
+        
+        if (!contentType.name.endsWith(BlockName.CALLOUT)) {
+          return false;
+        }
+
+        return editor.commands.setTextSelection({
+          from: startPos + 1, // +1 to exclude the first character
+          to: endPos,
+        });
+      },
+    };
+  },
   render: ({ block, editor }) => {
     return (
       <>

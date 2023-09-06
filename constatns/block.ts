@@ -8,6 +8,7 @@ export const enum BlockName {
     LIST_ITEM = "listItem",
     BLOCKQUOTE = "blockquote",
     CODE_BLOCK = "codeBlock",
+    CALLOUT = "callout",
 
 
 }
