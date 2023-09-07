@@ -38,5 +38,6 @@ export const CustomBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
   codeBlock: CodeBlockSpec
 }
 
+
 export type CustomBlockSchema = typeof CustomBlockSchema
 

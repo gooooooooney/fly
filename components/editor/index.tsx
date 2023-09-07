@@ -24,6 +24,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
   let beforeBlocks = [] as BlockWithOrder[];
   const [shouldUpdateContent, setShouldUpdateContent] = useState(false)
   const [editable, setEditable] = useStore(useBoundStore, s => [s.editable, s.setEditable])
+  const [setBlocks] = useStore(useBoundStore, s => [s.setBlocks])
   const { data } = usePageInit();
 
   const path = useUuidPathname();
@@ -75,6 +76,7 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
     if (!shouldUpdateContent) {
       return
     }
+    setBlocks(editor.topLevelBlocks)
     let topLevelBlocks = editor.topLevelBlocks;
     // if (topLevelBlocks.length === 0) return;
     const blockList = topLevelBlocks.map((block, index) => ({

@@ -35,6 +35,7 @@ export interface ContentSlice {
   editable: boolean
   menus: MenuProp[]
   blocks: BlockNoteEditor['topLevelBlocks']
+  setBlocks: (blocks: BlockNoteEditor['topLevelBlocks']) => void
   setMenus: (menus: MenuProp[]) => void
   setEditable: (editable: boolean) => void
   setCover: (cover: string) => void
@@ -58,6 +59,9 @@ export const createContentSlice: StateCreator<
     menus: [],
     setMenus: (menus) => set((state) => {
       return ({ menus })
+    }),
+    setBlocks: (blocks) => set((state) => {
+      return ({ blocks })
     }),
     setPageId: (pageId) => set((state) => ({ pageId })),
     setEditable: (editable) => set((state) => {

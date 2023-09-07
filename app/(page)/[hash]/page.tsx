@@ -9,6 +9,7 @@ import { getPageById } from "@/prisma/services/pages/pages-services";
 import { redirect } from "next/navigation";
 import { StoreInitializer } from "./store-initializer";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
+import { TOC } from "@/components/toc";
 async function getGithubEmojis() {
   const res = await fetch("https://api.github.com/emojis");
   const emojis = await res.json();
@@ -41,28 +42,28 @@ export default async function BlockPage({
   return (
     <>
       {/* <OutHookConfigurator /> */}
-      <>
-        <section
-          className="h-screen  w-full flex flex-col items-center z-1 max-h-full "
-        >
+      <div className="flex ">
+        <section className="h-screen overflow-auto w-full flex flex-col items-center z-1 max-h-full ">
           <Cover />
-          <section className="max-w-3xl flex flex-col w-full flex-grow ">
-            <div className="flex flex-col w-full">
-              <div className="group">
-                <IconAndCover id={params.hash} />
-                <PageTitle id={params.hash} />
+          <div className="relative w-full">
+            <section className="max-w-3xl mx-auto flex flex-col w-full flex-grow ">
+              <div className="flex flex-col w-full">
+                <div className="group">
+                  <IconAndCover id={params.hash} />
+                  <PageTitle id={params.hash} />
+                </div>
               </div>
-            </div>
-            <Separator />
-
-            <section className=" flex-grow flex flex-col mt-8">
-              <EditorWrapper 
-              // blocks={page?.blocks as any} 
-              />
+              <Separator />
+              <section className=" flex-grow flex flex-col mt-8">
+                <EditorWrapper
+                // blocks={page?.blocks as any}
+                />
+              </section>
             </section>
-          </section>
+            <TOC className="absolute top-10 left-5 self-start" />
+          </div>
         </section>
-      </>
+      </div>
     </>
   );
 }
