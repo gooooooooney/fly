@@ -1,19 +1,14 @@
 import { ReactSlashMenuItem } from "@blocknote/react";
 import { CustomBlockSchema } from "../blocks/custom-block-schema";
 import { Icons } from "@/components/icons";
-import { insertOrUpdateBlock } from "./slash-menu-page-item";
+import { insertOrUpdateBlock } from "../utils/insertOrUpdateBlock";
 
 export const SlashMenuCodeBlockItem: ReactSlashMenuItem<CustomBlockSchema> = {
   name: "codeBlock",
   execute: (editor) => {
-    editor.insertBlocks([
-      {
-        type: "codeBlock",
-      }
-    ],
-    editor.getTextCursorPosition().block,
-    "after"
-    )
+    insertOrUpdateBlock(editor, {
+      type: "codeBlock",
+    })
   },
   icon: <Icons.DividerHorizontal size={18} />,
   group: "Basic blocks",

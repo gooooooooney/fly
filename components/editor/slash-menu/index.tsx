@@ -106,6 +106,6 @@ export const slashMenuItems = [
   SlashMenuDividerItem,
   SlashMenuCalloutItem,
   SlashMenuTodoItem,
-  // SlashMenuCodeBlockItem,
+  SlashMenuCodeBlockItem,
   SlashMenuCustomItem,
 ]

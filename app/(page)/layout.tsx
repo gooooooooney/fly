@@ -6,6 +6,7 @@ import { PropsWithChildren } from "react";
 import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { ListBar } from "@/components/layout/list-bar";
+import Script from "next/script";
 
 export default async function PageLayout(
   props: PropsWithChildren & {
@@ -24,6 +25,7 @@ export default async function PageLayout(
   }
   return (
           <section className=" h-screen">
+            <Script src="https://unpkg.com/shiki"></Script>
             <section className="flex h-screen">
               {/* <Sidebar wps={wps} email={session.user.email!} /> */}
               <ListBar email={session.user.email!} />

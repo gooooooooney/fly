@@ -4,7 +4,7 @@ import { PageBlockSpec } from "./schemas/page-schema/page-block-spec";
 import { DividerBlockSpec } from "./schemas/divider/divider-block-spec";
 import { CalloutBlockSpec } from "./schemas/callout/callout-block-spec";
 import { TodoBlockSpec } from "./schemas/todo/todo-block-spec";
-import { CodeBlockSpec } from "./schemas/code-block/node";
+import { CodeBlockSpec } from "./schemas/code-block/code-block-schema";
 import { CustomSchema } from "./schemas/custom/custom-schema";
 
 
@@ -14,7 +14,7 @@ export type CustomBlockSpecs = {
   callout: CalloutBlockSpec
   todo: TodoBlockSpec
   custom: CustomSchema
-  // codeBlock: CodeBlockSpec
+  codeBlock: CodeBlockSpec
 }
 
 export const CustomBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
@@ -35,7 +35,7 @@ export const CustomBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
   callout: CalloutBlockSpec,
   todo: TodoBlockSpec,
   custom: CustomSchema,
-  // codeBlock: CodeBlockSpec
+  codeBlock: CodeBlockSpec
 }
 
 export type CustomBlockSchema = typeof CustomBlockSchema
