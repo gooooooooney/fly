@@ -5,6 +5,8 @@ import { usePageInit } from "@/hooks/use-page-init";
 import { useSpace } from "@/hooks/use-space";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { saveProperty } from "@/lib/data-source/page";
+import { findMenu, mergeMenus, setPropSyncMenus } from "@/lib/menus";
+import _ from "lodash";
 import { useEffect } from "react";
 import { useStore } from "zustand";
 
@@ -27,7 +29,10 @@ export const PageTitle = ({ id }: { id: string }) => {
   }, [data]);
   const setPageTitle = (title: string) => {
     setTitle(title);
-
+    setPropSyncMenus({
+      id: pageId,
+      title
+    })
     saveProperty({
       pageId,
       data: {

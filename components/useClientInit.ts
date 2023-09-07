@@ -1,7 +1,7 @@
 "use client";
 import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
 import { PageResponse } from "@/app/api/page/get/route";
@@ -22,6 +22,7 @@ export function useClientInit(id: string) {
   }, [id]);
 
   useEffect(() => {
+
     const link = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
     if (!link) {
       const link = document.createElement("link");

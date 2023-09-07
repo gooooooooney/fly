@@ -14,6 +14,8 @@ import { useEffect } from "react";
 import { useClientInit } from "@/components/useClientInit";
 import { saveProperty } from "@/lib/data-source/page";
 import { EmojiPicker } from "@/components/emoji-picker";
+import { findMenu, setMenus, mergeMenus, setPropSyncMenus } from "@/lib/menus";
+import { title } from "process";
 
 function IconAndCover({ id }: { id: string }) {
   const { data } = usePageInit();
@@ -31,6 +33,10 @@ function IconAndCover({ id }: { id: string }) {
 
   const setEmoji = (emoji: string) => {
     setIcon(emoji);
+    setPropSyncMenus({
+      id,
+      emoji,
+    })
     saveProperty({
       pageId: id,
       data: {
@@ -71,7 +77,7 @@ function IconAndCover({ id }: { id: string }) {
             }
           )}
         >
-   
+
           <EmojiPicker onEmojiSelect={e => setEmoji(e)}>
             <Button
               variant="light"

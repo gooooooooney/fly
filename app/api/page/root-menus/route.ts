@@ -9,6 +9,9 @@ export async function GET(request: Request) {
   if (!workspaceId) {
     return new NextResponse("spaceId is required", { status: 400 })
   }
+  if (!blockId) {
+    return new NextResponse("blockId is required", { status: 400 })
+  }
   try {
     const menus = await getRootPageMenus(workspaceId, blockId || "")
     return NextResponse.json({
