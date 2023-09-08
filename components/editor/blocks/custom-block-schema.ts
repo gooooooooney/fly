@@ -25,7 +25,7 @@ export const CustomBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
   //     ...defaultBlockSchema.heading.propSchema,
   //     level: {
   //       default: "1",
-  //       values: ["1", "2", "3", "4", "5", "6"] as any,
+  //       values: ["1", "2", "3", "4"] as any,
   //     }
   //   },
   //   node: HeadingBlockContent,

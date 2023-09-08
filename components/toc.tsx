@@ -3,16 +3,16 @@
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { cn } from "@/lib/utils";
 import { Link } from "@nextui-org/link";
-import { FC, Fragment, HtmlHTMLAttributes, useState } from "react";
+import { FC, Fragment, HtmlHTMLAttributes, useEffect, useRef, useState } from "react";
 import { useStore } from "zustand";
 
 export const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
   const blocks = useStore(useBoundStore, (state) => state.blocks);
-  const [activeItem, setActiveItem] = useState("");
+  const [activeId, setActiveId] = useState("");
 
   const headings = blocks.filter((block) => block.type == "heading")
   const handleItemClick = (id: string) => {
-    setActiveItem(id);
+    setActiveId(id);
     const target = document.querySelector(`[data-id="${id}"]`);
     if (target) {
       target.scrollIntoView({
@@ -21,17 +21,29 @@ export const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
     }
   };
 
+
   return (
-    <ul className={cn(props.className, "flex flex-col w-40")}>
+    <div className={cn(props.className, "flex flex-col w-40")}>
       {headings.map((heading) => {
         return (
           <Fragment key={heading.id}>
             <Link
               as="li"
-              className="block cursor-pointer mt-2"
+              className={cn(
+                [
+                  "block cursor-pointer mt-2",
+                  "transition-all transform -translate-x-1 duration-300 ease-in-out",
+                  " hover:text-success-500 hover:translate-x-0"
+                ],
+                {
+                  "font-bold": activeId === heading.id,
+                }
+              )}
               underline="hover"
-              color={activeItem === heading.id ? "success" : "primary"}
+
+              color={activeId === heading.id ? "success" : "primary"}
               onClick={() => handleItemClick(heading.id)}
+              // onClick={() => setActiveId(heading.id)}
             >
               {heading.content.map((ct, i) => {
                 const s = () => {
@@ -60,6 +72,6 @@ export const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
           </Fragment>
         );
       })}
-    </ul>
+    </div>
   );
 };

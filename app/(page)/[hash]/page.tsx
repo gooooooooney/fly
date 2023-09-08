@@ -43,9 +43,10 @@ export default async function BlockPage({
     <>
       {/* <OutHookConfigurator /> */}
       <div className="flex ">
-        <section className="h-screen overflow-auto w-full flex flex-col items-center z-1 max-h-full ">
+        <section className="h-screen  w-full flex flex-col items-center z-1 max-h-full ">
           <Cover />
-          <div className="relative w-full">
+          <div className="relative w-full flex">
+          <TOC className="sticky top-10 left-5 self-start" />
             <section className="max-w-3xl mx-auto flex flex-col w-full flex-grow ">
               <div className="flex flex-col w-full">
                 <div className="group">
@@ -60,7 +61,6 @@ export default async function BlockPage({
                 />
               </section>
             </section>
-            <TOC className="absolute top-10 left-5 self-start" />
           </div>
         </section>
       </div>

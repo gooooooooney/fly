@@ -26,6 +26,7 @@ import {
 import { createContext, ElementType, FC, HTMLProps, useContext } from "react";
 
 const blockStyles = styles as any;
+type ContentType = "block+" | "block*" | "inline*" | "text*" | "(paragraph|list?)+";
 // extend BlockConfig but use a React render function
 export type ReactBlockConfig<
   Type extends string,
@@ -49,6 +50,7 @@ export type ReactBlockConfig<
   addKeyboardShortcuts?: (props: { editor: Editor }) => {
     [key: string]: KeyboardShortcutCommand;
   };
+  content?: ContentType;
 };
 
 const BlockNoteDOMAttributesContext = createContext<BlockNoteDOMAttributes>({});
@@ -96,7 +98,7 @@ export function createCustomReactBlockSpec<
     }
   >({
     name: blockConfig.type,
-    content: blockConfig.containsInlineContent ? "inline*" : "",
+    content: blockConfig.containsInlineContent ? "inline*" : blockConfig.content,
     selectable: blockConfig.containsInlineContent,
 
     addAttributes() {

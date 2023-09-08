@@ -18,7 +18,7 @@ import { useTheme } from "next-themes";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 // import { getReactSlashMenuItems } from "./slash-menu";
 import { CustomBlockSchema } from "./blocks/custom-block-schema";
-import { slashMenuItems } from "./slash-menu";
+import { getReactSlashMenuItems, slashMenuItems } from "./slash-menu";
 interface EditorProps {
   editable: boolean;
   initialContent: BlockNoteEditor["topLevelBlocks"];

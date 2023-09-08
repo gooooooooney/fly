@@ -23,7 +23,7 @@ export const HeadingBlockContent = createTipTapBlock<"heading">({
 
   addInputRules() {
     return [
-      ...["1", "2", "3", "4", "5", "6"].map((level) => {
+      ...["1", "2", "3", "4"].map((level) => {
         // Creates a heading of appropriate level when starting with "#", "##", or "###".
         return new InputRule({
           find: new RegExp(`^(#{${parseInt(level)}})\\s$`),
@@ -32,7 +32,7 @@ export const HeadingBlockContent = createTipTapBlock<"heading">({
               .BNUpdateBlock(state.selection.from, {
                 type: "heading",
                 props: {
-                  level: level as "1" | "2" | "3" | "4" | "5" | "6",
+                  level: level as "1" | "2" | "3" | "4",
                 },
               })
               // Removes the "#" character(s) used to set the heading.
@@ -65,16 +65,16 @@ export const HeadingBlockContent = createTipTapBlock<"heading">({
         attrs: { level: "4" },
         node: "heading",
       },
-      {
-        tag: "h5",
-        attrs: { level: "5" },
-        node: "heading",
-      },
-      {
-        tag: "h6",
-        attrs: { level: "6" },
-        node: "heading",
-      },
+      // {
+      //   tag: "h5",
+      //   attrs: { level: "5" },
+      //   node: "heading",
+      // },
+      // {
+      //   tag: "h6",
+      //   attrs: { level: "6" },
+      //   node: "heading",
+      // },
     ];
   },
 
@@ -84,6 +84,7 @@ export const HeadingBlockContent = createTipTapBlock<"heading">({
       mergeAttributes(HTMLAttributes, {
         class: (blockStyles as any).blockContent,
         "data-content-type": this.name,
+        "id": node.attrs.id
       }),
       ["h" + node.attrs.level, { class: (blockStyles as any).inlineContent }, 0],
     ];

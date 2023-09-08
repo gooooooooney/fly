@@ -78,28 +78,28 @@ export const getDefaultSlashMenuItems = <BSchema extends BlockSchema>(
           } as PartialBlock<BSchema>),
       });
     }
-    if (schema.heading.propSchema.level.values?.includes("5")) {
-      slashMenuItems.push({
-        name: "Heading 5",
-        aliases: ["h5", "heading5", "subheading"],
-        execute: (editor) =>
-          insertOrUpdateBlock(editor, {
-            type: "heading",
-            props: { level: "5" },
-          } as PartialBlock<BSchema>),
-      });
-    }
-    if (schema.heading.propSchema.level.values?.includes("6")) {
-      slashMenuItems.push({
-        name: "Heading 6",
-        aliases: ["h6", "heading6", "subheading"],
-        execute: (editor) =>
-          insertOrUpdateBlock(editor, {
-            type: "heading",
-            props: { level: "6" },
-          } as PartialBlock<BSchema>),
-      });
-    }
+    // if (schema.heading.propSchema.level.values?.includes("5")) {
+    //   slashMenuItems.push({
+    //     name: "Heading 5",
+    //     aliases: ["h5", "heading5", "subheading"],
+    //     execute: (editor) =>
+    //       insertOrUpdateBlock(editor, {
+    //         type: "heading",
+    //         props: { level: "5" },
+    //       } as PartialBlock<BSchema>),
+    //   });
+    // }
+    // if (schema.heading.propSchema.level.values?.includes("6")) {
+    //   slashMenuItems.push({
+    //     name: "Heading 6",
+    //     aliases: ["h6", "heading6", "subheading"],
+    //     execute: (editor) =>
+    //       insertOrUpdateBlock(editor, {
+    //         type: "heading",
+    //         props: { level: "6" },
+    //       } as PartialBlock<BSchema>),
+    //   });
+    // }
   }
 
   if ("bulletListItem" in schema) {

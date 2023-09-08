@@ -98,6 +98,10 @@ export function getReactSlashMenuItems(
     })),
     SlashMenuPageItem,
     SlashMenuDividerItem,
+    SlashMenuCalloutItem,
+    SlashMenuTodoItem,
+    SlashMenuCodeBlockItem,
+    SlashMenuCustomItem,
   ];
 }
 
