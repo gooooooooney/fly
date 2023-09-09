@@ -45,23 +45,22 @@ export default async function BlockPage({
       <div className="flex ">
         <section className="h-screen  w-full flex flex-col items-center z-1 max-h-full ">
           <Cover />
-          <div className="relative w-full flex">
-          <TOC className="sticky top-10 left-5 self-start" />
-            <section className="max-w-3xl mx-auto flex flex-col w-full flex-grow ">
-              <div className="flex flex-col w-full">
-                <div className="group">
-                  <IconAndCover id={params.hash} />
-                  <PageTitle id={params.hash} />
-                </div>
+          <TOC className="sticky h-0 top-10  left-5 self-start" />
+
+          <section className="max-w-3xl mx-auto flex flex-col w-full flex-grow ">
+            <div className="flex flex-col w-full">
+              <div className="group">
+                <IconAndCover id={params.hash} />
+                <PageTitle id={params.hash} />
               </div>
-              <Separator />
-              <section className=" flex-grow flex flex-col mt-8">
-                <EditorWrapper
-                // blocks={page?.blocks as any}
-                />
-              </section>
+            </div>
+            <Separator />
+            <section className=" flex-grow flex flex-col mt-8">
+              <EditorWrapper
+              // blocks={page?.blocks as any}
+              />
             </section>
-          </div>
+          </section>
         </section>
       </div>
     </>

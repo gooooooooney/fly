@@ -4,7 +4,7 @@ import { useStore } from "zustand";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import _ from "lodash";
+import _, { set } from "lodash";
 import { save } from "@/lib/data-source/page";
 import { usePageInit } from "@/hooks/use-page-init";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
@@ -200,10 +200,10 @@ export const EditorWrapper = (props: EditorWrapperProps) => {
           ),
     });
 
-    // save({
-    //   pageId: path,
-    //   operations,
-    // });
+    save({
+      pageId: path,
+      operations,
+    });
   };
   return (
     <Editor

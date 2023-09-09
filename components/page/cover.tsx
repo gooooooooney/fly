@@ -23,6 +23,9 @@ function Cover() {
   const setEditable = useStore(useBoundStore, s => s.setEditable)
   useEffect(() => {
     setEditable(!!data?.body?.properties?.editable)
+    useBoundStore.setState({
+      blocks: data?.body?.blocks as any || [],
+    })
   }, [data])
   const pageId = useUuidPathname()
   useUnmount(() => {
@@ -31,6 +34,7 @@ function Cover() {
       cover: "",
       title: "",
       editable: false,
+      blocks: [],
     })
   })
 
