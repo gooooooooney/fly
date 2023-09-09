@@ -1,15 +1,18 @@
 import { OutHookConfigurator } from "@/components/OutHook";
-import { EditorWrapper } from "@/components/editor";
 // import Helmet from "@/components/helmet";
 import Cover from "@/components/page/cover";
 import IconAndCover from "@/components/page/icon-cover";
 import { PageTitle } from "@/components/page/page-title";
 import { Separator } from "@/components/ui/separator";
-import { getPageById } from "@/prisma/services/pages/pages-services";
-import { redirect } from "next/navigation";
-import { StoreInitializer } from "./store-initializer";
+import TOC from "@/components/toc";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { TOC } from "@/components/toc";
+import { useStore } from "zustand";
+import { cn } from "@/lib/utils";
+import { usePageInit } from "@/hooks/use-page-init";
+import { useEffect } from "react";
+import { useUnmount } from "react-use";
+import PageWrapper from "@/components/page/page-wrapper";
+
 async function getGithubEmojis() {
   const res = await fetch("https://api.github.com/emojis");
   const emojis = await res.json();
@@ -28,11 +31,7 @@ async function getLocalEmojis() {
   return emojis;
 }
 
-export default async function BlockPage({
-  params,
-}: {
-  params: { hash: string };
-}) {
+export default function BlockPage({ params }: { params: { hash: string } }) {
   // const page = await getPageById(params.hash);
 
   // if (!page) {
@@ -47,20 +46,7 @@ export default async function BlockPage({
           <Cover />
           <TOC className="sticky h-0 top-10  left-5 self-start" />
 
-          <section className="max-w-3xl mx-auto flex flex-col w-full flex-grow ">
-            <div className="flex flex-col w-full">
-              <div className="group">
-                <IconAndCover id={params.hash} />
-                <PageTitle id={params.hash} />
-              </div>
-            </div>
-            <Separator />
-            <section className=" flex-grow flex flex-col mt-8">
-              <EditorWrapper
-              // blocks={page?.blocks as any}
-              />
-            </section>
-          </section>
+          <PageWrapper id={params.hash} />
         </section>
       </div>
     </>

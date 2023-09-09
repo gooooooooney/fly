@@ -279,13 +279,15 @@ export async function saveProperty({ pageId, data }: SavePropertyParams) {
           title: data.title,
           emoji: data.emoji,
           cover: data.cover,
-          editable: data.editable
+          editable: data.editable,
+          pageWidth: data.pageWidth,
         },
         update: {
           title: data.title,
           emoji: data.emoji,
           cover: data.cover,
           editable: data.editable,
+          pageWidth: data.pageWidth,
         }
       })
       // 更新页面属性

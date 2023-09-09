@@ -69,9 +69,6 @@ let count = 0;
 
   useEffect(() => {
     if (editor) {
-      console.log(editable)
-      // setEditor(editor)
-      // onEditorReady?.(editor);
       editor.isEditable = editable;
     }
   }, [editable, editor]);

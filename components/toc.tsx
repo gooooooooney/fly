@@ -7,13 +7,12 @@ import {
   FC,
   Fragment,
   HtmlHTMLAttributes,
-  useEffect,
-  useRef,
   useState,
 } from "react";
 import { useStore } from "zustand";
 
-export const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
+ const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
+  console.log("render toc")
   const blocks = useStore(useBoundStore, (state) => state.blocks);
   const [activeId, setActiveId] = useState("");
 
@@ -34,23 +33,8 @@ export const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
         {headings.map((heading) => {
           return (
             <Fragment key={heading.id}>
-              <Link
-                as="li"
-                className={cn(
-                  [
-                    "block cursor-pointer mt-2",
-                    "transition-all transform -translate-x-1 duration-300 ease-in-out",
-                    " hover:text-success-500 hover:translate-x-0",
-                    "truncate",
-                  ],
-                  {
-                    "font-bold": activeId === heading.id,
-                  }
-                )}
-                underline="hover"
-                color={activeId === heading.id ? "success" : "primary"}
-                onClick={() => handleItemClick(heading.id)}
-                // onClick={() => setActiveId(heading.id)}
+              <li
+              className="w-full"
               >
                 {heading.content.map((ct, i) => {
                   const text = (() => {
@@ -66,7 +50,24 @@ export const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
 
                   return (
                     <Fragment key={ct.type + i}>
-                      <span
+                      <Link
+                        as="span"
+                        className={cn(
+                          [
+                            "inline-block cursor-pointer mt-2",
+                            "transition-all transform -translate-x-1 duration-300 ease-in-out",
+                            " hover:text-success-500 hover:translate-x-0",
+                            "truncate w-full",
+                          ],
+                          {
+                            "font-bold": activeId === heading.id,
+                          }
+                        )}
+                        underline="hover"
+                        color={activeId === heading.id ? "success" : "primary"}
+                        onClick={() => handleItemClick(heading.id)}
+                        // onClick={() => setActiveId(heading.id)}
+
                         title={text}
                         aria-label={text}
                         style={{
@@ -76,11 +77,11 @@ export const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
                         }}
                       >
                         {text}
-                      </span>
+                      </Link>
                     </Fragment>
                   );
                 })}
-              </Link>
+              </li>
             </Fragment>
           );
         })}
@@ -88,3 +89,5 @@ export const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
     </div>
   );
 };
+
+export default TOC;

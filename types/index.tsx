@@ -9,7 +9,7 @@ export type SaveBlocksParams = {
   pageId: string;
   blocks: BlockNoteEditor["topLevelBlocks"];
 };
-
+export type PageWidth = "default" | "wide" | "full";
 export type SavePropertyParams = {
   pageId: string;
   data: {
@@ -17,17 +17,17 @@ export type SavePropertyParams = {
     emoji?: string;
     cover?: string;
     editable?: boolean;
+    pageWidth?: PageWidth
   };
 };
 
 export interface Operation {
   command: Command;
-  data: BlockWithOrder[]
+  data: BlockWithOrder[];
 }
 
 export type SaveParams = {
   pageId: string;
   parentId?: string;
   operations: Operation[];
-
-}
+};

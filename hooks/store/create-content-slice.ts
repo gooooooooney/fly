@@ -58,27 +58,27 @@ export const createContentSlice: StateCreator<
     editable: false,
     menus: [],
     setMenus: (menus) => set((state) => {
-      return ({ menus })
+      return ({ ...state, menus })
     }),
     setBlocks: (blocks) => set((state) => {
-      return ({ blocks })
+      return ({ ...state, blocks })
     }),
-    setPageId: (pageId) => set((state) => ({ pageId })),
+    setPageId: (pageId) => set((state) => ({ ...state, pageId })),
     setEditable: (editable) => set((state) => {
-      return ({ editable })
+      return ({ ...state, editable })
     }),
     setCover: (cover) => set((state) => {
-      return ({ cover })
+      return ({ ...state, cover })
     }),
     setTitle: (title) => set((state) => {
       const menus = _.cloneDeep(state.menus)
       setActiveMenu(menus, { title })
-      return ({ title, menus })
+      return ({ ...state, title, menus })
     }),
     setIcon: (icon) => set((state) => {
       const menus = _.cloneDeep(state.menus)
       setActiveMenu(menus, { icon })
-      return ({ icon, menus })
+      return ({ ...state, icon, menus })
     }),
   })
 }

@@ -1,24 +1,17 @@
 "use client";
 import { Button } from "@nextui-org/button";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
-import { EmojiMartPicker, randomEmoji } from "./emoji-content/emoji-mart";
+import { randomEmoji } from "./emoji-content/emoji-mart";
 import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { LIST } from "@/constatns/emojis";
 import { Random, cn } from "@/lib/utils";
-import ImagePicker from "./image-picker";
 import { covers } from "@/constatns/images/unsplash";
 import { Icons } from "@/components/icons";
-import { usePageInit } from "@/hooks/use-page-init";
-import { useEffect } from "react";
 import { useClientInit } from "@/components/useClientInit";
 import { saveProperty } from "@/lib/data-source/page";
 import { EmojiPicker } from "@/components/emoji-picker";
-import { findMenu, setMenus, mergeMenus, setPropSyncMenus } from "@/lib/menus";
-import { title } from "process";
+import { setPropSyncMenus } from "@/lib/menus";
 
 function IconAndCover({ id }: { id: string }) {
-  const { data } = usePageInit();
 
   const { emoji, setCover, cover, setIcon } = useStore(
     useBoundStore,
@@ -44,13 +37,6 @@ function IconAndCover({ id }: { id: string }) {
       },
     });
   };
-
-  useEffect(() => {
-    if (data) {
-      setIcon(data?.body?.properties?.emoji || "");
-      setCover(data?.body?.properties?.cover || "");
-    }
-  }, [data]);
   const handleRandomIcon = () => {
     const emoji = randomEmoji();
     setEmoji(emoji);

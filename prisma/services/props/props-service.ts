@@ -8,6 +8,7 @@ export function getPropsByPageId(pageId: string) {
       editable: true,
       emoji: true,
       cover: true,
+      pageWidth: true,
     }
   })
 }

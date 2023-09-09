@@ -9,34 +9,16 @@ import { Button } from "@nextui-org/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import ImagePicker from "./icon-cover/image-picker";
 import { Icons } from "../icons";
-import { useEffect, useState } from "react";
+import {  memo, useState } from "react";
 import { Slider } from "@/components/ui/slider"
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
-import {useUnmount} from "react-use"
-import { usePageInit } from "@/hooks/use-page-init";
 
 function Cover() {
-
-  const {data} = usePageInit()
+  console.log("render cover")
   const [cover, setCover] = useStore(useBoundStore, (state) => [state.cover, state.setCover])
-  const setEditable = useStore(useBoundStore, s => s.setEditable)
-  useEffect(() => {
-    setEditable(!!data?.body?.properties?.editable)
-    useBoundStore.setState({
-      blocks: data?.body?.blocks as any || [],
-    })
-  }, [data])
   const pageId = useUuidPathname()
-  useUnmount(() => {
-    useBoundStore.setState({
-      icon: "",
-      cover: "",
-      title: "",
-      editable: false,
-      blocks: [],
-    })
-  })
+
 
   const [originalY, setOriginalY] = useState(50)
   const [y, setY] = useState(50)
@@ -122,4 +104,4 @@ function Cover() {
   )
 }
 
-export default Cover
+export default memo(Cover)

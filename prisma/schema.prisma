@@ -94,13 +94,14 @@ model Page {
 }
 
 model Properties {
-  pageId   String  @unique
-  page     Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  id       String  @id @default(cuid())
-  cover    String  @default("")
-  title    String  @default("")
-  emoji    String  @default("")
-  editable Boolean @default(true)
+  pageId    String    @unique
+  page      Page?     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  id        String    @id @default(cuid())
+  cover     String    @default("")
+  title     String    @default("")
+  emoji     String    @default("")
+  editable  Boolean   @default(true)
+  pageWidth PageWidth @default(default)
 }
 
 model Block {
@@ -116,6 +117,12 @@ model Block {
   propsId     String?
   prevBlockId String?
   nextBlockId String?
+}
+
+enum PageWidth {
+  full
+  default
+  wide
 }
 
 enum Type {
