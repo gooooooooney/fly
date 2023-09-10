@@ -37,13 +37,13 @@ export interface ContentSlice {
   editable: boolean
   menus: MenuProp[]
   blocks: BlockNoteEditor['topLevelBlocks']
-  setBlocks: (blocks: BlockNoteEditor['topLevelBlocks']) => void
-  setMenus: (menus: MenuProp[]) => void
-  setEditable: (editable: boolean) => void
-  setCover: (cover: string) => void
-  setTitle: (title: string) => void
-  setIcon: (icon: string) => void
-  setPageId: (pageId: string) => void
+  // setBlocks: (blocks: BlockNoteEditor['topLevelBlocks']) => void
+  // setMenus: (menus: MenuProp[]) => void
+  // setEditable: (editable: boolean) => void
+  // setCover: (cover: string) => void
+  // setTitle: (title: string) => void
+  // setIcon: (icon: string) => void
+  // setPageId: (pageId: string) => void
 }
 export const createContentSlice: StateCreator<
   ContentSlice,
@@ -59,39 +59,53 @@ export const createContentSlice: StateCreator<
     cover: "",
     editable: false,
     menus: [],
-    setMenus: (menus) => set((state) => {
-      return ({ ...state, menus })
-    }),
-    setBlocks: (blocks) => set((state) => {
-      return ({ ...state, blocks })
-    }),
-    setPageId: (pageId) => set((state) => ({ ...state, pageId })),
-    setEditable: (editable) => set((state) => {
-      return ({ ...state, editable })
-    }),
-    setCover: (cover) => set((state) => {
-      return ({ ...state, cover })
-    }),
-    setTitle: (title) => set((state) => {
-      const menus = _.cloneDeep(state.menus)
-      setActiveMenu(menus, { title })
-      return ({ ...state, title, menus })
-    }),
-    setIcon: (icon) => set((state) => {
-      const menus = _.cloneDeep(state.menus)
-      setActiveMenu(menus, { icon })
-      return ({ ...state, icon, menus })
-    }),
+    // setMenus: (menus) => set((state) => {
+    //   return ({ ...state, menus })
+    // }),
+    // setBlocks: (blocks) => set((state) => {
+    //   return ({ ...state, blocks })
+    // }),
+    // setPageId: (pageId) => set((state) => ({ ...state, pageId })),
+    // setEditable: (editable) => set((state) => {
+    //   return ({ ...state, editable })
+    // }),
+    // setCover: (cover) => set((state) => {
+    //   return ({ ...state, cover })
+    // }),
+    // setTitle: (title) => set((state) => {
+    //   const menus = _.cloneDeep(state.menus)
+    //   setActiveMenu(menus, { title })
+    //   return ({ ...state, title, menus })
+    // }),
+    // setIcon: (icon) => set((state) => {
+    //   const menus = _.cloneDeep(state.menus)
+    //   setActiveMenu(menus, { icon })
+    //   return ({ ...state, icon, menus })
+    // }),
   })
 }
 
-export const setMenus =   (menus: MenuProp[]) => useBoundStore.setState(s => ({ menus }))
-export const setBlocks =  (blocks: BlockNoteEditor['topLevelBlocks']) => useBoundStore.setState(s => ({ blocks }))
-export const setPageId =  (pageId: string) => useBoundStore.setState(s => ({ pageId }))
-export const setEditable =  (editable: boolean) => useBoundStore.setState(s => ({ editable }))
-export const setCover =  (cover: string) => useBoundStore.setState(s => ({ cover }))
-export const setTitle =  (title: string) => useBoundStore.setState(s => ({ title }))
-export const setIcon =  (icon: string) => useBoundStore.setState(s => ({ icon }))
+export const setMenus =   (menus: MenuProp[]) => useBoundStore.setState(s => {
+  s.menus = menus
+})
+export const setBlocks =  (blocks: BlockNoteEditor['topLevelBlocks']) => useBoundStore.setState(s => {
+  s.blocks = blocks
+})
+export const setPageId =  (pageId: string) => useBoundStore.setState(s => {
+  s.pageId = pageId
+})
+export const setEditable =  (editable: boolean) => useBoundStore.setState(s => {
+  s.editable = editable
+})
+export const setCover =  (cover: string) => useBoundStore.setState(s => {
+  s.cover = cover
+})
+export const setTitle =  (title: string) => useBoundStore.setState(s => {
+  s.title = title
+})
+export const setIcon =  (icon: string) => useBoundStore.setState(s => {
+  s.icon = icon
+})
 
 export const setMenu = (menu: MenuProp) => {
   useBoundStore.setState(s => {

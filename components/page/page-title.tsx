@@ -1,5 +1,6 @@
 "use client";
 
+import { setTitle } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { usePageInit } from "@/hooks/use-page-init";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
@@ -12,9 +13,8 @@ export const PageTitle = ({ id }: { id: string }) => {
   const { data } = usePageInit();
 
   // const editor = useBlockNote()
-  const [title, setTitle] = useBoundStore((state) => [
+  const [title] = useBoundStore((state) => [
     state.title,
-    state.setTitle,
   ]);
   const pageId = useUuidPathname()
   const setPageTitle = (title: string) => {

@@ -6,6 +6,8 @@ import { createReactBlockSpec, InlineContent } from "@blocknote/react";
 import { Link } from "@nextui-org/link";
 import _ from "lodash";
 import NextLink from "next/link";
+import {setMenus as setItems} from "@/hooks/store/create-content-slice";
+
 import { useState } from "react";
 
 
@@ -35,7 +37,6 @@ export const PageBlockSpec = createReactBlockSpec({
         const handleMouseEnter = () => {
             if (isDataLoaded) return;
             const items = useBoundStore.getState().menus
-            const setItems = useBoundStore.getState().setMenus
             const item = findMenu(items, block.id)
             if (item && item.hasChildren) {
                 const newMenus = _.cloneDeep(items)

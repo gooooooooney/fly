@@ -7,8 +7,9 @@ import NextLink from "next/link";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { loves, nature, outdoor } from "@/constatns/images/pelexs";
 import { saveProperty } from "@/lib/data-source/page";
+import { setCover } from "@/hooks/store/create-content-slice";
 export const PelexsImages = () => {
-  const [setCover, pageId] = useBoundStore((state) => [state.setCover, state.pageId])
+  const [ pageId] = useBoundStore((state) => [ state.pageId])
   const setUrl = (url: string) => {
     setCover(url)
     saveProperty({

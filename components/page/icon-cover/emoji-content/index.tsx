@@ -9,7 +9,6 @@ import { useUuidPathname } from "@/hooks/useUuidPathname";
 
 function EmojiContent() {
     const pageId = useUuidPathname()
-    const setEmoji = useBoundStore((state) => state.setIcon)
     const setIcon = (emoji: string) => {
         setEmoji(emoji)
         saveProperty({ 
@@ -46,3 +45,7 @@ function EmojiContent() {
     )
 }
 export default EmojiContent
+
+function setEmoji(emoji: string) {
+    throw new Error("Function not implemented.");
+}

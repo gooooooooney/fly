@@ -12,10 +12,11 @@ import {  memo, useState } from "react";
 import { Slider } from "@/components/ui/slider"
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { setCover } from "@/hooks/store/create-content-slice";
 
 function Cover() {
   console.log("render cover")
-  const [cover, setCover] = useBoundStore((state) => [state.cover, state.setCover])
+  const [cover] = useBoundStore((state) => [state.cover])
   const pageId = useUuidPathname()
 
 

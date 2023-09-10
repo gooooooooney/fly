@@ -18,6 +18,7 @@ import {
 import { FC } from "react";
 import { cn } from "@/lib/utils";
 import { PageWidthConfig } from "./page-width";
+import { setEditable } from "@/hooks/store/create-content-slice";
 
 const enum DropdownMenuKeys {
   LOCK = "lock",
@@ -79,10 +80,9 @@ const DropdownDataMenus = {
 };
 
 export const DropdownMenus: FC = () => {
-  const [editable, setEditable] = useBoundStore((s) => [
+  const [editable] = useBoundStore((s) => [
     s.editable,
-    s.setEditable,
-  ]);
+    ]);
   const pageId = useUuidPathname();
   const saveEditable = () => {
     setEditable(!editable);

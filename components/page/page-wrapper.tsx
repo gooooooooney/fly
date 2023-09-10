@@ -17,7 +17,7 @@ export default function PageWrapper({id}: {id: string}) {
     if (data) {
       useBoundStore.setState({
         blocks: (data?.body?.blocks as any) || [],
-        editable: data.body?.properties?.editable || true,
+        editable: !!data.body?.properties?.editable,
         pageWidth: data.body?.properties?.pageWidth || "default",
         icon: data.body?.properties?.emoji || "",
         cover: data.body?.properties?.cover || "",

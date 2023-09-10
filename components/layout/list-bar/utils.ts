@@ -2,6 +2,8 @@ import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { getChildrenMenus } from "@/lib/data-source/menus";
 import _ from "lodash";
+import {setMenus as setItems} from "@/hooks/store/create-content-slice";
+
 function setMenus(menus: MenuProp[], item: MenuProp) {
 
   for (const menu of menus) {
@@ -14,7 +16,7 @@ function setMenus(menus: MenuProp[], item: MenuProp) {
 }
 
 export function initMenus() {
-  const {menus: items, setMenus: setItems} = useBoundStore.getState()
+  const {menus: items} = useBoundStore.getState()
   const newMenus = _.cloneDeep(items)
 
   for (const menu of items) {

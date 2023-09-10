@@ -9,13 +9,12 @@ import { useClientInit } from "@/components/useClientInit";
 import { saveProperty } from "@/lib/data-source/page";
 import { EmojiPicker } from "@/components/emoji-picker";
 import { setPropSyncMenus } from "@/lib/menus";
+import { setCover, setIcon } from "@/hooks/store/create-content-slice";
 
 function IconAndCover({ id }: { id: string }) {
-  const { emoji, setCover, cover, setIcon } = useBoundStore((state) => ({
+  const { emoji, cover } = useBoundStore((state) => ({
     emoji: state.icon,
-    setIcon: state.setIcon,
     cover: state.cover,
-    setCover: state.setCover,
   }));
   useClientInit(id);
 

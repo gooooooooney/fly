@@ -1,6 +1,8 @@
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import _ from "lodash";
+import {setMenus as setItems} from "@/hooks/store/create-content-slice";
+
 
 export function findMenu(menus: MenuProp[], id: string): MenuProp | undefined {
   for (const menu of menus) {
@@ -64,11 +66,11 @@ export function setPropSyncMenus({
   title?: string
   emoji?: string
 }) {
-  const { menus, setMenus } = useBoundStore.getState()
+  const { menus } = useBoundStore.getState()
   const menu = findMenu(menus, id)
   if (!menu) return
   const item = _.cloneDeep(menu)
   if (title) item.title = title
   if (emoji) item.icon = emoji
-  setMenus(mergeMenus(menus, [item]))
+  setItems(mergeMenus(menus, [item]))
 }

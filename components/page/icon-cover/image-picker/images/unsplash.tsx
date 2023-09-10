@@ -8,8 +8,8 @@ import NextLink from "next/link";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { setCover } from "@/hooks/store/create-content-slice";
 export const UnsplashImages = () => {
-  const setCover = useBoundStore((state) => state.setCover)
   const pageId = useUuidPathname()
   const setUrl = (url: string) => {
     setCover(url)

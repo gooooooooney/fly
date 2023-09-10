@@ -7,7 +7,7 @@ import { Transition } from "@headlessui/react";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import SidebarHeader from "./header";
-import { MenuProp } from "@/hooks/store/create-content-slice";
+import { MenuProp, setMenus } from "@/hooks/store/create-content-slice";
 import { getSpaceInfo } from "@/lib/data-source/space";
 import _ from "lodash";
 import { Menus } from "./menu";
@@ -19,9 +19,8 @@ import { mergeMenus } from "@/lib/menus";
 export function ListBar(props: { email: string }) {
   const pageId = useUuidPathname();
   const [actSpace, setActSpace] = useState<null | any>(null);
-  const [items, setItems] = useBoundStore( (state) => [
+  const [items] = useBoundStore( (state) => [
     state.menus,
-    state.setMenus,
   ])!;
   const [collapsed, setCollapsed] = useBoundStore( (state) => [
     state.collapsed,
@@ -48,7 +47,7 @@ export function ListBar(props: { email: string }) {
       ([res, currentPagePath]) => {
         if (res && currentPagePath) {
           setActSpace(res?.activeWorkspace);
-          setItems(
+          setMenus(
             mergeMenus(res.activeWorkspace?.pages ?? [], currentPagePath ?? [])
           );
         }
@@ -64,7 +63,7 @@ export function ListBar(props: { email: string }) {
     // })
   }, []);
   useEffect(() => {
-    setItems(getItems(items));
+    setMenus(getItems(items));
   }, [pageId]);
 
   if (!actSpace) return null;

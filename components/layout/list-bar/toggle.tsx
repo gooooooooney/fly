@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import _ from "lodash";
 import Link from "next/link";
 import { useState } from "react";
+import {setMenus as setItems} from "@/hooks/store/create-content-slice";
 import { ActionMenus } from "./action-menus";
 
 
@@ -19,9 +20,8 @@ import { ActionMenus } from "./action-menus";
 
 export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
   const pageId = useUuidPathname()
-  const [items, setItems] = useBoundStore( (state) => [
+  const [items] = useBoundStore( (state) => [
     state.menus,
-    state.setMenus,
   ])!;
   const [isDataLoaded, setIsDataLoaded] = useState(false)
   const [showActionMenus, setShowActionMenus] = useState("hidden")

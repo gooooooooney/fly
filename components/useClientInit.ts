@@ -1,4 +1,5 @@
 "use client";
+import { setPageId } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useEffect } from "react";
 
@@ -7,10 +8,9 @@ const getShortcutIcon = (icon: string) => {
 };
 
 export function useClientInit(id: string) {
-  const [emoji, title, setPageId] = useBoundStore((state) => [
+  const [emoji, title] = useBoundStore((state) => [
     state.icon,
     state.title,
-    state.setPageId,
   ]);
 
   useEffect(() => {

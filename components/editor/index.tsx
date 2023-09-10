@@ -10,6 +10,7 @@ import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { Operation } from "@/types";
 import { areArraysEqual } from "@/lib/array";
 import { useBlockNote } from "@blocknote/react";
+import { setBlocks } from "@/hooks/store/create-content-slice";
 const Editor = dynamic(() => import("@/components/editor/editor"), {
   ssr: false,
 });
@@ -24,9 +25,7 @@ function EditorWrapper() {
   const [shouldUpdateContent, setShouldUpdateContent] = useState(false);
   const [editable] = useBoundStore((s) => [
     s.editable,
-    s.setEditable,
   ]);
-  const setBlocks = useBoundStore.getState().setBlocks;
   const { data } = usePageInit();
 
   const path = useUuidPathname();
