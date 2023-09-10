@@ -5,7 +5,6 @@ import { Button } from "@nextui-org/react";
 import { cn } from "@/lib/utils";
 import { Transition } from "@headlessui/react";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
-import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import SidebarHeader from "./header";
 import { MenuProp } from "@/hooks/store/create-content-slice";
@@ -20,11 +19,11 @@ import { mergeMenus } from "@/lib/menus";
 export function ListBar(props: { email: string }) {
   const pageId = useUuidPathname();
   const [actSpace, setActSpace] = useState<null | any>(null);
-  const [items, setItems] = useStore(useBoundStore, (state) => [
+  const [items, setItems] = useBoundStore( (state) => [
     state.menus,
     state.setMenus,
   ])!;
-  const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [
+  const [collapsed, setCollapsed] = useBoundStore( (state) => [
     state.collapsed,
     state.setCollapsed,
   ])!;

@@ -7,13 +7,12 @@ import { saveProperty } from "@/lib/data-source/page";
 import {  setPropSyncMenus } from "@/lib/menus";
 import { useBlockNote } from "@blocknote/react";
 import _ from "lodash";
-import { useStore } from "zustand";
 
 export const PageTitle = ({ id }: { id: string }) => {
   const { data } = usePageInit();
 
   // const editor = useBlockNote()
-  const [title, setTitle] = useStore(useBoundStore, (state) => [
+  const [title, setTitle] = useBoundStore((state) => [
     state.title,
     state.setTitle,
   ]);

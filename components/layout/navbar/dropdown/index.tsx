@@ -11,20 +11,11 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Radio,
-  RadioGroup,
   RadioProps,
-  Spacer,
-  Tooltip,
   VisuallyHidden,
   useRadio,
 } from "@nextui-org/react";
 import { FC } from "react";
-import { useStore } from "zustand";
-import { PageCard } from "./page-width/page-card";
 import { cn } from "@/lib/utils";
 import { PageWidthConfig } from "./page-width";
 
@@ -88,7 +79,7 @@ const DropdownDataMenus = {
 };
 
 export const DropdownMenus: FC = () => {
-  const [editable, setEditable] = useStore(useBoundStore, (s) => [
+  const [editable, setEditable] = useBoundStore((s) => [
     s.editable,
     s.setEditable,
   ]);

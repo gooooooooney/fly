@@ -3,14 +3,12 @@ import { RadioGroup, Spacer } from "@nextui-org/react";
 import { CustomRadio } from "..";
 import { PageCard } from "./page-card";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
 import { PageWidth } from "@/types";
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
-import { useState } from "react";
 
 export const PageWidthConfig = () => {
-  const [pageWidth] = useStore(useBoundStore, (s) => [
+  const [pageWidth] = useBoundStore((s) => [
     s.pageWidth,
   ]);
   const setPageWidth = useBoundStore.getState().setPageWidth;

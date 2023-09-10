@@ -9,11 +9,10 @@ import {
   HtmlHTMLAttributes,
   useState,
 } from "react";
-import { useStore } from "zustand";
 
  const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
   console.log("render toc")
-  const blocks = useStore(useBoundStore, (state) => state.blocks);
+  const blocks = useBoundStore(state => state.blocks)
   const [activeId, setActiveId] = useState("");
 
   const headings = blocks.filter((block) => block.type == "heading");

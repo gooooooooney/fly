@@ -1,10 +1,8 @@
 "use client";
 import { Navbar, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
 import { ThemeSwitch } from "./theme-switch";
-// import useStore from "@/hooks/use-store";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { cn } from "@/lib/utils";
-import { useStore } from "zustand";
 import { Icons } from "@/components/icons";
 import { Session } from "next-auth";
 import { Breadcrumbs } from "./breadcrumbs";
@@ -12,7 +10,7 @@ import _ from "lodash";
 import { DropdownMenus } from "./dropdown";
 
 export default function Header({ session }: { session: Session | null }) {
-  const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [
+  const [collapsed, setCollapsed] = useBoundStore( (state) => [
     state.collapsed,
     state.setCollapsed,
   ])!;

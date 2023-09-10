@@ -1,6 +1,8 @@
 import { StateCreator } from "zustand"
 import _ from "lodash"
 import { saveProperty } from "@/lib/data-source/page"
+import { useBoundStore } from "./useBoundStore";
+import { findMenu } from "@/lib/menus";
 
 export interface MenuProp {
   id: string;
@@ -80,5 +82,27 @@ export const createContentSlice: StateCreator<
       setActiveMenu(menus, { icon })
       return ({ ...state, icon, menus })
     }),
+  })
+}
+
+export const setMenus =   (menus: MenuProp[]) => useBoundStore.setState(s => ({ menus }))
+export const setBlocks =  (blocks: BlockNoteEditor['topLevelBlocks']) => useBoundStore.setState(s => ({ blocks }))
+export const setPageId =  (pageId: string) => useBoundStore.setState(s => ({ pageId }))
+export const setEditable =  (editable: boolean) => useBoundStore.setState(s => ({ editable }))
+export const setCover =  (cover: string) => useBoundStore.setState(s => ({ cover }))
+export const setTitle =  (title: string) => useBoundStore.setState(s => ({ title }))
+export const setIcon =  (icon: string) => useBoundStore.setState(s => ({ icon }))
+
+export const setMenu = (menu: MenuProp) => {
+  useBoundStore.setState(s => {
+
+    const item = findMenu(s.menus, menu.id)
+    if (item) {
+      item.title = menu.title
+      item.icon = menu.icon
+      item.hasChildren = menu.hasChildren
+      item.isActive = menu.isActive
+      item.children = menu.children
+    }
   })
 }

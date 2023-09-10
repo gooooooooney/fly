@@ -2,7 +2,6 @@ import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { getChildrenMenus } from "@/lib/data-source/menus";
 import _ from "lodash";
-import { useStore } from "zustand";
 function setMenus(menus: MenuProp[], item: MenuProp) {
 
   for (const menu of menus) {

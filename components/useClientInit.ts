@@ -1,10 +1,6 @@
 "use client";
-import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-import { fetcher } from "@/lib/utils";
-import { PageResponse } from "@/app/api/page/get/route";
+import { useEffect } from "react";
 
 const getShortcutIcon = (icon: string) => {
   return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${icon}</text></svg>`;

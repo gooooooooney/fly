@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@nextui-org/button";
 import { randomEmoji } from "./emoji-content/emoji-mart";
-import { useStore } from "zustand";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { Random, cn } from "@/lib/utils";
 import { covers } from "@/constatns/images/unsplash";
@@ -12,16 +11,12 @@ import { EmojiPicker } from "@/components/emoji-picker";
 import { setPropSyncMenus } from "@/lib/menus";
 
 function IconAndCover({ id }: { id: string }) {
-
-  const { emoji, setCover, cover, setIcon } = useStore(
-    useBoundStore,
-    (state) => ({
-      emoji: state.icon,
-      setIcon: state.setIcon,
-      cover: state.cover,
-      setCover: state.setCover,
-    })
-  );
+  const { emoji, setCover, cover, setIcon } = useBoundStore((state) => ({
+    emoji: state.icon,
+    setIcon: state.setIcon,
+    cover: state.cover,
+    setCover: state.setCover,
+  }));
   useClientInit(id);
 
   const setEmoji = (emoji: string) => {
@@ -29,7 +24,7 @@ function IconAndCover({ id }: { id: string }) {
     setPropSyncMenus({
       id,
       emoji,
-    })
+    });
     saveProperty({
       pageId: id,
       data: {
@@ -63,8 +58,7 @@ function IconAndCover({ id }: { id: string }) {
             }
           )}
         >
-
-          <EmojiPicker onEmojiSelect={e => setEmoji(e)}>
+          <EmojiPicker onEmojiSelect={(e) => setEmoji(e)}>
             <Button
               variant="light"
               className="text-7xl px-0 h-18 w-18 aria-expanded:opacity-100"

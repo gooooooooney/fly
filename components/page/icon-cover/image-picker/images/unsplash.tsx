@@ -6,12 +6,10 @@ import { Link } from "@nextui-org/link";
 import NextLink from "next/link";
 
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
 import { saveProperty } from "@/lib/data-source/page";
-import { usePathname } from "next/navigation";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 export const UnsplashImages = () => {
-  const setCover = useStore(useBoundStore, (state) => state.setCover)
+  const setCover = useBoundStore((state) => state.setCover)
   const pageId = useUuidPathname()
   const setUrl = (url: string) => {
     setCover(url)

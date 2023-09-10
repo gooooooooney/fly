@@ -21,7 +21,6 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 }) => {
   const { theme, setTheme } = useTheme();
   const isSSR = useIsSSR();
-  // const editor = useStore(useBoundStore, (state) => state.editor)
 
   const onChange = () => {
     if (theme === "light") {

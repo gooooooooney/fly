@@ -1,6 +1,5 @@
 "use client";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import { memo, useCallback, useEffect, useState } from "react";
@@ -23,7 +22,7 @@ function EditorWrapper() {
 
   let beforeBlocks = [] as BlockWithOrder[];
   const [shouldUpdateContent, setShouldUpdateContent] = useState(false);
-  const [editable] = useStore(useBoundStore, (s) => [
+  const [editable] = useBoundStore((s) => [
     s.editable,
     s.setEditable,
   ]);

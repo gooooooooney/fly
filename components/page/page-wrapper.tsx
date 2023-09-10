@@ -9,11 +9,10 @@ import EditorWrapper from "@/components/editor";
 
 import { useEffect } from "react";
 import { useUnmount } from "react-use";
-import { useStore } from "zustand";
 
 export default function PageWrapper({id}: {id: string}) {
   const { data } = usePageInit();
-  const [pageWidth] = useStore(useBoundStore, (state) => [state.pageWidth]);
+  const [pageWidth] = useBoundStore( (state) => [state.pageWidth]);
   useEffect(() => {
     if (data) {
       useBoundStore.setState({

@@ -2,7 +2,6 @@
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
-import { Button } from "@nextui-org/button";
 import {
   Dropdown,
   DropdownItem,
@@ -12,7 +11,6 @@ import {
 import { Link } from "@nextui-org/link";
 import NextLink from "next/link";
 import { Fragment, useMemo } from "react";
-import { useStore } from "zustand";
 
 function findParents(
   tree: MenuProp[],
@@ -43,7 +41,7 @@ function findParents(
 
 export function Breadcrumbs() {
   const pageId = useUuidPathname();
-  const menus = useStore(useBoundStore, (state) => state.menus);
+  const menus = useBoundStore((state) => state.menus);
 
   const breadcrumbs = useMemo(() => {
     const paths = findParents(menus, pageId);

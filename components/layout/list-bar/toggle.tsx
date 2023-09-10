@@ -11,7 +11,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import _ from "lodash";
 import Link from "next/link";
 import { useState } from "react";
-import { useStore } from "zustand";
 import { ActionMenus } from "./action-menus";
 
 
@@ -20,7 +19,7 @@ import { ActionMenus } from "./action-menus";
 
 export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
   const pageId = useUuidPathname()
-  const [items, setItems] = useStore(useBoundStore, (state) => [
+  const [items, setItems] = useBoundStore( (state) => [
     state.menus,
     state.setMenus,
   ])!;

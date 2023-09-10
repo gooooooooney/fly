@@ -4,7 +4,6 @@
 import { Image } from "@nextui-org/image";
 import NextImage from "next/image";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
 import { Button } from "@nextui-org/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import ImagePicker from "./icon-cover/image-picker";
@@ -16,7 +15,7 @@ import { useUuidPathname } from "@/hooks/useUuidPathname";
 
 function Cover() {
   console.log("render cover")
-  const [cover, setCover] = useStore(useBoundStore, (state) => [state.cover, state.setCover])
+  const [cover, setCover] = useBoundStore((state) => [state.cover, state.setCover])
   const pageId = useUuidPathname()
 
 
