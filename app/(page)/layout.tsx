@@ -7,6 +7,7 @@ import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-ser
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { ListBar } from "@/components/layout/list-bar";
 import Script from "next/script";
+import TOC from "@/components/toc";
 
 export default async function PageLayout(
   props: PropsWithChildren & {
@@ -38,6 +39,7 @@ export default async function PageLayout(
                     {props.children}
                   </PageTransitionLayout>
                 </main>
+
               </section>
             </section>
           </section>

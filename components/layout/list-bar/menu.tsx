@@ -13,7 +13,7 @@ export function Menus({
   items,
   itemWithoutChildClassName,
   ...props
-}: ListboxProps & { items: MenuProp[]; itemWithoutChildClassName?: string }) {
+}: Omit<ListboxProps, "children"> & { items: MenuProp[]; itemWithoutChildClassName?: string }) {
   return (
     <Listbox
       aria-label="User Menu"
@@ -25,7 +25,7 @@ export function Menus({
       }}
       {...props}
     >
-      {(item: MenuProp) => {
+      {(item: any) => {
         if (_.isArray(item.children) && item.children.length > 0) {
           return (
             <ListboxItem

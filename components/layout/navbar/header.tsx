@@ -8,11 +8,11 @@ import { Session } from "next-auth";
 import { Breadcrumbs } from "./breadcrumbs";
 import _ from "lodash";
 import { DropdownMenus } from "./dropdown";
+import { setCollapsed } from "@/hooks/store/create-layout-slice";
 
 export default function Header({ session }: { session: Session | null }) {
-  const [collapsed, setCollapsed] = useBoundStore( (state) => [
+  const [collapsed] = useBoundStore( (state) => [
     state.collapsed,
-    state.setCollapsed,
   ])!;
   // const { SignInModal, setShowSignInModal } = useSignInModal();
 

@@ -6,12 +6,12 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { PageWidth } from "@/types";
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { setPageWidth } from "@/hooks/store/create-layout-slice";
 
 export const PageWidthConfig = () => {
   const [pageWidth] = useBoundStore((s) => [
     s.pageWidth,
   ]);
-  const setPageWidth = useBoundStore.getState().setPageWidth;
   const pageId = useUuidPathname();
   const savePageWidth = (pageWidth: PageWidth) => {
     setPageWidth(pageWidth);

@@ -34,10 +34,11 @@ export default function BlockPage({ params }: { params: { hash: string } }) {
       {/* <OutHookConfigurator /> */}
       <div className="flex ">
         <section className="h-screen  w-full flex flex-col items-center z-1 max-h-full ">
-          <Cover />
-          <TOC className="sticky h-0 top-10  left-5 self-start" />
-
-          <PageWrapper id={params.hash} />
+          <div className="w-full">
+            <Cover />
+            <TOC className="sticky h-0 top-10  z-50 left-5 self-start" />
+            <PageWrapper id={params.hash} />
+          </div>
         </section>
       </div>
     </>

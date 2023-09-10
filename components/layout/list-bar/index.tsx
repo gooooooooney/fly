@@ -13,6 +13,7 @@ import _ from "lodash";
 import { Menus } from "./menu";
 import { findCurrentPagePath } from "@/lib/data-source/menus";
 import { mergeMenus } from "@/lib/menus";
+import { setCollapsed } from "@/hooks/store/create-layout-slice";
 
 
 
@@ -22,9 +23,8 @@ export function ListBar(props: { email: string }) {
   const [items] = useBoundStore( (state) => [
     state.menus,
   ])!;
-  const [collapsed, setCollapsed] = useBoundStore( (state) => [
+  const [collapsed] = useBoundStore( (state) => [
     state.collapsed,
-    state.setCollapsed,
   ])!;
 
   const getItems = (list: MenuProp[]): MenuProp[] => {
