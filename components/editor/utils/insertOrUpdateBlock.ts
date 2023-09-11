@@ -12,7 +12,6 @@ export function insertOrUpdateBlock(
       "Slash Menu open in a block that doesn't contain inline content."
     );
   }
-
   if (
     (currentBlock.content.length === 1 &&
       currentBlock.content[0].type === "text" &&

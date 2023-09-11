@@ -24,9 +24,10 @@ import {
   SingleCommands,
 } from "@tiptap/react";
 import { createContext, ElementType, FC, HTMLProps, useContext } from "react";
+import { CustomBlockSchema } from "../blocks/custom-block-schema";
 
 const blockStyles = styles as any;
-type ContentType = "block+" | "block*" | "inline*" | "text*" | "(paragraph|list?)+";
+type ContentType = "blockContainer" | "blockContent" | "inlineContent" | "blockContent*" | "blockContent+" | "paragraph+" | "paragraph*";
 // extend BlockConfig but use a React render function
 export type ReactBlockConfig<
   Type extends string,
@@ -42,12 +43,12 @@ export type ReactBlockConfig<
       BlockConfig<Type, PSchema, ContainsInlineContent, BSchema>["render"]
     >[0];
     editor: Parameters<
-      BlockConfig<Type, PSchema, ContainsInlineContent, BSchema>["render"]
+      BlockConfig<Type, PSchema, ContainsInlineContent, CustomBlockSchema>["render"]
     >[1];
   }>;
 } & {
   addCommands?: (commands: any) => any;
-  addKeyboardShortcuts?: (props: { editor: Editor }) => {
+  addKeyboardShortcuts?: (props: { editor: Editor, bnEditor: BlockNoteEditor<CustomBlockSchema> }) => {
     [key: string]: KeyboardShortcutCommand;
   };
   content?: ContentType;
@@ -93,7 +94,7 @@ export function createCustomReactBlockSpec<
   const node = createTipTapBlock<
     BType,
     {
-      editor: BlockNoteEditor<BSchema>;
+      editor: BlockNoteEditor<CustomBlockSchema>;
       domAttributes?: BlockNoteDOMAttributes;
     }
   >({
@@ -120,7 +121,8 @@ export function createCustomReactBlockSpec<
     addKeyboardShortcuts() {
       const result = blockConfig.addKeyboardShortcuts
         ? blockConfig.addKeyboardShortcuts({
-          editor: this.editor
+          editor: this.editor,
+          bnEditor: this.options.editor! as BlockNoteEditor<CustomBlockSchema>,
         })
         : {};
       return result;
@@ -147,7 +149,7 @@ export function createCustomReactBlockSpec<
 
         // Gets BlockNote editor instance
         const editor = this.options.editor! as BlockNoteEditor<
-          BSchema & { [k in BType]: BlockSpec<BType, PSchema> }
+          CustomBlockSchema & { [k in BType]: BlockSpec<BType, PSchema> }
         >;
         // Gets position of the node
         const pos =
