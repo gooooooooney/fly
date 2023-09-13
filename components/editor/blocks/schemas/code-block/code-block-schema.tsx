@@ -34,26 +34,30 @@ export const CodeBlockSpec = createCustomReactBlockSpec({
   },
   addKeyboardShortcuts({ editor, bnEditor }) {
     return {
-      "Enter": ({}) => {
-        const { node, contentType } = getBlockInfoFromPos(
-          editor.state.doc,
-          editor.state.selection.from
-        )!;
+      "Enter": () => editor.commands.first(({ commands }) => [
+        ({ state }) => {
+          const { node, contentType } = getBlockInfoFromPos(
+            state.doc,
+            state.selection.from
+          )!;
 
-        debugger
-        // If the current block is a callout block, do nothing.
-        if (contentType.name.endsWith("codeBlock")) {
-          // bnEditor.getTextCursorPosition().block.content.push({
-          //   type: "text",
-          //   text: "\n",
-          //   styles: {},
-          // })
-          return true;
-        }
-        // return false;
-        return false
-      
-      },
+          // If the current block is a callout block, do nothing.
+          if (contentType.name.endsWith("codeBlock")) {
+
+            return commands.BNUpdateBlock(state.selection.from, {
+              content: [
+                {
+                  type: "text",
+                  text: "hello"
+                }
+              ]
+            });
+          }
+          // return false;
+          return false
+
+        },
+      ]),
     };
   },
   containsInlineContent: true,

@@ -3,7 +3,7 @@ import { Icons } from "../../icons";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { addNewPage, save, saveBlocks } from "@/lib/data-source/page";
 import OutHook from "../../OutHook";
-import { MenuProp } from "@/hooks/store/create-content-slice";
+import { MenuProp, setMenus } from "@/hooks/store/create-content-slice";
 import _ from "lodash";
 import { CustomBlockSchema } from "../blocks/custom-block-schema";
 
@@ -30,7 +30,7 @@ export const SlashMenuPageItem: ReactSlashMenuItem<CustomBlockSchema> = {
   execute: (editor) => {
     const childBlock = editor.getTextCursorPosition().block;
     const pageId = useBoundStore.getState().pageId;
-    const { setMenus, menus } = useBoundStore.getState();
+    const { menus } = useBoundStore.getState();
     insertOrUpdateBlock(editor, {
       type: "page",
     });
