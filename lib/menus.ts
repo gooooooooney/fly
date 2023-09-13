@@ -1,7 +1,6 @@
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import _ from "lodash";
-import {setMenus as setItems} from "@/hooks/store/create-content-slice";
 
 
 export function findMenu(menus: MenuProp[], id: string): MenuProp | undefined {
@@ -66,11 +65,24 @@ export function setPropSyncMenus({
   title?: string
   emoji?: string
 }) {
-  const { menus } = useBoundStore.getState()
-  const menu = findMenu(menus, id)
-  if (!menu) return
-  const item = _.cloneDeep(menu)
-  if (title) item.title = title
-  if (emoji) item.icon = emoji
-  setItems(mergeMenus(menus, [item]))
+  useBoundStore.setState(s => {
+    const item = findMenu(s.menus, id)
+    if (!item) return
+    if (title) item.title = title
+    if (emoji) item.icon = emoji
+  })
+}
+
+export function sortMenus(menus: MenuProp[], ids: string[]) {
+  const idToIndexMap = new Map()
+  for (const [index, id] of ids.entries()) {
+    idToIndexMap.set(id, index)
+  }
+  return menus.sort((a, b) => {
+    const aIndex = idToIndexMap.get(a.id)
+    const bIndex = idToIndexMap.get(b.id)
+    if (aIndex === void 0 || bIndex === void 0) return 0
+    return aIndex - bIndex
+  })
+  
 }

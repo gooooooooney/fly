@@ -11,6 +11,7 @@ import { Operation } from "@/types";
 import { areArraysEqual } from "@/lib/array";
 import { useBlockNote } from "@blocknote/react";
 import { setBlocks } from "@/hooks/store/create-content-slice";
+import { findMenu, sortMenus } from "@/lib/menus";
 const Editor = dynamic(() => import("@/components/editor/editor"), {
   ssr: false,
 });
@@ -22,20 +23,13 @@ function EditorWrapper() {
   console.log("render editor wrapper");
 
   let beforeBlocks = [] as BlockWithOrder[];
-  const [shouldUpdateContent, setShouldUpdateContent] = useState(false);
+  let isFirst = true
   const [editable] = useBoundStore((s) => [
     s.editable,
   ]);
   const { data } = usePageInit();
 
   const path = useUuidPathname();
-  useEffect(() => {
-    if (data) {
-      setTimeout(() => {
-        setShouldUpdateContent(true);
-      }, 1000);
-    }
-  }, [data]);
 
   const { theme } = useTheme();
 
@@ -73,7 +67,10 @@ function EditorWrapper() {
       console.log("topLevelBlocks", editor.topLevelBlocks);
       console.log("json", editor._tiptapEditor.getJSON());
       // 避免第一次渲染的时候触发导致调用save接口
-      if (!shouldUpdateContent) {
+      if (!isFirst) {
+        setTimeout(() => {
+          isFirst = false;
+        })
         return;
       }
       setBlocks(editor.topLevelBlocks);
@@ -198,6 +195,20 @@ function EditorWrapper() {
               "id"
             ),
       });
+      if (isOrderChanged) {
+        const pageBlock = blockList.filter((b) => b.type === "page");
+        // 排序 menus
+        pageBlock.length && useBoundStore.setState(s => {
+          const menu = findMenu(s.menus, path);
+          if (menu) {
+            const result = sortMenus(menu.children, pageBlock.map((b) => b.id));
+            menu.children = result
+          }
+
+        })
+        
+      }
+
 
       save({
         pageId: path,

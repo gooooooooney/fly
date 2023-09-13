@@ -38,7 +38,6 @@ let count = 0;
   console.log("render editor", count++);
   // so many rerenders
   // const setEditor = useBoundStore.getState().setEditor
-
   const { theme } = useTheme();
   const editor = useBlockNote(
     {
@@ -64,7 +63,7 @@ let count = 0;
       onEditorContentChange,
       onTextCursorPositionChange,
     },
-    // [editable]
+    [initialContent]
   );
 
   useEffect(() => {
