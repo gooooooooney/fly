@@ -12,7 +12,7 @@ import { getSpaceInfo } from "@/lib/data-source/space";
 import _ from "lodash";
 import { Menus } from "./menu";
 import { findCurrentPagePath } from "@/lib/data-source/menus";
-import { mergeMenus } from "@/lib/menus";
+import { findMenu, mergeMenus } from "@/lib/menus";
 import { setCollapsed } from "@/hooks/store/create-layout-slice";
 
 
@@ -50,6 +50,12 @@ export function ListBar(props: { email: string }) {
           setMenus(
             mergeMenus(res.activeWorkspace?.pages ?? [], currentPagePath ?? [])
           );
+          useBoundStore.setState(s => {
+            const item = findMenu(s.menus, pageId)
+            if (item) {
+              item.isActive = true
+            }
+          })
         }
       }
     );
@@ -63,8 +69,24 @@ export function ListBar(props: { email: string }) {
     // })
   }, []);
   useEffect(() => {
-    setMenus(getItems(items));
+    
+    // setMenus(getItems(items));
+    useBoundStore.setState(s => {
+      const item = findMenu(s.menus, pageId)
+      if (item) {
+        item.isActive = true
+      }
+    })
+    return () => {
+      useBoundStore.setState(s => {
+        const item = findMenu(s.menus, pageId)
+        if (item) {
+          item.isActive = false
+        }
+      })
+    }
   }, [pageId]);
+
 
   if (!actSpace) return null;
   const activeWp = actSpace;

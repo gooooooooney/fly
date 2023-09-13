@@ -13,6 +13,18 @@ export function findMenu(menus: MenuProp[], id: string): MenuProp | undefined {
   }
   return void 0
 }
+
+export function findActiveMenu(menus: MenuProp[]): MenuProp | undefined {
+  for (const menu of menus) {
+    if (menu.isActive) return menu
+    if (menu.children) {
+      const foundInChildren = findActiveMenu(menu.children)
+      if (foundInChildren) return foundInChildren
+    }
+  }
+  return void 0
+}
+
 export function setMenus(menus: MenuProp[], item: MenuProp) {
 
   for (const menu of menus) {
@@ -73,7 +85,7 @@ export function setPropSyncMenus({
   })
 }
 
-export function sortMenus(menus: MenuProp[], ids: string[]) {
+export function sortMenus<T extends IdObj>(menus: T[], ids: string[]) {
   const idToIndexMap = new Map()
   for (const [index, id] of ids.entries()) {
     idToIndexMap.set(id, index)
@@ -84,5 +96,5 @@ export function sortMenus(menus: MenuProp[], ids: string[]) {
     if (aIndex === void 0 || bIndex === void 0) return 0
     return aIndex - bIndex
   })
-  
+
 }

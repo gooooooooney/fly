@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma"
 import { Nullable } from "unsplash-js/dist/helpers/typescript";
 import { getPageMenusWithoutPageId } from "../utils";
 import { MenuProp } from "@/hooks/store/create-content-slice";
+import { sortMenus } from "@/lib/menus";
 
 async function getNestedBlocks(id: string) {
   const blocks = await prisma.block.findUnique({
@@ -132,12 +133,18 @@ export async function getChildrenMenus(spaceId: string,pageId: string) {
           }
         }
       },
+      blocks: {
+        where: {
+          type: "page"
+        }
+      },
       properties: true,
     }
   })
   if (!page) {
     return []
   }
+  page.children = sortMenus(page.children, page.blocks.map(b => b.id))
   return getPageMenusWithoutPageId(page.children)
   
 }

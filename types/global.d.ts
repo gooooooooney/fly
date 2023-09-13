@@ -33,4 +33,8 @@ declare global {
 
   type ReturnTypePromiseFunc<T> = T extends (...args: any) => Promise<infer V> ? V : T;
 
+  interface IdObj {
+    id: string
+  }
+
 }

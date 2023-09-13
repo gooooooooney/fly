@@ -114,7 +114,6 @@ model Block {
   props       Json    @db.Json
   page        Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId      String?
-  propsId     String?
   prevBlockId String?
   nextBlockId String?
 }

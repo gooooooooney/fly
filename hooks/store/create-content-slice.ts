@@ -4,8 +4,10 @@ import { saveProperty } from "@/lib/data-source/page"
 import { useBoundStore } from "./useBoundStore";
 import { findMenu } from "@/lib/menus";
 
-export interface MenuProp {
-  id: string;
+
+
+
+export interface MenuProp extends IdObj {
   title: string;
   icon: string;
   hasChildren: boolean;

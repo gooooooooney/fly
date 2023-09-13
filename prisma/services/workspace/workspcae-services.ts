@@ -2,6 +2,7 @@
 import { MenuProp } from "@/hooks/store/create-content-slice"
 import prisma from "@/lib/prisma"
 import { getPageMenus } from "../utils"
+import { sortMenus } from "@/lib/menus"
 
 export type WorkspaceInfo = ReturnTypePromiseFunc<typeof getWorkspacesByUserId>
 
@@ -45,6 +46,11 @@ export async function getWorkspaces(userId: string, pageId: string) {
                   properties: true,
                 }
               },
+              blocks: {
+                where: {
+                  type: "page"
+                }
+              },
               properties: true,
             }
           }
@@ -59,6 +65,7 @@ export async function getWorkspaces(userId: string, pageId: string) {
     }
   }
   const workspaces = await Promise.all(user.workspaces.map(async workspace => {
+
     return {
       ...workspace,
       pages: await getPageMenus(workspace.pages, pageId)
