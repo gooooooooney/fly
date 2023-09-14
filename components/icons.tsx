@@ -24,6 +24,7 @@ import {
   RxChatBubble,
   RxCheckbox,
   RxCheck,
+  RxCircle,
 } from "react-icons/rx";
 
 export const SunFilledIcon = ({
@@ -160,4 +161,5 @@ export const Icons = {
   ChatBubble: RxChatBubble,
   Checkbox: RxCheckbox,
   Check: RxCheck,
+  Circle: RxCircle
 };

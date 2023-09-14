@@ -65,7 +65,13 @@ export async function getWorkspaces(userId: string, pageId: string) {
     }
   }
   const workspaces = await Promise.all(user.workspaces.map(async workspace => {
-
+    workspace.pages = workspace.pages.map(page => {
+      return {
+        ...page,
+        // 根据block对page进行排序
+        children: sortMenus(page.children, page.blocks.map(v => v.id))
+      }
+    })
     return {
       ...workspace,
       pages: await getPageMenus(workspace.pages, pageId)
