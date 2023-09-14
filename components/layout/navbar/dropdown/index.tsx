@@ -66,7 +66,7 @@ export const DropdownMenus: FC = () => {
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Page width</DropdownMenuSubTrigger>
             <DropdownMenuPortal>
-              <DropdownMenuSubContent className="px-5">
+              <DropdownMenuSubContent sideOffset={5} className="px-5">
                 <PageWidthConfig />
               </DropdownMenuSubContent>
             </DropdownMenuPortal>

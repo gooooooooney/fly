@@ -12,9 +12,10 @@ import _ from "lodash";
 export const PageTitle = ({ id }: { id: string }) => {
   const { data } = usePageInit();
 
-  // const editor = useBlockNote()
-  const [title] = useBoundStore((state) => [
+  const editor = useBlockNote()
+  const [title, editable] = useBoundStore((state) => [
     state.title,
+    state.editable
   ]);
   const pageId = useUuidPathname()
   const setPageTitle = (title: string) => {
@@ -32,7 +33,7 @@ export const PageTitle = ({ id }: { id: string }) => {
   }
   const handleEnter = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
     if (e.key === "Enter") {
-      // e.preventDefault();
+      e.preventDefault();
       // editor?.insertBlocks(
       //   [
       //     {
