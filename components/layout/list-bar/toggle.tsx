@@ -8,7 +8,7 @@ import { Disclosure } from "@headlessui/react";
 import { Button } from "@nextui-org/button";
 import { cn } from "@nextui-org/system";
 import { AnimatePresence, motion } from "framer-motion";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 import Link from "next/link";
 import { useState } from "react";
 import {setMenus as setItems} from "@/hooks/store/create-content-slice";
@@ -32,14 +32,14 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
         setShowActionMenus("block")
         if (!open) {
           if (isDataLoaded) return;
-          const newMenus = _.cloneDeep(items)
+          const newMenus = cloneDeep(items)
 
           Promise.all(item.children
             .filter(v => v.hasChildren)
             .map(async (v) =>
               v && getChildrenMenus(v.id).then(res => {
                 setIsDataLoaded(true)
-                const newMenu = _.cloneDeep(v)
+                const newMenu = cloneDeep(v)
                 newMenu.children = res.map(val => ({
                   ...val,
                   isActive: val.id === pageId

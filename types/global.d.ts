@@ -27,7 +27,7 @@ declare global {
 
   }
   interface HttpRequestData<T = any> {
-    head:RequestDataHead,
+    head: HttpRequestDataHead,
     body:T
   }
 

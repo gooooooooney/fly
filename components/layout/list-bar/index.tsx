@@ -9,7 +9,6 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import SidebarHeader from "./header";
 import { MenuProp, setMenus } from "@/hooks/store/create-content-slice";
 import { getSpaceInfo } from "@/lib/data-source/space";
-import _ from "lodash";
 import { Menus } from "./menu";
 import { findCurrentPagePath } from "@/lib/data-source/menus";
 import { findMenu, mergeMenus } from "@/lib/menus";

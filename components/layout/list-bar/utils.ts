@@ -1,7 +1,7 @@
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { getChildrenMenus } from "@/lib/data-source/menus";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 import {setMenus as setItems} from "@/hooks/store/create-content-slice";
 
 function setMenus(menus: MenuProp[], item: MenuProp) {
@@ -17,7 +17,7 @@ function setMenus(menus: MenuProp[], item: MenuProp) {
 
 export function initMenus() {
   const {menus: items} = useBoundStore.getState()
-  const newMenus = _.cloneDeep(items)
+  const newMenus = cloneDeep(items)
 
   for (const menu of items) {
     if (menu.hasChildren && menu.children.length === 0) {
@@ -29,7 +29,7 @@ export function initMenus() {
     .filter(v => v.hasChildren && v.children.length === 0)
     .map(async (v) =>
       v && getChildrenMenus(v.id).then(res => {
-        const newMenu = _.cloneDeep(v)
+        const newMenu = cloneDeep(v)
         newMenu.children = res
         return newMenu
       })))

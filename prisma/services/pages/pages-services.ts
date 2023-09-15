@@ -116,7 +116,7 @@ export async function getAllPage(pageId: string) {
 }
 
 
-export async function getChildrenMenus(spaceId: string,pageId: string) {
+export async function getChildrenMenus(spaceId: string, pageId: string) {
   const page = await prisma?.page.findUnique({
     where: {
       id: pageId,
@@ -146,11 +146,11 @@ export async function getChildrenMenus(spaceId: string,pageId: string) {
   }
   page.children = sortMenus(page.children, page.blocks.map(b => b.id))
   return getPageMenusWithoutPageId(page.children)
-  
+
 }
 
 export async function getRootPageMenus(workspaceId: string, blockId?: string) {
-  
+
   const where: NonNullable<Parameters<typeof prisma["page"]["findMany"]>[number]>["where"] = {
     workspace: {
       id: workspaceId,
@@ -215,7 +215,7 @@ export async function addNewPage({
 
       }
     })
-    
+
     // return await prisma?.workspace.update({
     //   where: {
     //     id: spaceId
@@ -469,13 +469,52 @@ export async function save({
   })
 }
 
+export async function removePage({pageId, spaceId}:{pageId: string, spaceId: string}) {
+  return await prisma.$transaction(async tx => {
+    try {
+      const block = await tx.block.findUnique({ where: { id: pageId } })
+      await deletePage(pageId)
+      if (block) {
+        const pre = block.prevBlockId
+        const next = block.nextBlockId
+        // update prev and next block
+        if (pre) {
+          await tx.block.update({
+            where: {
+              id: pre
+            },
+            data: {
+              nextBlockId: next
+            }
+          })
+        }
+        if (next) {
+          await tx.block.update({
+            where: {
+              id: next
+            },
+            data: {
+              prevBlockId: pre
+            }
+          })
+        }
+      }
+      return true
+    } catch (error) {
+      return false
+    }
+
+  })
+
+}
+
 
 
 
 
 
 export async function findAncestors(nodeId: string, tree: any[] = []): Promise<MenuProp[]> {
-  const node = await prisma.page.findUnique({ where: { id: nodeId }, include: {properties: true} });
+  const node = await prisma.page.findUnique({ where: { id: nodeId }, include: { properties: true } });
 
   if (!node) {
     return tree;

@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { Session } from "next-auth";
 import { Breadcrumbs } from "./breadcrumbs";
-import _ from "lodash";
 import { DropdownMenus } from "./dropdown";
 import { setCollapsed } from "@/hooks/store/create-layout-slice";
 

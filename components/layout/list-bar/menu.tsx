@@ -2,7 +2,7 @@ import { MenuProp } from "@/hooks/store/create-content-slice";
 import { Disclosure } from "@headlessui/react";
 import { ListboxProps, Listbox, ListboxItem } from "@nextui-org/react";
 import { cn } from "@nextui-org/system";
-import _ from "lodash";
+import isArray from "lodash/isArray";
 import Link from "next/link";
 import { Toggle } from "./toggle";
 import { SubMenu } from "./submenu";
@@ -26,7 +26,7 @@ export function Menus({
       {...props}
     >
       {(item: any) => {
-        if (_.isArray(item.children) && item.children.length > 0) {
+        if (isArray(item.children) && item.children.length > 0) {
           return (
             <ListboxItem
               textValue={item.title}

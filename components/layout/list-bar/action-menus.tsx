@@ -1,8 +1,12 @@
 import { Icons } from "@/components/icons";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { removePage } from "@/lib/data-source/page";
 import { cn } from "@/lib/utils";
 import { Button } from "@nextui-org/button";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from "@nextui-org/dropdown";
+import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes } from "react";
+import { toast } from "sonner";
 
 
 interface ActionMenusProps {
@@ -10,7 +14,29 @@ interface ActionMenusProps {
 }
 
 export const ActionMenus: FC<HTMLAttributes<HTMLDivElement> & ActionMenusProps> = ({ className, pageId }) => {
-  
+  const router = useRouter()
+  const handleAction = (key: any) => {
+    switch (key) {
+      case "remove": {
+        toast.promise(removePage({
+          pageId,
+          spaceId: "",
+        }), {
+          loading: "Deleting...",
+          success: () => {
+            setTimeout(() => {
+              router.push("/")
+            }, 1000);
+            return "Delete successfully, redirecting..."
+
+          },
+          error: "Delete failed",
+        })
+        break;
+      }
+      default:
+    }
+  }
   return (
     <Dropdown
       radius="sm"
@@ -23,7 +49,7 @@ export const ActionMenus: FC<HTMLAttributes<HTMLDivElement> & ActionMenusProps> 
           <Icons.DotsHorizontal />
         </Button>
       </DropdownTrigger>
-      <DropdownMenu itemClasses={{
+      <DropdownMenu onAction={handleAction} itemClasses={{
         base: [
           "rounded-sm",
           "text-default-500",

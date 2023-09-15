@@ -4,7 +4,7 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { addNewPage, save, saveBlocks } from "@/lib/data-source/page";
 import OutHook from "../../OutHook";
 import { MenuProp, setMenus } from "@/hooks/store/create-content-slice";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 import { CustomBlockSchema } from "../blocks/custom-block-schema";
 
 export function insertOrUpdateBlock(editor: BlockNoteEditor, block: any) {
@@ -58,7 +58,7 @@ export const SlashMenuPageItem: ReactSlashMenuItem<CustomBlockSchema> = {
         hasChildren: false,
         children: [],
       }
-      const cloneMenus = _.cloneDeep(menus)
+      const cloneMenus = cloneDeep(menus)
       const setChild = (menus: MenuProp[]) => {
         for (const menu of menus) {
           if (menu.id === pageId) {

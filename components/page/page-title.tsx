@@ -7,7 +7,6 @@ import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { saveProperty } from "@/lib/data-source/page";
 import {  setPropSyncMenus } from "@/lib/menus";
 import { useBlockNote } from "@blocknote/react";
-import _ from "lodash";
 
 export const PageTitle = ({ id }: { id: string }) => {
   const { data } = usePageInit();
@@ -33,16 +32,17 @@ export const PageTitle = ({ id }: { id: string }) => {
   }
   const handleEnter = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault();
-      // editor?.insertBlocks(
-      //   [
-      //     {
-      //       type: "paragraph",
-      //     },
-      //   ],
-      //   editor?.topLevelBlocks[0]
-      // );
-      // editor?.focus();
+      
+      
+      editor?.insertBlocks(
+        [
+          {
+            type: "paragraph",
+          },
+        ],
+        editor?.topLevelBlocks[0]
+      );
+      editor?.focus();
     }
   };
   if (!data) return null;

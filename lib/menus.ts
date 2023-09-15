@@ -1,6 +1,6 @@
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
 
 export function findMenu(menus: MenuProp[], id: string): MenuProp | undefined {
@@ -41,7 +41,7 @@ export function mergeMenus(
   sourceMenus: MenuProp[]
 ): MenuProp[] {
   // 创建一个新的数组，避免修改原始数组
-  const mergedMenus: MenuProp[] = _.cloneDeep(targetMenus);
+  const mergedMenus: MenuProp[] = cloneDeep(targetMenus);
 
   for (const sourceMenu of sourceMenus) {
     // 根据ID查找目标数组中对应的菜单项

@@ -3,7 +3,7 @@ import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import { memo, useCallback, useEffect, useState } from "react";
-import _, { set } from "lodash";
+import uniqBy from "lodash/uniqBy";
 import { save } from "@/lib/data-source/page";
 import { usePageInit } from "@/hooks/use-page-init";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
@@ -190,7 +190,7 @@ function EditorWrapper() {
         // Compatible nesting and indentation of bullet lists and ordered lists.
         data: isOrderChanged
           ? blockList
-          : _.uniqBy(
+          : uniqBy(
               currentBlock ? [currentBlock, ...updateBlocks] : updateBlocks,
               "id"
             ),

@@ -1,8 +1,8 @@
 "use client";
 import { SlashMenuProps } from "@blocknote/react";
 import { FC, Fragment, use, useEffect, useState } from "react";
-import { CustomBlockSchema } from "../block-schema";
-import _ from "lodash";
+import groupBy from "lodash/groupBy";
+import toArray from "lodash/toArray";
 import {
   Dropdown,
   DropdownItem,
@@ -11,12 +11,12 @@ import {
   DropdownTrigger,
 
 } from "@nextui-org/dropdown";
-import { SlashMenuItem } from "./slash-menu-item";
+import { CustomBlockSchema } from "../blocks/custom-block-schema";
 
 export const CustomSlashMenu = (props: SlashMenuProps<CustomBlockSchema>) => {
   let index = 0;
-  const groups = _.groupBy(props.filteredItems, (i) => i.group);
-  const list = _.toArray(groups)
+  const groups = groupBy(props.filteredItems, (i) => i.group);
+  const list = toArray(groups)
   const [open, setOpen] = useState(false);
   useEffect(() => {
     setOpen(true)

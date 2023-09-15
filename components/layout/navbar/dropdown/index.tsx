@@ -73,7 +73,7 @@ export const DropdownMenus: FC = () => {
           </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup >
+        <DropdownMenuGroup>
           <DropdownMenuItem
             textValue={DropdownMenuKeys.LOCK}
             onClick={saveEditable}

@@ -1,13 +1,25 @@
-import { deletePage } from "@/prisma/services/pages/pages-services";
+import { deletePage, removePage } from "@/prisma/services/pages/pages-services";
 import { z } from "@/lib/zod";
 import { NextResponse } from "next/server";
-const schema = z.string().nonempty()
-export async function GET(request: Request) {
-  const pageId = new URL(request.url).searchParams.get("pageId")
-  const res =  await deletePage(pageId!)
 
-  if (!schema.safeParse(pageId).success) {
+export type RemoveResponse = HttpRequestData<ReturnTypePromiseFunc<typeof removePage>>
+
+
+const schema = z.object({
+  pageId: z.string().nonempty(),
+  spaceId: z.string().nonempty()
+})
+
+export async function POST(request: Request) {
+  const reqData = await request.json()
+
+  if (!schema.safeParse(reqData.head).success) {
     return new NextResponse("Bad Request", { status: 400 });
   }
-  return NextResponse.json(res)
+  const res =  await removePage(reqData.head)
+
+  return  NextResponse.json({
+    head: {},
+    body: res
+  } as RemoveResponse)
 }

@@ -1,5 +1,6 @@
 import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types";
 import { fetcher } from "../utils";
+import { RemoveResponse } from "@/app/api/page/remove/route";
 
 
 
@@ -57,6 +58,32 @@ export function addNewPage({
         pageId
       },
       body: {}
+    })
+  })
+}
+
+export function removePage({
+  spaceId,
+  pageId
+}: { pageId: string, spaceId: string }): Promise<Boolean> {
+  return new Promise((resolve, reject) => {
+    fetcher("/api/page/remove", {
+      method: "POST",
+      body: JSON.stringify({
+        head: {
+          pageId,
+          spaceId
+        },
+        body: {}
+      })
+    }).then(res => {
+      if (res.body) {
+        resolve(true)
+      } else {
+        reject(false)
+      }
+    }).catch(err => {
+      reject(false)
     })
   })
 }

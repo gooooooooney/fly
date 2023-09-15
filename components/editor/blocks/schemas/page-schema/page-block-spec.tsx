@@ -4,7 +4,7 @@ import { findMenu, mergeMenus, setMenus } from "@/lib/menus";
 import { defaultProps } from "@blocknote/core";
 import { createReactBlockSpec, InlineContent } from "@blocknote/react";
 import { Link } from "@nextui-org/link";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 import NextLink from "next/link";
 import {setMenus as setItems} from "@/hooks/store/create-content-slice";
 
@@ -39,11 +39,11 @@ export const PageBlockSpec = createReactBlockSpec({
             const items = useBoundStore.getState().menus
             const item = findMenu(items, block.id)
             if (item && item.hasChildren) {
-                const newMenus = _.cloneDeep(items)
+                const newMenus = cloneDeep(items)
 
                 getChildrenMenus(item.id).then(res => {
                     setIsDataLoaded(true)
-                    const newMenu = _.cloneDeep(item)
+                    const newMenu = cloneDeep(item)
                     newMenu.children = res
                     setMenus(newMenus, newMenu)
                     setItems(mergeMenus(items, newMenus))
