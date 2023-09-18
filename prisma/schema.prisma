@@ -90,7 +90,7 @@ model Page {
   updatedAt   DateTime    @updatedAt
   properties  Properties?
   // page and block is one to many relationship, one page can have many blocks but one block can only belong to one page
-  blocks      Block[]
+  blocks      Block[]     
 }
 
 model Properties {

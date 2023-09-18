@@ -1,4 +1,5 @@
 import { Icons } from "@/components/icons";
+import { useAlertDialog } from "@/components/shared/alert-dialog/use-alert-dialog";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { removePage } from "@/lib/data-source/page";
 import { cn } from "@/lib/utils";
@@ -15,62 +16,93 @@ interface ActionMenusProps {
 
 export const ActionMenus: FC<HTMLAttributes<HTMLDivElement> & ActionMenusProps> = ({ className, pageId }) => {
   const router = useRouter()
+  const { openAlert } = useAlertDialog()
   const handleAction = (key: any) => {
     switch (key) {
       case "remove": {
-        toast.promise(removePage({
-          pageId,
-          spaceId: "",
-        }), {
-          loading: "Deleting...",
-          success: () => {
-            setTimeout(() => {
-              router.push("/")
-            }, 1000);
-            return "Delete successfully, redirecting..."
+        openAlert({
+          title: "Delete page",
+          content: "Are you sure you want to delete this page?",
+          okText: "Delete",
+          okColor: "danger",
+          cancelText: "Cancel",
+          onConfirm: () => {
+              toast.promise(removePage({
+                pageId,
+                spaceId: "",
+              }), {
 
-          },
-          error: "Delete failed",
+                loading: "Deleting...",
+                success: () => {
+                  setTimeout(() => {
+                    router.push("/")
+                  }, 1000);
+                  return "Delete successfully, redirecting..."
+
+                },
+                error: () => {
+                  return "Delete failed"
+                },
+              })
+              return Promise.resolve(true)
+          }
         })
+        // toast.promise(removePage({
+        //   pageId,
+        //   spaceId: "",
+        // }), {
+        //   loading: "Deleting...",
+        //   success: () => {
+        //     setTimeout(() => {
+        //       router.push("/")
+        //     }, 1000);
+        //     return "Delete successfully, redirecting..."
+
+        //   },
+        //   error: "Delete failed",
+        // })
         break;
       }
       default:
     }
   }
   return (
-    <Dropdown
-      radius="sm"
-      classNames={{
-        base: "p-0 border-small border-divider bg-background",
-      }}
-    >
-      <DropdownTrigger className="px-2 py-1 mx-0 min-w-fit rounded-sm h-auto">
-        <Button className={cn("px-0", className)} variant="light" size="sm">
-          <Icons.DotsHorizontal />
-        </Button>
-      </DropdownTrigger>
-      <DropdownMenu onAction={handleAction} itemClasses={{
-        base: [
-          "rounded-sm",
-          "text-default-500",
-          "transition-opacity",
-          "data-[hover=true]:text-default-foreground",
-          "data-[hover=true]:bg-default-100/80",
-          "dark:data-[hover=true]:bg-default-50",
-          "data-[selectable=true]:focus:bg-default-50",
-          "data-[pressed=true]:opacity-70",
-          "data-[focus-visible=true]:ring-default-500",
-        ],
-      }} aria-label="dropdown action">
-        <DropdownSection>
-          <DropdownItem
-            key="remove"
-            startContent={<Icons.TrashIcon />}
-          >
-            Remove
-          </DropdownItem>
-        </DropdownSection>
-      </DropdownMenu>
-    </Dropdown>
+    <>
+      <Dropdown
+        radius="sm"
+        classNames={{
+          base: "p-0 border-small border-divider bg-background",
+        }}
+      >
+        <DropdownTrigger className="px-2 py-1 mx-0 min-w-fit rounded-sm h-auto">
+          <Button className={cn("px-0", className)} variant="light" size="sm">
+            <Icons.DotsHorizontal />
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu onAction={handleAction} itemClasses={{
+          base: [
+            "rounded-sm",
+            "text-default-500",
+            "transition-opacity",
+            "data-[hover=true]:text-default-foreground",
+            "data-[hover=true]:bg-default-100/80",
+            "dark:data-[hover=true]:bg-default-50",
+            "data-[selectable=true]:focus:bg-default-50",
+            "data-[pressed=true]:opacity-70",
+            "data-[focus-visible=true]:ring-default-500",
+          ],
+        }} aria-label="dropdown action">
+          <DropdownSection>
+            <DropdownItem
+              key="remove"
+              startContent={<Icons.TrashIcon />}
+            >
+              Remove
+            </DropdownItem>
+          </DropdownSection>
+        </DropdownMenu>
+      </Dropdown>
+    </>
+
   )
 }

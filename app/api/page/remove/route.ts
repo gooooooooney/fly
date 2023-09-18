@@ -7,7 +7,7 @@ export type RemoveResponse = HttpRequestData<ReturnTypePromiseFunc<typeof remove
 
 const schema = z.object({
   pageId: z.string().nonempty(),
-  spaceId: z.string().nonempty()
+  spaceId: z.string()
 })
 
 export async function POST(request: Request) {

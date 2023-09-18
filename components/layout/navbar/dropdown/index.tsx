@@ -1,7 +1,7 @@
 import { Icons } from "@/components/icons";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
-import { saveProperty } from "@/lib/data-source/page";
+import { removePage, saveProperty } from "@/lib/data-source/page";
 // import {
 //   Dropdown,
 //   DropdownItem,
@@ -15,10 +15,14 @@ import { PageWidthConfig } from "./page-width";
 import { setEditable } from "@/hooks/store/create-content-slice";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useAlertDialog } from "@/components/shared/alert-dialog/use-alert-dialog";
 
 const enum DropdownMenuKeys {
   LOCK = "lock",
   PAGE_WIDTH = "page-width",
+  DELETE_PAGE = "delete-page",
 }
 
 
@@ -35,6 +39,8 @@ export const DropdownMenus: FC = () => {
   const [editable] = useBoundStore((s) => [
     s.editable,
   ]);
+  const router = useRouter()
+  const { openAlert } = useAlertDialog()
   const pageId = useUuidPathname();
   const saveEditable = () => {
     setEditable(!editable);
@@ -45,15 +51,36 @@ export const DropdownMenus: FC = () => {
       },
     });
   };
-  const handleAction = (key: DropdownMenuKeys) => {
-    switch (key) {
-      case DropdownMenuKeys.LOCK: {
-        saveEditable();
-        break;
+  const handleDeletePage = () => {
+    openAlert({
+      title: "Delete page",
+      content: "Are you sure you want to delete this page?",
+      okText: "Delete",
+      okColor: "danger",
+      showLoading: false,
+      cancelText: "Cancel",
+      onConfirm: () => {
+        toast.promise(removePage({
+          pageId,
+          spaceId: "",
+        }), {
+
+          loading: "Deleting...",
+          success: () => {
+            setTimeout(() => {
+              router.push("/")
+            }, 1000);
+            return "Delete successfully, redirecting..."
+
+          },
+          error: () => {
+            return "Delete failed"
+          },
+        })
+        return Promise.resolve(true)
       }
-      default:
-    }
-  };
+    })
+  }
   return (
     <DropdownMenu >
       <DropdownMenuTrigger asChild>
@@ -80,6 +107,9 @@ export const DropdownMenus: FC = () => {
             key={DropdownMenuKeys.LOCK}
           >
             {editable ? "Lock page" : "Unlock page"}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleDeletePage} key={DropdownMenuKeys.DELETE_PAGE}>
+            Delete page
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

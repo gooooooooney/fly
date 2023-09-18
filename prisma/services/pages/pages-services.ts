@@ -469,7 +469,7 @@ export async function save({
   })
 }
 
-export async function removePage({pageId, spaceId}:{pageId: string, spaceId: string}) {
+export async function removePage({ pageId, spaceId }: { pageId: string, spaceId: string }) {
   return await prisma.$transaction(async tx => {
     try {
       const block = await tx.block.findUnique({ where: { id: pageId } })
@@ -498,6 +498,14 @@ export async function removePage({pageId, spaceId}:{pageId: string, spaceId: str
             }
           })
         }
+        await tx.block.delete({
+          where: {
+            id: block.id
+          },
+          include: {
+            children: true
+          }
+        })
       }
       return true
     } catch (error) {
