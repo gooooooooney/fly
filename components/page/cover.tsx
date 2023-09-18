@@ -16,7 +16,7 @@ import { setCover } from "@/hooks/store/create-content-slice";
 
 function Cover() {
   console.log("render cover")
-  const [cover] = useBoundStore((state) => [state.cover])
+  const [cover, editable] = useBoundStore((state) => [state.cover, state.editable])
   const pageId = useUuidPathname()
 
 
@@ -59,7 +59,7 @@ function Cover() {
               alt="NextUI hero Image"
             />
             {
-              !showSlider && (
+              editable && !showSlider && (
                 <div className="opacity-0 z-11 ml-[calc(96px+env(safe-area-inset-left))] mr-[calc(96px+env(safe-area-inset-right))] group-hover:opacity-100 absolute right-2 bottom-2 transition-opacity">
                   <Popover placement="left">
                     <PopoverTrigger >
@@ -78,7 +78,7 @@ function Cover() {
               )
             }
             {
-              showSlider && (
+              editable && showSlider && (
                 <>
                   <div className="absolute opacity-50 w-1/2 z-20 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                     <Slider value={[y]} onValueChange={([v]) => setY(v)} max={100} step={1} min={0} />

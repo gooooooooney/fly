@@ -12,9 +12,10 @@ import { setPropSyncMenus } from "@/lib/menus";
 import { setCover, setIcon } from "@/hooks/store/create-content-slice";
 
 function IconAndCover({ id }: { id: string }) {
-  const { emoji, cover } = useBoundStore((state) => ({
+  const { emoji, cover, editable } = useBoundStore((state) => ({
     emoji: state.icon,
     cover: state.cover,
+    editable: state.editable
   }));
   useClientInit(id);
 
@@ -48,7 +49,7 @@ function IconAndCover({ id }: { id: string }) {
   };
   return (
     <>
-      {emoji && (
+      { emoji && (
         <div
           className={cn(
             "h-18 w-18 relative max-w-full z-10 -mt-[2.2rem] inline-block",
@@ -59,8 +60,9 @@ function IconAndCover({ id }: { id: string }) {
         >
           <EmojiPicker onEmojiSelect={(e) => setEmoji(e)}>
             <Button
+              isDisabled={!editable}
               variant="light"
-              className="text-7xl px-0 h-18 w-18 aria-expanded:opacity-100"
+              className="text-7xl px-0 h-18 w-18 aria-expanded:opacity-100 !opacity-100"
             >
               {emoji}
             </Button>

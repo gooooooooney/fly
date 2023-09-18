@@ -11,7 +11,7 @@ import { useBlockNote } from "@blocknote/react";
 export const PageTitle = ({ id }: { id: string }) => {
   const { data } = usePageInit();
 
-  const editor = useBlockNote()
+  // const editor = useBlockNote()
   const [title, editable] = useBoundStore((state) => [
     state.title,
     state.editable
@@ -34,15 +34,15 @@ export const PageTitle = ({ id }: { id: string }) => {
     if (e.key === "Enter") {
       
       
-      editor?.insertBlocks(
-        [
-          {
-            type: "paragraph",
-          },
-        ],
-        editor?.topLevelBlocks[0]
-      );
-      editor?.focus();
+      // editor?.insertBlocks(
+      //   [
+      //     {
+      //       type: "paragraph",
+      //     },
+      //   ],
+      //   editor?.topLevelBlocks[0]
+      // );
+      // editor?.focus();
     }
   };
   if (!data) return null;
@@ -63,6 +63,7 @@ export const PageTitle = ({ id }: { id: string }) => {
       <input
         placeholder="Untitled"
         type="text"
+        disabled={!editable}
         value={title}
         onKeyDown={handleEnter}
         className="outline-none bg-background scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
