@@ -21,6 +21,7 @@ export default async function Home() {
   if (activeWorkspace.pages.length === 0) {
     const page = await addNewPage({
       spaceId: activeWorkspace.id,
+      userId: session.user.id,
     })
     redirect(`/${page!.id}`)
   }

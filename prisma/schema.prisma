@@ -90,7 +90,19 @@ model Page {
   updatedAt   DateTime    @updatedAt
   properties  Properties?
   // page and block is one to many relationship, one page can have many blocks but one block can only belong to one page
-  blocks      Block[]     
+  blocks      Block[]
+  sharePage   SharePage?
+}
+
+model SharePage {
+  enabled      Boolean     @default(false) // if enabled, the page can be shared
+  id           String      @id @default(uuid())
+  pageId       String      @unique
+  passwordHash String?
+  permission   Permission @default(READ)
+  url          String?
+  ownerUserId  String // 存储分享者的用户ID
+  Page         Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
 }
 
 model Properties {
@@ -138,4 +150,9 @@ enum Type {
 enum Role {
   OWNER
   READER
+}
+
+enum Permission {
+  READ
+  EDIT
 }

@@ -24,7 +24,8 @@ export async function POST(request: Request) {
   const page = addNewPage({
     blockId: head.blockId!,
     spaceId: head.spaceId!,
-    parentId: head.pageId!
+    parentId: head.pageId!,
+    userId: session.user.id,
   })
   return NextResponse.json({
     head: {},

@@ -49,6 +49,7 @@ export async function getPageById(pageId: string) {
           nextBlockId: true,
         }
       },
+      sharePage: true
     },
 
   })
@@ -195,40 +196,41 @@ export async function getRootPageMenus(workspaceId: string, blockId?: string) {
 export async function addNewPage({
   blockId,
   spaceId,
-  parentId
+  parentId,
+  userId
 }: {
   blockId?: string
   spaceId: string
   parentId?: string
+  userId: string
 }) {
   try {
-    return await prisma?.page.create({
-      data: {
-        id: blockId,
-        parentId,
-        workspaceId: spaceId,
-        properties: {
-          create: {
-
+    return prisma.$transaction(async tx => {
+      const user = await tx.user.findUniqueOrThrow({
+        where: {
+          id: userId,
+        }
+      })
+      
+      return await tx?.page.create({
+        data: {
+          id: blockId,
+          parentId,
+          workspaceId: spaceId,
+          properties: {
+            create: {
+  
+            },
           },
-        },
-
-      }
+          sharePage: {
+            create: {
+              ownerUserId: user.id
+            }
+          }
+  
+        }
+      })
     })
-
-    // return await prisma?.workspace.update({
-    //   where: {
-    //     id: spaceId
-    //   },
-    //   data: {
-    //     pages: {
-    //       create: {
-    //         id: blockId,
-    //         parentId,
-    //       }
-    //     }
-    //   }
-    // })
   } catch (error) {
     console.log(error)
     return null
