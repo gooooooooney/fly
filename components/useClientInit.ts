@@ -1,6 +1,7 @@
 "use client";
 import { setPageId } from "@/hooks/store/create-content-slice";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
+import { usePageInit } from "@/hooks/use-page-init";
 import { useEffect } from "react";
 
 const getShortcutIcon = (icon: string) => {
@@ -8,10 +9,7 @@ const getShortcutIcon = (icon: string) => {
 };
 
 export function useClientInit(id: string) {
-  const [emoji, title] = useBoundStore((state) => [
-    state.icon,
-    state.title,
-  ]);
+  const {data} = usePageInit()
 
   useEffect(() => {
     setPageId(id);
@@ -27,17 +25,17 @@ export function useClientInit(id: string) {
       document.getElementsByTagName("head")[0].appendChild(link);
     }
     if (link) {
-      link.href = getShortcutIcon(emoji || "📝");
+      link.href = getShortcutIcon(data?.icon || "📝");
     }
-  }, [emoji]);
+  }, [data?.icon]);
 
   useEffect(() => {
-    if (!title) {
+    if (!data?.title) {
       document.title = "Untitled";
     } else {
-      document.title = title;
+      document.title = data.title;
     }
-  }, [title]);
+  }, [data?.title]);
 }
 
 // export default Helmet;

@@ -8,11 +8,15 @@ import NextLink from "next/link";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
-import { setCover } from "@/hooks/store/create-content-slice";
+import { usePageInit } from "@/hooks/use-page-init";
 export const UnsplashImages = () => {
   const pageId = useUuidPathname()
+  const {data, mutate} = usePageInit()
   const setUrl = (url: string) => {
-    setCover(url)
+    mutate({
+      ...data,
+      cover: url,
+    }, { revalidate: false })
     saveProperty({
       pageId: pageId,
       data: {

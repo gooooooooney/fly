@@ -1,5 +1,4 @@
 import { Icons } from "@/components/icons";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { removePage, saveProperty } from "@/lib/data-source/page";
 // import {
@@ -12,12 +11,12 @@ import { removePage, saveProperty } from "@/lib/data-source/page";
 
 import { FC } from "react";
 import { PageWidthConfig } from "./page-width";
-import { setEditable } from "@/hooks/store/create-content-slice";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useAlertDialog } from "@/components/shared/alert-dialog/use-alert-dialog";
+import { usePageInit } from "@/hooks/use-page-init";
 
 const enum DropdownMenuKeys {
   LOCK = "lock",
@@ -36,18 +35,20 @@ const DropdownDataMenus = {
 };
 
 export const DropdownMenus: FC = () => {
-  const [editable] = useBoundStore((s) => [
-    s.editable,
-  ]);
+  const {data, mutate} = usePageInit()
   const router = useRouter()
   const { openAlert } = useAlertDialog()
   const pageId = useUuidPathname();
+  if (!data) return
   const saveEditable = () => {
-    setEditable(!editable);
+    mutate({
+      ...data,
+      editable: !data.editable
+    })
     saveProperty({
       pageId,
       data: {
-        editable: !editable,
+        editable: !data.editable,
       },
     });
   };
@@ -106,7 +107,7 @@ export const DropdownMenus: FC = () => {
             onClick={saveEditable}
             key={DropdownMenuKeys.LOCK}
           >
-            {editable ? "Lock page" : "Unlock page"}
+            {data.editable ? "Lock page" : "Unlock page"}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleDeletePage} key={DropdownMenuKeys.DELETE_PAGE}>
             Delete page

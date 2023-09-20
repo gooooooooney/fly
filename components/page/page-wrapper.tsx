@@ -15,33 +15,15 @@ export default function PageWrapper({id}: {id: string}) {
   const [pageWidth] = useBoundStore( (state) => [state.pageWidth]);
   useEffect(() => {
     if (data) {
-      const getEditable = () => {
-        if (data.body.isOwner) {
-          return !!data.body?.properties?.editable
-        }
-        if (data.body.sharePage?.enabled && data.body.sharePage?.permission === "EDIT") {
-          return true
-        }
-        return false
-      }
       useBoundStore.setState({
-        blocks: (data?.body?.blocks as any) || [],
-        editable: getEditable(),
-        pageWidth: data.body?.properties?.pageWidth || "default",
-        icon: data.body?.properties?.emoji || "",
-        cover: data.body?.properties?.cover || "",
-        title: data.body?.properties?.title || "",
-        workspaceId: data.body?.workspaceId || "",
+        blocks: (data?.blocks as any) || [],
+        workspaceId: data?.workspaceId || "",
       });
     }
   }, [data]);
 
   useUnmount(() => {
     useBoundStore.setState({
-      icon: "",
-      cover: "",
-      title: "",
-      editable: false,
       blocks: [],
     });
   });

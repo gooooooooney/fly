@@ -24,9 +24,6 @@ function EditorWrapper() {
 
   let beforeBlocks = [] as BlockWithOrder[];
   let isFirst = true
-  const [editable] = useBoundStore((s) => [
-    s.editable,
-  ]);
   const { data } = usePageInit();
 
   const path = useUuidPathname();
@@ -63,7 +60,7 @@ function EditorWrapper() {
   );
   const handleOnEditorContentChange = useCallback(
     (editor: BlockNoteEditor) => {
-      if (editable === false) return;
+      if (data?.editable === false) return;
       console.log("_tiptapEditor", editor._tiptapEditor);
       console.log("topLevelBlocks", editor.topLevelBlocks);
       console.log("json", editor._tiptapEditor.getJSON());
@@ -219,14 +216,14 @@ function EditorWrapper() {
     []
   );
 
-  if (!data?.body?.blocks) return null;
-  beforeBlocks = data?.body?.blocks as any;
+  if (!data?.blocks) return null;
+  beforeBlocks = data?.blocks as any;
 
   return (
     <Editor
-      initialContent={(data?.body?.blocks as any) || []}
+      initialContent={(data?.blocks as any) || []}
       theme={theme as "light" | "dark"}
-      editable={editable}
+      editable={data?.editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
       // onEditorReady={handleEditorReady}

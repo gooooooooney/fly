@@ -22,13 +22,10 @@ export function Share() {
   const setShareEnable = (enabled: boolean) => {
     mutate({
       ...data,
-      body: {
-        ...data!.body,
-        sharePage: {
-          ...data.body!.sharePage,
-          enabled,
-        }
-      },
+      shareSetting: {
+        ...data!.shareSetting,
+        enabled,
+      }
     }, {
       revalidate: false,
     })
@@ -49,7 +46,7 @@ export function Share() {
       </PopoverTrigger>
       <PopoverContent className="w-unit-7xl" >
         {
-          !data.body?.sharePage?.enabled ? (
+          !data.shareSetting?.enabled ? (
             <div className="p-4 flex flex-col">
               <p className="mb-4">
                 Publish a static website of this page. You can allow others to view, duplicate, and remix.

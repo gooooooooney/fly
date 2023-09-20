@@ -6,17 +6,23 @@ import { LIST } from "@/constatns/emojis";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { saveProperty } from "@/lib/data-source/page";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { usePageInit } from "@/hooks/use-page-init";
 
 function EmojiContent() {
     const pageId = useUuidPathname()
+    const { data, mutate } = usePageInit()
+
     const setIcon = (emoji: string) => {
-        setEmoji(emoji)
-        saveProperty({ 
+        mutate({
+            ...data,
+            icon: emoji,
+        }, { revalidate: false })
+        saveProperty({
             pageId,
             data: {
                 emoji
             }
-         })
+        })
     }
 
     return (
@@ -27,7 +33,7 @@ function EmojiContent() {
                         {LIST.map((list, index) => (
                             <div className="flex w-full flex-wrap" key={index}>
                                 {list.map((emoji, index) => (
-                                    <span onClick={() => setIcon(emoji)}  key={index} className=" w-7 h-7 p-1 cursor-pointer text-xl">{emoji}</span>
+                                    <span onClick={() => setIcon(emoji)} key={index} className=" w-7 h-7 p-1 cursor-pointer text-xl">{emoji}</span>
                                 ))}
                             </div>
                         ))}

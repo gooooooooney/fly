@@ -9,18 +9,19 @@ import { useClientInit } from "@/components/useClientInit";
 import { saveProperty } from "@/lib/data-source/page";
 import { EmojiPicker } from "@/components/emoji-picker";
 import { setPropSyncMenus } from "@/lib/menus";
-import { setCover, setIcon } from "@/hooks/store/create-content-slice";
+import { usePageInit } from "@/hooks/use-page-init";
 
 function IconAndCover({ id }: { id: string }) {
-  const { emoji, cover, editable } = useBoundStore((state) => ({
-    emoji: state.icon,
-    cover: state.cover,
-    editable: state.editable
-  }));
+
+  const { data, mutate } = usePageInit()
   useClientInit(id);
 
+  if (!data) return null;
   const setEmoji = (emoji: string) => {
-    setIcon(emoji);
+    mutate({
+      ...data,
+      icon: emoji,
+    }, { revalidate: false })
     setPropSyncMenus({
       id,
       emoji,
@@ -39,7 +40,10 @@ function IconAndCover({ id }: { id: string }) {
   const handleRandomCover = () => {
     const randomCover = covers[Random(0, covers.length - 1)];
 
-    setCover(randomCover.urls.full);
+    mutate({
+      ...data,
+      cover: randomCover.urls.full,
+    }, { revalidate: false })
     saveProperty({
       pageId: id,
       data: {
@@ -49,29 +53,29 @@ function IconAndCover({ id }: { id: string }) {
   };
   return (
     <>
-      { emoji && (
+      {data?.icon && (
         <div
           className={cn(
             "h-18 w-18 relative max-w-full z-10 -mt-[2.2rem] inline-block",
             {
-              "mt-24": !cover,
+              "mt-24": !data?.cover,
             }
           )}
         >
           <EmojiPicker onEmojiSelect={(e) => setEmoji(e)}>
             <Button
-              isDisabled={!editable}
+              isDisabled={!data?.editable}
               variant="light"
               className="text-7xl px-0 h-18 w-18 aria-expanded:opacity-100 !opacity-100"
             >
-              {emoji}
+              {data?.icon}
             </Button>
           </EmojiPicker>
         </div>
       )}
       <section className="my-2">
         <section className="flex group-hover:opacity-100 transition-opacity opacity-0 items-center">
-          {!emoji && (
+          {!data?.icon && (
             <Button
               size="sm"
               variant="light"
@@ -81,7 +85,7 @@ function IconAndCover({ id }: { id: string }) {
               Add icon
             </Button>
           )}
-          {!cover && (
+          {!data?.cover && (
             <Button
               size="sm"
               variant="light"

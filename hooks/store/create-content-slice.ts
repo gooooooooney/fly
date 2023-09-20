@@ -95,18 +95,18 @@ export const setBlocks =  (blocks: BlockNoteEditor['topLevelBlocks']) => useBoun
 export const setPageId =  (pageId: string) => useBoundStore.setState(s => {
   s.pageId = pageId
 })
-export const setEditable =  (editable: boolean) => useBoundStore.setState(s => {
-  s.editable = editable
-})
-export const setCover =  (cover: string) => useBoundStore.setState(s => {
-  s.cover = cover
-})
-export const setTitle =  (title: string) => useBoundStore.setState(s => {
-  s.title = title
-})
-export const setIcon =  (icon: string) => useBoundStore.setState(s => {
-  s.icon = icon
-})
+// export const setEditable =  (editable: boolean) => useBoundStore.setState(s => {
+//   s.editable = editable
+// })
+// export const setCover =  (cover: string) => useBoundStore.setState(s => {
+//   s.cover = cover
+// })
+// export const setTitle =  (title: string) => useBoundStore.setState(s => {
+//   s.title = title
+// })
+// export const setIcon =  (icon: string) => useBoundStore.setState(s => {
+//   s.icon = icon
+// })
 
 export const setMenu = (menu: MenuProp) => {
   useBoundStore.setState(s => {

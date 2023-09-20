@@ -1,24 +1,22 @@
 "use client";
 
-import { setTitle } from "@/hooks/store/create-content-slice";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { usePageInit } from "@/hooks/use-page-init";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { saveProperty } from "@/lib/data-source/page";
 import {  setPropSyncMenus } from "@/lib/menus";
-import { useBlockNote } from "@blocknote/react";
 
 export const PageTitle = ({ id }: { id: string }) => {
-  const { data } = usePageInit();
+  const { data, mutate } = usePageInit();
 
-  // const editor = useBlockNote()
-  const [title, editable] = useBoundStore((state) => [
-    state.title,
-    state.editable
-  ]);
+
   const pageId = useUuidPathname()
   const setPageTitle = (title: string) => {
-    setTitle(title);
+    mutate({
+      ...data,
+      title
+    }, {
+      revalidate: false,
+    })
     setPropSyncMenus({
       id: pageId,
       title
@@ -63,8 +61,8 @@ export const PageTitle = ({ id }: { id: string }) => {
       <input
         placeholder="Untitled"
         type="text"
-        disabled={!editable}
-        value={title}
+        disabled={!data.editable}
+        value={data.title}
         onKeyDown={handleEnter}
         className="outline-none bg-background scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
         onChange={(e) => {

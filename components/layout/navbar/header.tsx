@@ -22,7 +22,7 @@ export default function Header() {
       {/* <SignInModal /> */}
       <Navbar isBordered={false} maxWidth="full">
         {
-          data?.body.isOwner && collapsed && (
+          data?.isOwner && collapsed && (
             <NavbarItem as="div">
               <Button
                 variant="light"
@@ -40,14 +40,15 @@ export default function Header() {
               </Button>
             </NavbarItem>
           )}
-        {data?.body.isOwner && <NavbarContent justify="start">
+        {/* {data?.isOwner &&  */}
+        <NavbarContent justify="start">
           <NavbarItem>
             <Breadcrumbs />
           </NavbarItem>
         </NavbarContent>
-        }
+        {/* } */}
         <NavbarContent justify="end">
-          {data?.body.isOwner && (
+          {data?.isOwner && (
             <>
               <NavbarItem>
                 <Share />

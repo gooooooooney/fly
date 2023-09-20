@@ -7,11 +7,15 @@ import NextLink from "next/link";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { loves, nature, outdoor } from "@/constatns/images/pelexs";
 import { saveProperty } from "@/lib/data-source/page";
-import { setCover } from "@/hooks/store/create-content-slice";
+import { usePageInit } from "@/hooks/use-page-init";
 export const PelexsImages = () => {
-  const [ pageId] = useBoundStore((state) => [ state.pageId])
+  const [pageId] = useBoundStore((state) => [state.pageId])
+  const { data, mutate } = usePageInit()
   const setUrl = (url: string) => {
-    setCover(url)
+    mutate({
+      ...data,
+      cover: url,
+    }, { revalidate: false })
     saveProperty({
       pageId: pageId,
       data: {
