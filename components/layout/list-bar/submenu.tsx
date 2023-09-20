@@ -11,7 +11,7 @@ export function SubMenu({ item }: { item: MenuProp }) {
 
     >
       <Menus className={cn(
-        "p-0 gap-0 pl-[1em] pt-[1px]   dark:divide-default-100/80 bg-content1 max-w-xs overflow-visible "
+        "p-0 gap-0 pl-[1em] pt-[1px]   dark:divide-default-100/80  max-w-xs overflow-visible "
       )}
         itemWithoutChildClassName="pl-[14px]"
         items={item.children} />

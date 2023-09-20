@@ -5,8 +5,9 @@ import { shareSetting } from "@/lib/data-source/page";
 import { cn } from "@/lib/utils";
 import { Button } from "@nextui-org/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
-import { Select, SelectItem, Switch } from "@nextui-org/react";
+import { Select, SelectItem, Switch, useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
+import { useCopyToClipboard } from "react-use";
 import { toast } from "sonner";
 
 const enum Permission {
@@ -17,6 +18,8 @@ const enum Permission {
 export function Share() {
   const pageId = useUuidPathname()
   const { data, mutate } = usePageInit()
+  const {isOpen, onClose, onOpenChange} = useDisclosure()
+  const [state, copyToClipboard] = useCopyToClipboard()
 
   if (!data) return
   const setShareEnable = (enabled: boolean) => {
@@ -40,7 +43,7 @@ export function Share() {
     })
   }
   return (
-    <Popover radius="sm">
+    <Popover isOpen={isOpen} onOpenChange={onOpenChange} radius="sm">
       <PopoverTrigger>
         <Button color="primary" size="sm" radius="sm" variant="solid">Share</Button>
       </PopoverTrigger>
@@ -71,7 +74,7 @@ export function Share() {
                       "inline-flex flex-row-reverse w-full max-w-md items-center",
                       "justify-between cursor-pointer rounded-lg ",
                     ),
-                    wrapper: cn("mx-0")
+                    wrapper: cn("mx-0 cursor-not-allowed")
                   }}>
                   Allow editing
                 </Switch>
@@ -90,12 +93,21 @@ export function Share() {
                     Unpublished
                   </Button>
                   <Button
-                    className="mt-2"
+                    className="mt-2 cursor-copy"
                     size="sm"
                     fullWidth
                     color="primary"
                     radius="sm"
                     variant="solid"
+                    onClick={() => {
+                      onClose()
+                      copyToClipboard(window.location.href)
+                      if (state.error) {
+                        toast.error("Fail to copy link to clipboard")
+                        return
+                      }
+                      toast.success("Copied link to clipboard")
+                    }}
                   >
                     Copy link
                   </Button>
