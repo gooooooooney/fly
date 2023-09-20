@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   if (!session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
-  const requestBody = await request.json() as HttpRequestData<SaveBlocksParams>;
+  const requestBody = await request.json();
 
 
   if (!requestBody.head.pageId) {
