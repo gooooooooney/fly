@@ -25,6 +25,7 @@ import {
   RxCheckbox,
   RxCheck,
   RxCircle,
+  RxCopy,
 } from "react-icons/rx";
 
 export const SunFilledIcon = ({
@@ -134,6 +135,14 @@ export function Github({ className }: { className?: string }) {
   );
 }
 
+function Graphics({ className }: { className?: string }) {
+  return <svg className={className} role="graphics-symbol" viewBox="0 0 16 16" >
+    <circle cx="8" cy="8" r="8" fill="none" stroke="#2383E2">
+      <animate attributeName="r" from="3" to="8" dur="1s" begin="0s" repeatCount="indefinite"></animate>
+      <animate attributeName="opacity" from="1" to="0" dur="1s" begin="0s" repeatCount="indefinite"></animate>
+    </circle><circle cx="8" cy="8" r="3" fill="#2383E2"></circle></svg>
+}
+
 export const Icons = {
   SunFilledIcon,
   MoonFilledIcon,
@@ -155,11 +164,14 @@ export const Icons = {
   Plus: RxPlus,
   Google,
   Github,
+  Graphics,
   Email: RxEnvelopeClosed,
   DotsHorizontal: RxDotsHorizontal,
   DividerHorizontal: RxDividerHorizontal,
   ChatBubble: RxChatBubble,
   Checkbox: RxCheckbox,
   Check: RxCheck,
-  Circle: RxCircle
+  Circle: RxCircle,
+  Copy: RxCopy
+
 };

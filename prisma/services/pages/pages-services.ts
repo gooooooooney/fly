@@ -4,6 +4,7 @@ import { Nullable } from "unsplash-js/dist/helpers/typescript";
 import { getPageMenusWithoutPageId } from "../utils";
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { sortMenus } from "@/lib/menus";
+import { $Enums } from "@prisma/client";
 
 async function getNestedBlocks(id: string) {
   const blocks = await prisma.block.findUnique({
@@ -211,7 +212,7 @@ export async function addNewPage({
           id: userId,
         }
       })
-      
+
       return await tx?.page.create({
         data: {
           id: blockId,
@@ -219,7 +220,7 @@ export async function addNewPage({
           workspaceId: spaceId,
           properties: {
             create: {
-  
+
             },
           },
           sharePage: {
@@ -227,7 +228,7 @@ export async function addNewPage({
               ownerUserId: user.id
             }
           }
-  
+
         }
       })
     })
@@ -516,6 +517,54 @@ export async function removePage({ pageId, spaceId }: { pageId: string, spaceId:
 
   })
 
+}
+
+export async function setSharePageSetting({
+  pageId,
+  enabled,
+  userId,
+  permission,
+  url,
+}: {
+  pageId: string
+  enabled?: boolean
+  userId: string
+  permission?: $Enums.Permission
+  url?: string,
+}) {
+  return await prisma.$transaction(async tx => {
+    try {
+      await tx.sharePage.update({
+        where: {
+          pageId,
+          ownerUserId: userId,
+        },
+        data: {
+          enabled,
+          url,
+          permission
+        }
+      })
+      return true
+    } catch (error) {
+      return false
+    }
+  })
+}
+
+export async function getSharePageSetting({
+  pageId,
+  // userId,
+}: {
+  pageId: string
+  // userId: string
+}) {
+  return prisma.sharePage.findUnique({
+    where: {
+      pageId,
+      // ownerUserId: userId,
+    }
+  })
 }
 
 

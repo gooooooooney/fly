@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
 import {
-  getPageById,
+  getPageById, getSharePageSetting,
 } from "@/prisma/services/pages/pages-services";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { ResolvingMetadata, Metadata } from "next";
@@ -39,19 +39,19 @@ export default async function PageLayout(
   }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/signin");
+
+  const shareSetting = await getSharePageSetting({ pageId: props.params.hash})
+
+
+  if (!shareSetting) {
+    notFound();
   }
-  const wps = await getWorkspacesByUserId(session.user.id);
-  if (wps.length === 0) {
-    redirect("/create-workspace");
-  }
-  const page = await getPageById(props.params.hash);
-  if (!page) {
-    redirect("/");
+  const isShared = shareSetting.ownerUserId !== session?.user.id
+  if (isShared && !shareSetting.enabled) {
+    notFound()
   }
 
   return (
-    <section data-spaceid={page.workspaceId} id="spaceid">{props.children}</section>
+    <section id="spaceid">{props.children}</section>
   );
 }

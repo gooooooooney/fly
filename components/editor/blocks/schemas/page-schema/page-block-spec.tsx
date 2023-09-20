@@ -53,7 +53,7 @@ export const PageBlockSpec = createReactBlockSpec({
 
         return (
             <>
-                <Link as={NextLink}
+                <Link color="foreground" as={NextLink}
                     onMouseEnter={handleMouseEnter}
                     contentEditable={false}
                     href={`/${block.id}`}

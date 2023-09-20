@@ -63,6 +63,7 @@ function EditorWrapper() {
   );
   const handleOnEditorContentChange = useCallback(
     (editor: BlockNoteEditor) => {
+      if (editable === false) return;
       console.log("_tiptapEditor", editor._tiptapEditor);
       console.log("topLevelBlocks", editor.topLevelBlocks);
       console.log("json", editor._tiptapEditor.getJSON());

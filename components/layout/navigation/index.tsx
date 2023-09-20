@@ -54,10 +54,10 @@ export default function Navigation() {
                       href={item.href}
                       className={cn(
                         item.current ? 'bg-muted' : 'hover:bg-muted',
-                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-primary'
+                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold '
                       )}
                     >
-                      <item.icon className="h-6 w-6 shrink-0 text-primary" aria-hidden="true" />
+                      <item.icon className="h-6 w-6 shrink-0 " aria-hidden="true" />
                       {item.name}
                     </a>
                   ) : (
@@ -67,14 +67,14 @@ export default function Navigation() {
                           <Disclosure.Button
                             className={cn(
                               item.current ? 'bg-muted' : 'hover:bg-muted',
-                              'flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold text-primary'
+                              'flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold '
                             )}
                           >
-                            <item.icon className="h-6 w-6 shrink-0 text-primary" aria-hidden="true" />
+                            <item.icon className="h-6 w-6 shrink-0 " aria-hidden="true" />
                             {item.name}
                             <Icons.ChevronRightIcon
                               className={cn(
-                                open ? 'rotate-90 text-primary' : 'text-primary',
+                                open ? 'rotate-90 ' : '',
                                 'ml-auto h-5 w-5 shrink-0'
                               )}
                               aria-hidden="true"
@@ -89,7 +89,7 @@ export default function Navigation() {
                                   href={subItem.href}
                                   className={cn(
                                     subItem.current ? 'bg-muted' : 'hover:bg-muted',
-                                    'block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-primary'
+                                    'block rounded-md py-2 pr-2 pl-9 text-sm leading-6 '
                                   )}
                                 >
                                   {subItem.name}
@@ -108,7 +108,7 @@ export default function Navigation() {
           <li className="-mx-6 mt-auto">
             <a
               href="#"
-              className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-primary hover:bg-muted"
+              className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  hover:bg-muted"
             >
               <img
                 className="h-8 w-8 rounded-full bg-muted"

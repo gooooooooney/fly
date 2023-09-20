@@ -15,9 +15,18 @@ export default function PageWrapper({id}: {id: string}) {
   const [pageWidth] = useBoundStore( (state) => [state.pageWidth]);
   useEffect(() => {
     if (data) {
+      const getEditable = () => {
+        if (data.body.isOwner) {
+          return !!data.body?.properties?.editable
+        }
+        if (data.body.sharePage?.enabled && data.body.sharePage?.permission === "EDIT") {
+          return true
+        }
+        return false
+      }
       useBoundStore.setState({
         blocks: (data?.body?.blocks as any) || [],
-        editable: !!data.body?.properties?.editable,
+        editable: getEditable(),
         pageWidth: data.body?.properties?.pageWidth || "default",
         icon: data.body?.properties?.emoji || "",
         cover: data.body?.properties?.cover || "",

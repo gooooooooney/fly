@@ -51,7 +51,7 @@ let count = 0;
       initialContent: initialContent.length === 0 ? undefined : initialContent,
       domAttributes: {
         blockContainer: {
-          class: "!bg-background text-primary",
+          class: "!bg-background text-default-foreground",
         },
         editor: {
           class: "!bg-background !ps-0 !pe-0",

@@ -1,6 +1,7 @@
 import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types";
 import { fetcher } from "../utils";
 import { RemoveResponse } from "@/app/api/page/remove/route";
+import { $Enums } from "@prisma/client";
 
 
 
@@ -84,6 +85,33 @@ export function removePage({
       }
     }).catch(err => {
       reject(false)
+    })
+  })
+}
+
+
+export function shareSetting({
+  pageId,
+  enabled,
+  url,
+  permission
+}: {
+  pageId: string,
+  enabled?: boolean,
+  url?: string,
+  permission?: $Enums.Permission
+}) {
+  return fetcher<{body: boolean}>("/api/page/share/setting", {
+    method: "POST",
+    body: JSON.stringify({
+      head: {
+        pageId
+      },
+      body: {
+        enabled,
+        url,
+        permission
+      }
     })
   })
 }

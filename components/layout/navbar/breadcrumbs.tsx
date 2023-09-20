@@ -106,6 +106,7 @@ export function Breadcrumbs() {
             ) : (
               <>
                 <Link
+                  color={path.id === pageId ? "foreground" : "primary"} 
                   isDisabled={path.id === pageId}
                   as={NextLink}
                   href={`/${path.id}`}

@@ -1,8 +1,13 @@
+import { Icons } from "@/components/icons";
 import { usePageInit } from "@/hooks/use-page-init";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { shareSetting } from "@/lib/data-source/page";
+import { cn } from "@/lib/utils";
 import { Button } from "@nextui-org/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
-import { Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem, Switch } from "@nextui-org/react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const enum Permission {
   READ = "READ",
@@ -10,40 +15,95 @@ const enum Permission {
 }
 
 export function Share() {
-  const { data } = usePageInit()
-  const [value, setValue] = useState(new Set([]))
-  if (!data) return
+  const pageId = useUuidPathname()
+  const { data, mutate } = usePageInit()
 
+  if (!data) return
+  const setShareEnable = (enabled: boolean) => {
+    mutate({
+      ...data,
+      body: {
+        ...data!.body,
+        sharePage: {
+          ...data.body!.sharePage,
+          enabled,
+        }
+      },
+    }, {
+      revalidate: false,
+    })
+    shareSetting({
+      pageId,
+      enabled,
+      url: window.location.href
+    }).then(res => {
+      if (!res.body) {
+        toast.error("Fail")
+      }
+    })
+  }
   return (
-    <Popover>
+    <Popover radius="sm">
       <PopoverTrigger>
-        <Button variant="shadow">Share</Button>
+        <Button color="primary" size="sm" radius="sm" variant="solid">Share</Button>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent className="w-unit-7xl" >
         {
-          !!data.body?.sharePage?.enabled ? (
-            <div>
-              <Button fullWidth>
-                Share page
+          !data.body?.sharePage?.enabled ? (
+            <div className="p-4 flex flex-col">
+              <p className="mb-4">
+                Publish a static website of this page. You can allow others to view, duplicate, and remix.
+              </p>
+              <Button size="sm" color="primary" radius="sm" variant="solid" onClick={() => {
+                setShareEnable(true)
+              }} fullWidth>
+                Publish
               </Button>
             </div>
           ) : (
-            <div>
-              <Select
-                placeholder="Select permission"
-                selectedKeys={value}
-                onSelectionChange={(keys: any) => {
-                  const permission = keys[0]
-                  setValue(keys)
-                }}
-                defaultSelectedKeys={[data.body!.sharePage!.permission!]}>
-                <SelectItem key={Permission.READ} value={Permission.READ}>
-                  Read
-                </SelectItem>
-                <SelectItem key={Permission.EDIT} value={Permission.EDIT}>
-                  Read
-                </SelectItem>
-              </Select>
+            <div className="p-4 w-full ">
+              <div className="flex flex-col gap-2 items-center">
+                <p className="text-primary my-2 flex  items-center">
+                  <Icons.Graphics className="w-4 h-4" />
+                  This page is live on the web</p>
+                <Switch
+                  size="sm"
+                  isDisabled
+                  classNames={{
+                    base: cn(
+                      "inline-flex flex-row-reverse w-full max-w-md items-center",
+                      "justify-between cursor-pointer rounded-lg ",
+                    ),
+                    wrapper: cn("mx-0")
+                  }}>
+                  Allow editing
+                </Switch>
+                <div className="flex w-full gap-2 justify-between items-center">
+                  <Button
+                    onClick={() => {
+                      setShareEnable(false)
+                    }}
+                    fullWidth
+                    className="mt-2"
+                    size="sm"
+                    color="default"
+                    radius="sm"
+                    variant="solid"
+                  >
+                    Unpublished
+                  </Button>
+                  <Button
+                    className="mt-2"
+                    size="sm"
+                    fullWidth
+                    color="primary"
+                    radius="sm"
+                    variant="solid"
+                  >
+                    Copy link
+                  </Button>
+                </div>
+              </div>
             </div>
           )
         }

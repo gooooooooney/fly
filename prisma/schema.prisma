@@ -101,7 +101,7 @@ model SharePage {
   passwordHash String?
   permission   Permission @default(READ)
   url          String?
-  ownerUserId  String // 存储分享者的用户ID
+  ownerUserId  String       // 存储分享者的用户ID
   Page         Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
 }
 

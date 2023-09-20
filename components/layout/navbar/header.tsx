@@ -8,63 +8,66 @@ import { Session } from "next-auth";
 import { Breadcrumbs } from "./breadcrumbs";
 import { DropdownMenus } from "./dropdown";
 import { setCollapsed } from "@/hooks/store/create-layout-slice";
+import { Share } from "./share";
+import { usePageInit } from "@/hooks/use-page-init";
 
-export default function Header({ session }: { session: Session | null }) {
-  const [collapsed] = useBoundStore( (state) => [
+export default function Header() {
+  const [collapsed] = useBoundStore((state) => [
     state.collapsed,
   ])!;
   // const { SignInModal, setShowSignInModal } = useSignInModal();
-
+  const { data } = usePageInit()
   return (
     <>
       {/* <SignInModal /> */}
       <Navbar isBordered={false} maxWidth="full">
-        {collapsed && (
-          <NavbarItem as="div">
-            <Button
-              variant="light"
-              onClick={() => {
-                setCollapsed(!collapsed);
-              }}
-              isIconOnly
-            >
-              <Icons.DoubleArrowLeftIcon
-                className={cn(
-                  "transition-transform",
-                  collapsed ? "transform rotate-180" : "transform rotate-0"
-                )}
-              />
-            </Button>
-          </NavbarItem>
-        )}
-        <NavbarContent justify="start">
+        {
+          data?.body.isOwner && collapsed && (
+            <NavbarItem as="div">
+              <Button
+                variant="light"
+                onClick={() => {
+                  setCollapsed(!collapsed);
+                }}
+                isIconOnly
+              >
+                <Icons.DoubleArrowLeftIcon
+                  className={cn(
+                    "transition-transform",
+                    collapsed ? "transform rotate-180" : "transform rotate-0"
+                  )}
+                />
+              </Button>
+            </NavbarItem>
+          )}
+        {data?.body.isOwner && <NavbarContent justify="start">
           <NavbarItem>
             <Breadcrumbs />
           </NavbarItem>
         </NavbarContent>
+        }
         <NavbarContent justify="end">
-          <NavbarItem>
-            <DropdownMenus />
-          </NavbarItem>
+          {data?.body.isOwner && (
+            <>
+              <NavbarItem>
+                <Share />
+              </NavbarItem>
+
+              <NavbarItem>
+
+                <DropdownMenus />
+              </NavbarItem>
+            </>
+          )
+          }
           <NavbarItem className="mr-2">
             <ThemeSwitch />
           </NavbarItem>
-          {/* <NavbarItem className="mr-8">
-            {session ? (
-              <UserDropdown session={session} />
-            ) : (
-              <Button
-              
-                variant="light"
-                onClick={() => {
-                  setShowSignInModal(true);
-                }}
-              >
-                sign in
-              </Button>
-            )}
-          </NavbarItem> */}
         </NavbarContent>
+
+
+
+
       </Navbar>
     </>
   );
