@@ -45,6 +45,11 @@ export async function POST(request: Request) {
             create: {
               
             }
+          },
+          sharePage: {
+            create: {
+              ownerUserId: session.user.id,
+            }
           }
         },
 

@@ -11,7 +11,7 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="h-full flex justify-center items-center">
+    <section className="h-full mt-20 flex justify-center items-center">
       {children}
     </section>
   );
