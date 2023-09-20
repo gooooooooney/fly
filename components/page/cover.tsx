@@ -3,29 +3,44 @@
 
 import { Image } from "@nextui-org/image";
 import NextImage from "next/image";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
 import { Button } from "@nextui-org/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import ImagePicker from "./icon-cover/image-picker";
 import { Icons } from "../icons";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Slider } from "@/components/ui/slider"
+import { saveProperty } from "@/lib/data-source/page";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { usePageInit } from "@/hooks/use-page-init";
 
 function Cover() {
+  console.log("render cover")
+  const { data, mutate } = usePageInit()
+  const pageId = useUuidPathname()
 
-  const [cover, setCover] = useStore(useBoundStore, (state) => [state.cover, state.setCover])
 
   const [originalY, setOriginalY] = useState(50)
   const [y, setY] = useState(50)
 
   const [showSlider, setShowSlider] = useState(false)
 
+  const removeCover = () => {
+    mutate({
+      ...data,
+      cover: "",
+    }, { revalidate: false })
+    saveProperty({
+      pageId,
+      data: {
+        cover: ""
+      }
+    })
+  }
 
   return (
     <>
       {
-        cover && (
+        data?.cover && (
           <section className="w-full relative group">
             <Image
               classNames={{
@@ -42,11 +57,11 @@ function Cover() {
               sizes="100vw"
               isZoomed
               radius="none"
-              src={cover}
+              src={data?.cover}
               alt="NextUI hero Image"
             />
             {
-              !showSlider && (
+              data?.editable && !showSlider && (
                 <div className="opacity-0 z-11 ml-[calc(96px+env(safe-area-inset-left))] mr-[calc(96px+env(safe-area-inset-right))] group-hover:opacity-100 absolute right-2 bottom-2 transition-opacity">
                   <Popover placement="left">
                     <PopoverTrigger >
@@ -58,14 +73,14 @@ function Cover() {
                   </Popover>
 
                   <Button onClick={() => setShowSlider(true)} variant="shadow" className="mx-2 z-[11]" size="sm">Reposition</Button>
-                  <Button onClick={() => setCover("")} className="z-[11]" isIconOnly variant="shadow" size="sm">
+                  <Button onClick={() => removeCover()} className="z-[11]" isIconOnly variant="shadow" size="sm">
                     <Icons.TrashIcon />
                   </Button>
                 </div>
               )
             }
             {
-              showSlider && (
+              data?.editable && showSlider && (
                 <>
                   <div className="absolute opacity-50 w-1/2 z-20 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                     <Slider value={[y]} onValueChange={([v]) => setY(v)} max={100} step={1} min={0} />
@@ -91,4 +106,4 @@ function Cover() {
   )
 }
 
-export default Cover
+export default memo(Cover)

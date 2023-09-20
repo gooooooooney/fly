@@ -12,13 +12,13 @@ export default function PageTransitionLayout({
   const pathname = usePathname();
 
   return (
-    <motion.div
+    <motion.section
       key={pathname}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity:1, y:0 }}
       exit={{ opacity: 0, y: 20 }}
     >
       {children}
-    </motion.div>
+    </motion.section>
   );
 }

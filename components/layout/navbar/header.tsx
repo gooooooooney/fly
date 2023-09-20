@@ -1,44 +1,75 @@
-"use client"
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Link,
-  Button
-} from "@nextui-org/react";
+"use client";
+import { Navbar, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
 import { ThemeSwitch } from "./theme-switch";
-// import useStore from "@/hooks/use-store";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { cn } from "@/lib/utils";
-import { useStore } from "zustand";
 import { Icons } from "@/components/icons";
+import { Session } from "next-auth";
+import { Breadcrumbs } from "./breadcrumbs";
+import { DropdownMenus } from "./dropdown";
+import { setCollapsed } from "@/hooks/store/create-layout-slice";
+import { Share } from "./share";
+import { usePageInit } from "@/hooks/use-page-init";
 
 export default function Header() {
-  const [collapsed, setCollapsed] = useStore(useBoundStore, (state) => [state.collapsed, state.setCollapsed])!
-
+  const [collapsed] = useBoundStore((state) => [
+    state.collapsed,
+  ])!;
+  // const { SignInModal, setShowSignInModal } = useSignInModal();
+  const { data } = usePageInit()
   return (
-    <Navbar isBordered={false}  maxWidth="full">
-      <NavbarContent justify="start">
-        <NavbarItem >
-          <Button
-            variant="light"
-            onClick={() => {
-              setCollapsed(!collapsed)
-            }}
-            isIconOnly>
-            <Icons.DoubleArrowLeftIcon className={cn(
-              "transition-transform",
-              collapsed ? "transform rotate-180" : "transform rotate-0"
-            )} />
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="mr-8">
-          <ThemeSwitch />
-        </NavbarItem>
-      </NavbarContent>
-    </Navbar>
-  )
+    <>
+      {/* <SignInModal /> */}
+      <Navbar isBordered={false} maxWidth="full">
+        {
+          data?.isOwner && collapsed && (
+            <NavbarItem as="div">
+              <Button
+                variant="light"
+                onClick={() => {
+                  setCollapsed(!collapsed);
+                }}
+                isIconOnly
+              >
+                <Icons.DoubleArrowLeftIcon
+                  className={cn(
+                    "transition-transform",
+                    collapsed ? "transform rotate-180" : "transform rotate-0"
+                  )}
+                />
+              </Button>
+            </NavbarItem>
+          )}
+        {/* {data?.isOwner &&  */}
+        <NavbarContent justify="start">
+          <NavbarItem>
+            <Breadcrumbs />
+          </NavbarItem>
+        </NavbarContent>
+        {/* } */}
+        <NavbarContent justify="end">
+          {data?.isOwner && (
+            <>
+              <NavbarItem>
+                <Share />
+              </NavbarItem>
+
+              <NavbarItem>
+
+                <DropdownMenus />
+              </NavbarItem>
+            </>
+          )
+          }
+          <NavbarItem className="mr-2">
+            <ThemeSwitch />
+          </NavbarItem>
+        </NavbarContent>
+
+
+
+
+      </Navbar>
+    </>
+  );
 }

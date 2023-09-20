@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
   images: {
     remotePatterns: [
       {
@@ -59,5 +60,6 @@ const nextConfig = {
     };
   },
 }
-
+console.log(process.env.POSTGRES_URL);
+console.log(process.env.NODE_ENV);
 module.exports = nextConfig

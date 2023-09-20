@@ -1,35 +1,51 @@
-"use client"
+"use client";
 
-
-import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
-
-
+import { usePageInit } from "@/hooks/use-page-init";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { saveProperty } from "@/lib/data-source/page";
+import {  setPropSyncMenus } from "@/lib/menus";
 
 export const PageTitle = ({ id }: { id: string }) => {
-  const [title, setTitle, editable, editor] = useStore(useBoundStore, (state) => [
-    state.title,
-    state.setTitle,
-    state.editable,
-    state.editor,
-  ])
+  const { data, mutate } = usePageInit();
+
+
+  const pageId = useUuidPathname()
+  const setPageTitle = (title: string) => {
+    mutate({
+      ...data,
+      title
+    }, {
+      revalidate: false,
+    })
+    setPropSyncMenus({
+      id: pageId,
+      title
+    })
+    saveProperty({
+      pageId,
+      data: {
+        title
+      }
+    })
+  }
   const handleEnter = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault()
-      editor?.insertBlocks(
-        [
-          {
-            type: "paragraph"
-          }
-        ],
-        editor?.topLevelBlocks[0]
-      )
-      editor?.focus()
+      
+      
+      // editor?.insertBlocks(
+      //   [
+      //     {
+      //       type: "paragraph",
+      //     },
+      //   ],
+      //   editor?.topLevelBlocks[0]
+      // );
+      // editor?.focus();
     }
-  }
+  };
+  if (!data) return null;
   return (
-    <div className="my-4"
-    >
+    <div className="my-4">
       {/* <h1
         suppressContentEditableWarning={true}
         onKeyDown={handleEnter}
@@ -42,14 +58,17 @@ export const PageTitle = ({ id }: { id: string }) => {
       >
         {title}
       </h1> */}
-      <input placeholder="Untitled"
+      <input
+        placeholder="Untitled"
         type="text"
-        value={title}
+        disabled={!data.editable}
+        value={data.title}
         onKeyDown={handleEnter}
         className="outline-none bg-background scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
         onChange={(e) => {
-          setTitle(e.target.value)
-        }} />
+          setPageTitle(e.currentTarget.value)
+        }}
+      />
     </div>
-  )
-}
+  );
+};

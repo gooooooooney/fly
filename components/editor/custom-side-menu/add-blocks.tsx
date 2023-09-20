@@ -1,8 +1,8 @@
 import { Icons } from "@/components/icons"
 import { SideMenuProps } from "@blocknote/react"
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown"
-import { CustomBlockSchema } from "../block-schema"
 import { Button } from "@nextui-org/button"
+import { CustomBlockSchema } from "../blocks/custom-block-schema"
 
 export function AddBlocks(props: SideMenuProps<CustomBlockSchema>) {
 

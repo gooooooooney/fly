@@ -6,49 +6,52 @@ import {
   SideMenuPositioner,
   SlashMenuPositioner,
   getDefaultReactSlashMenuItems,
+  // getDefaultReactSlashMenuItems,
   useBlockNote,
 } from "@blocknote/react";
 import "./index.css";
 import "@blocknote/core/style.css";
-import { useStore } from "zustand";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
 import FormattingToolbar from "./formatting-toolbar";
-import { useEffect } from "react";
-import { insertPageItem } from "./slashmenu";
-import { blockSchema } from "./block-schema";
-
+import { memo, useEffect } from "react";
 import { CustomSideMenu } from "./custom-side-menu";
-import { CustomSlashMenu } from "./custom-slash-menu";
 import { useTheme } from "next-themes";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
+// import { getReactSlashMenuItems } from "./slash-menu";
+import { CustomBlockSchema } from "./blocks/custom-block-schema";
+import { getReactSlashMenuItems, slashMenuItems } from "./slash-menu";
 interface EditorProps {
   editable: boolean;
+  initialContent: BlockNoteEditor["topLevelBlocks"];
   theme: "light" | "dark";
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   onEditorContentChange?: (editor: BlockNoteEditor) => void;
   onTextCursorPositionChange?: (editor: BlockNoteEditor) => void;
 }
-
-export default function Editor({
+let count = 0;
+ function Editor({
   editable,
+  initialContent,
   onEditorReady,
   onEditorContentChange,
   onTextCursorPositionChange,
 }: EditorProps) {
-  const initialContent = useStore(useBoundStore, (state) => state.blocks);
-  const {theme} = useTheme()
+  console.log("render editor", count++);
+  // so many rerenders
+  // const setEditor = useBoundStore.getState().setEditor
+  const { theme } = useTheme();
   const editor = useBlockNote(
     {
       editable,
-      blockSchema: blockSchema,
+      blockSchema: CustomBlockSchema,
       slashMenuItems: [
-        ...getDefaultReactSlashMenuItems(blockSchema),
-        
-        insertPageItem,
+        // ...getReactSlashMenuItems(),
+        ...getDefaultReactSlashMenuItems(CustomBlockSchema),
+        ...slashMenuItems,
       ],
-      initialContent: initialContent.length > 0 ? initialContent : undefined,
+      initialContent: initialContent.length === 0 ? undefined : initialContent,
       domAttributes: {
         blockContainer: {
-          class: "!bg-background text-primary",
+          class: "!bg-background text-default-foreground",
         },
         editor: {
           class: "!bg-background !ps-0 !pe-0",
@@ -60,7 +63,7 @@ export default function Editor({
       onEditorContentChange,
       onTextCursorPositionChange,
     },
-    [ initialContent]
+    [initialContent]
   );
 
   useEffect(() => {
@@ -71,7 +74,11 @@ export default function Editor({
 
   return (
     <div className="flex-grow flex flex-col">
-      <BlockNoteView className="w-full"  theme={theme as "light" | "dark"}  editor={editor}>
+      <BlockNoteView
+        className="w-full"
+        theme={theme as "light" | "dark"}
+        editor={editor}
+      >
         <FormattingToolbarPositioner
           editor={editor}
           formattingToolbar={FormattingToolbar}
@@ -118,3 +125,5 @@ export default function Editor({
     </div>
   );
 }
+
+export default memo(Editor)

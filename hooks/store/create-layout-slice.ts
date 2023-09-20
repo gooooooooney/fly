@@ -1,15 +1,33 @@
+import { PageWidth } from "@/types"
 import { StateCreator } from "zustand"
+import { useBoundStore } from "./useBoundStore"
 
 export interface LayoutSlice {
   collapsed: boolean
-  setCollapsed: (bol: boolean) => void
+  pageWidth: PageWidth
+
+
+  workspaceId: string
 }
 export const createLayoutSlice: StateCreator<
   LayoutSlice,
   [],
   [],
   LayoutSlice
-  > = (set) => ({
-    collapsed: false,
-    setCollapsed: (bol: boolean) => set((state) => ({ ...state, collapsed: bol })),
-  })
+> = (set) => ({
+  pageWidth: "default",
+  workspaceId: "",
+  collapsed: false,
+})
+
+export const setPageWidth = (pageWidth: PageWidth) => useBoundStore.setState(s => {
+  s.pageWidth = pageWidth
+})
+export const setCollapsed = (bol: boolean) => useBoundStore.setState(s => {
+  s.collapsed = bol
+}
+)
+export const setWorkspaceId = (workspaceId: string) => useBoundStore.setState(s => {
+  s.workspaceId = workspaceId
+}
+)

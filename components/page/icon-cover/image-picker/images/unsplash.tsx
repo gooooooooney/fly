@@ -6,10 +6,24 @@ import { Link } from "@nextui-org/link";
 import NextLink from "next/link";
 
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
+import { saveProperty } from "@/lib/data-source/page";
+import { useUuidPathname } from "@/hooks/useUuidPathname";
+import { usePageInit } from "@/hooks/use-page-init";
 export const UnsplashImages = () => {
-  const setCover = useStore(useBoundStore, (state) => state.setCover)
-
+  const pageId = useUuidPathname()
+  const {data, mutate} = usePageInit()
+  const setUrl = (url: string) => {
+    mutate({
+      ...data,
+      cover: url,
+    }, { revalidate: false })
+    saveProperty({
+      pageId: pageId,
+      data: {
+        cover: url
+      }
+    })
+  }
   return (
     <>
       <Link isBlock href="https://unsplash.com/s/photos/pure-color" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>
@@ -21,7 +35,7 @@ export const UnsplashImages = () => {
         {pureColors.map((item, index) => (
           <div className="w-1/4 p-[3px]" key={item.id}>
             <Image
-              onClick={() => setCover(item.urls.raw)}
+              onClick={() => setUrl(item.urls.raw)}
               classNames={{
                 wrapper: "!max-w-full",
               }}
@@ -51,7 +65,7 @@ export const UnsplashImages = () => {
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              onClick={() => setCover(item.urls.raw)}
+              onClick={() => setUrl(item.urls.raw)}
               as={NextImage}
               width={0}
               className="w-full cursor-pointer h-16"
@@ -79,7 +93,7 @@ export const UnsplashImages = () => {
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              onClick={() => setCover(item.urls.raw)}
+              onClick={() => setUrl(item.urls.raw)}
               as={NextImage}
               width={0}
               className="w-full cursor-pointer h-16"

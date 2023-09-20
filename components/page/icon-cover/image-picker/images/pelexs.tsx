@@ -5,10 +5,24 @@ import { Link } from "@nextui-org/link";
 import NextLink from "next/link";
 
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { useStore } from "zustand";
 import { loves, nature, outdoor } from "@/constatns/images/pelexs";
+import { saveProperty } from "@/lib/data-source/page";
+import { usePageInit } from "@/hooks/use-page-init";
 export const PelexsImages = () => {
-  const [setCover] = useStore(useBoundStore, (state) => [state.setCover, state.pageId])
+  const [pageId] = useBoundStore((state) => [state.pageId])
+  const { data, mutate } = usePageInit()
+  const setUrl = (url: string) => {
+    mutate({
+      ...data,
+      cover: url,
+    }, { revalidate: false })
+    saveProperty({
+      pageId: pageId,
+      data: {
+        cover: url
+      }
+    })
+  }
   return (
     <>
       <Link isBlock href="https://www.pexels.com/search/nature" className="my-2 px-3 text-[#37352fa6] dark:text-[#ffffff71]" target="_blank" underline="none" as={NextLink}>
@@ -20,7 +34,7 @@ export const PelexsImages = () => {
         {nature.map((item, index) => (
           <div className="w-1/4 p-[3px]" key={item.id}>
             <Image
-              onClick={() => setCover(item.src.original)}
+              onClick={() => setUrl(item.src.original)}
               classNames={{
                 wrapper: "!max-w-full",
               }}
@@ -50,7 +64,7 @@ export const PelexsImages = () => {
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              onClick={() => setCover(item.src.original)}
+              onClick={() => setUrl(item.src.original)}
               as={NextImage}
               width={0}
               className="w-full cursor-pointer h-16"
@@ -78,7 +92,7 @@ export const PelexsImages = () => {
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              onClick={() => setCover(item.src.original)}
+              onClick={() => setUrl(item.src.original)}
               as={NextImage}
               width={0}
               className="w-full cursor-pointer h-16"
