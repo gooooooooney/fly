@@ -13,7 +13,7 @@ export type CustomBlockSpecs = {
   divider: DividerBlockSpec
   callout: CalloutBlockSpec
   todo: TodoBlockSpec
-  custom: CustomSchema
+  // custom: CustomSchema
   codeBlock: CodeBlockSpec
 }
 
@@ -34,7 +34,7 @@ export const CustomBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
   divider: DividerBlockSpec,
   callout: CalloutBlockSpec,
   todo: TodoBlockSpec,
-  custom: CustomSchema,
+  // custom: CustomSchema,
   codeBlock: CodeBlockSpec
 }
 

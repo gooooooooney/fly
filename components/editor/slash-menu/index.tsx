@@ -101,7 +101,7 @@ export function getReactSlashMenuItems(
     SlashMenuCalloutItem,
     SlashMenuTodoItem,
     SlashMenuCodeBlockItem,
-    SlashMenuCustomItem,
+    // SlashMenuCustomItem,
   ];
 }
 
@@ -111,5 +111,5 @@ export const slashMenuItems = [
   SlashMenuCalloutItem,
   SlashMenuTodoItem,
   SlashMenuCodeBlockItem,
-  SlashMenuCustomItem,
+  // SlashMenuCustomItem,
 ]

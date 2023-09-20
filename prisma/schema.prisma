@@ -150,6 +150,7 @@ enum Type {
   divider
   callout
   todo
+  codeBlock
 }
 
 enum Role {
