@@ -6,19 +6,11 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import Image from "next/image";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import { Icons } from "@/components/icons";
 
 import React from "react";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
 const GooneyFlyLogo: React.FC = () => {
   return (
