@@ -1,7 +1,7 @@
 import { Icons } from "@/components/icons";
 import { AddBlockButton, DragHandle, SideMenuProps } from "@blocknote/react";
-import { CustomBlockSchema } from "../block-schema";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown";
+import { CustomBlockSchema } from "../blocks/custom-block-schema";
 // import { DragHandle } from "./drag-handle";
 // import { AddBlocks } from "./add-blocks";
 
