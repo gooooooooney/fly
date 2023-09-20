@@ -8,7 +8,7 @@ export const SlashMenuCustomItem: ReactSlashMenuItem<CustomBlockSchema> = {
   execute: (editor) => {
     editor.insertBlocks([
       {
-        type: "custom",
+        // type: "custom",
       }
     ],
     editor.getTextCursorPosition().block,
