@@ -68,7 +68,7 @@ function EditorWrapper() {
       if (!isFirst) {
         setTimeout(() => {
           isFirst = false;
-        })
+        }, 1000)
         return;
       }
       setBlocks(editor.topLevelBlocks);

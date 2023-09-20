@@ -13,6 +13,7 @@ import { Menus } from "./menu";
 import { findCurrentPagePath } from "@/lib/data-source/menus";
 import { findMenu, mergeMenus } from "@/lib/menus";
 import { setCollapsed } from "@/hooks/store/create-layout-slice";
+import { useMount } from "react-use";
 
 
 
@@ -40,7 +41,7 @@ export function ListBar(props: { email: string }) {
     });
   };
 
-  useEffect(() => {
+  useMount(() => {
     // 避免当进入子页面时，刷新页面导致breadcrumbs不正确
     Promise.all([getSpaceInfo(), findCurrentPagePath(pageId)]).then(
       ([res, currentPagePath]) => {
@@ -58,15 +59,7 @@ export function ListBar(props: { email: string }) {
         }
       }
     );
-    // getSpaceInfo().then(res => {
-    //   if (res) {
-    //     setActSpace(res?.activeWorkspace);
-    //     setItems(
-    //       res.activeWorkspace?.pages ?? []
-    //     );
-    //   }
-    // })
-  }, []);
+  });
   useEffect(() => {
     
     // setMenus(getItems(items));
