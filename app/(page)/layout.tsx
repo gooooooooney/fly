@@ -1,14 +1,10 @@
 import Nav from "@/components/layout/navbar/nav";
 import PageTransitionLayout from "@/components/page-transition-layout";
 import { getServerSession } from "next-auth";
-import { redirect, notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
-import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { ListBar } from "@/components/layout/list-bar";
 import Script from "next/script";
-import TOC from "@/components/toc";
-import { getSharePageSetting } from "@/prisma/services/pages/pages-services";
 
 export default async function PageLayout(
   props: PropsWithChildren & {
