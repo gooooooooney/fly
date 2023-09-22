@@ -208,7 +208,7 @@ export async function addNewPage({
   userId: string
 }) {
   try {
-    return prisma.$transaction(async tx => {
+    return await prisma.$transaction(async tx => {
       const user = await tx.user.findUniqueOrThrow({
         where: {
           id: userId,
