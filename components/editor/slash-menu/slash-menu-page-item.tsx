@@ -1,8 +1,7 @@
 import { ReactSlashMenuItem } from "@blocknote/react";
 import { Icons } from "../../icons";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
-import { addNewPage, save, saveBlocks } from "@/lib/data-source/page";
-import OutHook from "../../OutHook";
+import { addNewPage } from "@/lib/data-source/page";
 import { MenuProp, setMenus } from "@/hooks/store/create-content-slice";
 import cloneDeep from "lodash/cloneDeep";
 import { CustomBlockSchema } from "../blocks/custom-block-schema";

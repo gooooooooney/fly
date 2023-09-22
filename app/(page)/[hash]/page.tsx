@@ -1,5 +1,3 @@
-import { OutHookConfigurator } from "@/components/OutHook";
-// import Helmet from "@/components/helmet";
 import Cover from "@/components/page/cover";
 import TOC from "@/components/toc";
 import PageWrapper from "@/components/page/page-wrapper";
