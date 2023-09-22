@@ -27,6 +27,14 @@ export async function POST(request: Request) {
     parentId: head.pageId!,
     userId: session.user.id,
   })
+  if (!page) {
+    return NextResponse.json({
+      head: {
+        
+      },
+      body: { error: "Something went wrong" }
+    })
+  }
   return NextResponse.json({
     head: {},
     body: page

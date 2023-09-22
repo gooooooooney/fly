@@ -5,6 +5,7 @@ import { addNewPage } from "@/lib/data-source/page";
 import { MenuProp, setMenus } from "@/hooks/store/create-content-slice";
 import cloneDeep from "lodash/cloneDeep";
 import { CustomBlockSchema } from "../blocks/custom-block-schema";
+import { toast } from "sonner";
 
 export function insertOrUpdateBlock(editor: BlockNoteEditor, block: any) {
   const currentBlock = editor.getTextCursorPosition().block;
@@ -77,6 +78,11 @@ export const SlashMenuPageItem: ReactSlashMenuItem<CustomBlockSchema> = {
       pageId,
       blockId: childBlock.id,
       spaceId: useBoundStore.getState().workspaceId,
+    }).then((res: any) => {
+      if (res.body.error) {
+        toast.error(res.body.error)
+        editor.removeBlocks([childBlock])
+      }
     });
   },
   aliases: ["page"],
