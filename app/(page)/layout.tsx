@@ -19,12 +19,7 @@ export default async function PageLayout(
       <Script src="https://unpkg.com/shiki"></Script>
       <section className="flex h-screen">
 
-        {
-          session?.user.id ? (
-            <ListBar email={session.user.email || ""} />
-          )
-            : null
-        }
+        <ListBar email={session?.user.email || ""} />
 
         <section className="flex flex-col w-full">
           <Nav />
