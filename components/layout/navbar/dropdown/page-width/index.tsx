@@ -76,7 +76,7 @@ export const PageWidthConfig = () => {
       value={pageWidth}
       onValueChange={(v) => savePageWidth(v as any)}
       orientation="horizontal"
-      className="flex py-2"
+      className="flex py-2 "
     >
       <CustomRadio value="default">
         <PageCard px="px-5" title={<span>Defalut</span>} />
