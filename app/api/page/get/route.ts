@@ -16,6 +16,10 @@ export async function GET(request: Request) {
   }
   const res = await getPageById(pageId!)
 
+  if (!res) {
+    return new NextResponse("Not Found", { status: 404 });
+  }
+
   const isOwner = res?.sharePage?.ownerUserId === session?.user.id
   return NextResponse.json({
     head: {},
