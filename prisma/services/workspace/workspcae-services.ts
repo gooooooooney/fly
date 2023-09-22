@@ -83,6 +83,9 @@ export async function getWorkspaces(userId: string, pageId: string) {
       activeWorkspace: workspaces.find(space => space.isActive)!,
       workspaces,
     }
+  }, {
+    maxWait: 5000, // default: 2000
+    timeout: 20000, // default: 5000
   })
 }
 

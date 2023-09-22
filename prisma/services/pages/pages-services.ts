@@ -33,7 +33,7 @@ async function getNestedBlocks(id: string) {
 
 export async function getPageById(pageId: string) {
   return await prisma.$transaction(async tx => {
-    const page = await tx.page.findUnique({
+    const page = await tx.page.findUniqueOrThrow({
       where: {
         id: pageId,
       },
@@ -100,6 +100,9 @@ export async function getPageById(pageId: string) {
         children: b?.children,
       }))
     }
+  }, {
+    maxWait: 5000, // default: 2000
+    timeout: 20000, // default: 5000
   })
 }
 
@@ -233,6 +236,9 @@ export async function addNewPage({
 
         }
       })
+    }, {
+      maxWait: 5000, // default: 2000
+      timeout: 20000, // default: 5000
     })
   } catch (error) {
     console.log(error)
