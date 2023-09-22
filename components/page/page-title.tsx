@@ -4,6 +4,7 @@ import { usePageInit } from "@/hooks/use-page-init";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { saveProperty } from "@/lib/data-source/page";
 import {  setPropSyncMenus } from "@/lib/menus";
+import { changePageTitle } from "@/lib/page-meta";
 
 export const PageTitle = ({ id }: { id: string }) => {
   const { data, mutate } = usePageInit();
@@ -11,6 +12,7 @@ export const PageTitle = ({ id }: { id: string }) => {
 
   const pageId = useUuidPathname()
   const setPageTitle = (title: string) => {
+    changePageTitle(title)
     mutate({
       ...data,
       title

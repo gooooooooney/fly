@@ -44,3 +44,4 @@ export async function fetcher<JSON = any>(
 
   return res.json();
 }
+

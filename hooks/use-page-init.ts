@@ -2,6 +2,8 @@ import { PageResponse } from "@/app/api/page/get/route"
 import { fetcher } from "@/lib/utils"
 import useSWR from "swr"
 import { useUuidPathname } from "./useUuidPathname"
+import { useEffect } from "react"
+import { setPageId } from "./store/create-content-slice"
 
 
 export const init = async (url: string) => {
@@ -31,7 +33,9 @@ export const init = async (url: string) => {
 
 export function usePageInit() {
   const id = useUuidPathname()
-
+  useEffect(() => {
+    setPageId(id);
+  }, [id]);
 
   const res = useSWR(id ? () => "/api/page/get?pageId=" + id : null, init, {
     revalidateOnFocus: false,

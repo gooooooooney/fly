@@ -32,73 +32,75 @@ async function getNestedBlocks(id: string) {
 
 
 export async function getPageById(pageId: string) {
-  const page = await prisma?.page.findUnique({
-    where: {
-      id: pageId,
-    },
-    include: {
-      properties: true,
-      children: true,
-      blocks: {
-        select: {
-          id: true,
-          type: true,
-          props: true,
-          children: true,
-          content: true,
-          prevBlockId: true,
-          nextBlockId: true,
-        }
+  return await prisma.$transaction(async tx => {
+    const page = await tx.page.findUnique({
+      where: {
+        id: pageId,
       },
-      sharePage: true
-    },
+      include: {
+        properties: true,
+        children: true,
+        blocks: {
+          select: {
+            id: true,
+            type: true,
+            props: true,
+            children: true,
+            content: true,
+            prevBlockId: true,
+            nextBlockId: true,
+          }
+        },
+        sharePage: true
+      },
 
-  })
-  if (!page) return null
-  if (!page.blocks) return null
+    })
+    if (!page) return null
+    if (!page.blocks) return null
 
 
-  for (const block of page.blocks) {
-    const children = await getNestedBlocks(block.id);
-    block.children = children?.children.length ? children.children : block.children;
-  }
-
-
-
-  const dataArray = page.blocks
-  // Create a map with IDs as keys for faster access
-  const idMap = dataArray.reduce((map, item) => {
-    map[item.id] = item;
-    return map;
-  }, {} as Record<string, typeof page['blocks'][number]>);
-
-  // Initialize an array to store nodes without incoming edges (prevBlockId === null)
-  const startNodes = dataArray.filter(item => item.prevBlockId === null && item.nextBlockId !== null);
-
-  // Perform topological sort
-  const sortedArray = [];
-  const queue = [...startNodes];
-
-  while (queue.length > 0) {
-    const currentNode = queue.shift();
-    sortedArray.push(currentNode);
-
-    const nextNodeId = currentNode?.nextBlockId;
-    if (nextNodeId && idMap[nextNodeId]) {
-      queue.push(idMap[nextNodeId]);
+    for (const block of page.blocks) {
+      const children = await getNestedBlocks(block.id);
+      block.children = children?.children.length ? children.children : block.children;
     }
-  }
-  // console.log(sortedArray)
-  return {
-    ...page,
-    blocks: sortedArray.map(b => ({
-      id: b?.id,
-      type: b?.type,
-      props: b?.props,
-      content: b?.content,
-      children: b?.children,
-    }))
-  }
+
+
+
+    const dataArray = page.blocks
+    // Create a map with IDs as keys for faster access
+    const idMap = dataArray.reduce((map, item) => {
+      map[item.id] = item;
+      return map;
+    }, {} as Record<string, typeof page['blocks'][number]>);
+
+    // Initialize an array to store nodes without incoming edges (prevBlockId === null)
+    const startNodes = dataArray.filter(item => item.prevBlockId === null && item.nextBlockId !== null);
+
+    // Perform topological sort
+    const sortedArray = [];
+    const queue = [...startNodes];
+
+    while (queue.length > 0) {
+      const currentNode = queue.shift();
+      sortedArray.push(currentNode);
+
+      const nextNodeId = currentNode?.nextBlockId;
+      if (nextNodeId && idMap[nextNodeId]) {
+        queue.push(idMap[nextNodeId]);
+      }
+    }
+    // console.log(sortedArray)
+    return {
+      ...page,
+      blocks: sortedArray.map(b => ({
+        id: b?.id,
+        type: b?.type,
+        props: b?.props,
+        content: b?.content,
+        children: b?.children,
+      }))
+    }
+  })
 }
 
 export async function getAllPage(pageId: string) {

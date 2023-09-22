@@ -24,7 +24,7 @@ export async function generateMetadata(
   const pageInfo = await getPropsByPageId(id)
 
   return {
-    title: pageInfo?.title,
+    title: pageInfo?.title || "Untitled",
     icons: {
       shortcut: getShortcutIcon(pageInfo?.emoji || "🐠"),
     },

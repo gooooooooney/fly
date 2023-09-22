@@ -1,23 +1,23 @@
 "use client";
 import { Button } from "@nextui-org/button";
 import { randomEmoji } from "./emoji-content/emoji-mart";
-import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { Random, cn } from "@/lib/utils";
 import { covers } from "@/constatns/images/unsplash";
 import { Icons } from "@/components/icons";
-import { useClientInit } from "@/components/useClientInit";
 import { saveProperty } from "@/lib/data-source/page";
 import { EmojiPicker } from "@/components/emoji-picker";
 import { setPropSyncMenus } from "@/lib/menus";
 import { usePageInit } from "@/hooks/use-page-init";
+import { changePageIcon } from "@/lib/page-meta";
 
 function IconAndCover({ id }: { id: string }) {
 
   const { data, mutate } = usePageInit()
-  useClientInit(id);
+  
 
   if (!data) return null;
   const setEmoji = (emoji: string) => {
+    changePageIcon(emoji)
     mutate({
       ...data,
       icon: emoji,
