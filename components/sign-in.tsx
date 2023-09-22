@@ -10,6 +10,7 @@ import { Icons } from "@/components/icons";
 import React from "react";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 const GooneyFlyLogo: React.FC = () => {
   return (
@@ -59,7 +60,11 @@ export const SignInCard = () => {
   const handleEmailClick = () => {
     if (validationState === "invalid") return
     setEmailClicked(true);
-    signIn("email", { email })
+    signIn("email", { email }).catch((e => {
+      toast.error(e.message)
+    })).finally(() => {
+      setEmailClicked(false);
+    })
   }
   return (
     <Card className="max-w-[400px] mx-auto">
