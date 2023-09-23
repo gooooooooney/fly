@@ -12,17 +12,17 @@ import {
 import "./index.css";
 import "@blocknote/core/style.css";
 import FormattingToolbar from "./formatting-toolbar";
-import { memo, useEffect } from "react";
+import { DependencyList, memo, useEffect, useMemo, useRef } from "react";
 import { CustomSideMenu } from "./custom-side-menu";
 import { useTheme } from "next-themes";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 // import { getReactSlashMenuItems } from "./slash-menu";
 import { CustomBlockSchema } from "./blocks/custom-block-schema";
-import { getReactSlashMenuItems, slashMenuItems } from "./slash-menu";
+import {  slashMenuItems } from "./slash-menu";
+
 interface EditorProps {
   editable: boolean;
   initialContent: BlockNoteEditor["topLevelBlocks"];
-  theme: "light" | "dark";
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   onEditorContentChange?: (editor: BlockNoteEditor) => void;
   onTextCursorPositionChange?: (editor: BlockNoteEditor) => void;
@@ -39,6 +39,7 @@ let count = 0;
   // so many rerenders
   // const setEditor = useBoundStore.getState().setEditor
   const { theme } = useTheme();
+
   const editor = useBlockNote(
     {
       editable,
@@ -70,6 +71,7 @@ let count = 0;
     if (editor) {
       editor.isEditable = editable;
     }
+    
   }, [editable, editor]);
 
   return (

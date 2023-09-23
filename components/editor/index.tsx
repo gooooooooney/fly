@@ -9,7 +9,6 @@ import { usePageInit } from "@/hooks/use-page-init";
 import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { Operation } from "@/types";
 import { areArraysEqual } from "@/lib/array";
-import { useBlockNote } from "@blocknote/react";
 import { setBlocks } from "@/hooks/store/create-content-slice";
 import { findMenu, sortMenus } from "@/lib/menus";
 const Editor = dynamic(() => import("@/components/editor/editor"), {
@@ -68,7 +67,7 @@ function EditorWrapper() {
       if (!isFirst) {
         setTimeout(() => {
           isFirst = false;
-        }, 1000)
+        }, 2000)
         return;
       }
       setBlocks(editor.topLevelBlocks);
@@ -222,7 +221,6 @@ function EditorWrapper() {
   return (
     <Editor
       initialContent={(data?.blocks as any) || []}
-      theme={theme as "light" | "dark"}
       editable={data?.editable}
       onEditorContentChange={handleOnEditorContentChange}
       onTextCursorPositionChange={handleTextCursorPositionChange}
