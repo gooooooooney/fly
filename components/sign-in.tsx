@@ -103,7 +103,11 @@ export const SignInCard = () => {
           startContent={<Icons.Github className="h-5 w-5" />}
           onClick={() => {
             setGitHubClicked(true);
-            signIn("github", { callbackUrl: "/" })
+            signIn("github", { callbackUrl: "/" }).catch((e => {
+              toast.error(e.message)
+            })).finally(() => {
+              setGitHubClicked(false);
+            })
           }}
         >
           Sign In with Github

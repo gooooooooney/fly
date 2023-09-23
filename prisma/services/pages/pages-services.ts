@@ -33,7 +33,7 @@ async function getNestedBlocks(id: string) {
 
 export async function getPageById(pageId: string) {
   return await prisma.$transaction(async tx => {
-    const page = await tx.page.findUniqueOrThrow({
+    const page = await tx.page.findUnique({
       where: {
         id: pageId,
       },
@@ -566,7 +566,7 @@ export async function getSharePageSetting({
   pageId: string
   // userId: string
 }) {
-  return prisma.sharePage.findUniqueOrThrow({
+  return prisma.sharePage.findUnique({
     where: {
       pageId,
       // ownerUserId: userId,
