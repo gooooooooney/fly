@@ -46,6 +46,7 @@ export default async function PageLayout(
   if (!shareSetting) {
     notFound();
   }
+  console.log(session?.user.id, shareSetting.ownerUserId)
   const isShared = shareSetting.ownerUserId !== session?.user.id
   if (isShared && !shareSetting.enabled) {
     notFound()
