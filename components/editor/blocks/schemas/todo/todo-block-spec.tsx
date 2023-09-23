@@ -36,7 +36,6 @@ export const TodoBlockSpec = createCustomReactBlockSpec({
             // Changes list item block to a text block if the content is empty.
             commands.command(() => {
               if (node.textContent.length === 0) {
-                console.log("change to paragraph");
                 return commands.BNUpdateBlock(state.selection.from, {
                   type: "paragraph",
                   props: {},
@@ -51,7 +50,6 @@ export const TodoBlockSpec = createCustomReactBlockSpec({
             // below.
             commands.command(() => {
               if (node.textContent.length > 0) {
-                console.log("split block");
                 chain()
                   .deleteSelection()
                   .BNSplitBlock(state.selection.from, true)

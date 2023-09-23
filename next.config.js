@@ -60,6 +60,6 @@ const nextConfig = {
     };
   },
 }
-console.log(process.env.POSTGRES_URL);
+console.log(process.env.POSTGRES_SUPABASE_URL);
 console.log(process.env.NODE_ENV);
 module.exports = nextConfig

@@ -218,7 +218,7 @@ export async function addNewPage({
         }
       })
 
-      return await tx?.page.create({
+      const page = await tx?.page.create({
         data: {
           id: blockId,
           parentId,
@@ -236,58 +236,57 @@ export async function addNewPage({
 
         }
       })
+      return page
     }, {
       maxWait: 5000, // default: 2000
       timeout: 20000, // default: 5000
     })
   } catch (error) {
-    console.log(error)
     return null
   }
 }
 
 
-export async function updateBlockProps({ pageId, data }: SavePropertyParams) {
-  // 查询当前页面是否是子页面
-  const subPage = await prisma?.block.findUnique({
-    where: {
-      id: pageId
-    },
-  })
-  if (subPage) {
-    const props = {} as any
-    if (data.cover) {
-      props["cover"] = data.cover
-    }
-    if (data.emoji) {
-      props["emoji"] = data.emoji
-    }
-    if (data.title) {
-      props["title"] = data.title
-    }
-    if (data.editable) {
-      props["editable"] = data.editable
-    }
 
-    const res = await prisma?.block.update({
-      where: {
-        id: pageId
-      },
-      data: {
-        props: {
-          ...subPage.props as any,
-          ...props
-        }
-      }
-    })
-  }
-}
 
 export async function saveProperty({ pageId, data }: SavePropertyParams) {
   try {
     return await prisma?.$transaction(async tx => {
 
-      await updateBlockProps({ pageId, data })
+      // 查询当前页面是否是子页面
+      const subPage = await tx?.block.findUnique({
+        where: {
+          id: pageId
+        },
+      })
+      if (subPage) {
+        const props = {} as any
+        if (data.cover) {
+          props["cover"] = data.cover
+        }
+        if (data.emoji) {
+          props["emoji"] = data.emoji
+        }
+        if (data.title) {
+          props["title"] = data.title
+        }
+        if (data.editable) {
+          props["editable"] = data.editable
+        }
+
+        const res = await prisma?.block.update({
+          where: {
+            id: pageId
+          },
+          data: {
+            props: {
+              ...subPage.props as any,
+              ...props
+            }
+          }
+        })
+      }
+
       return await tx.properties.upsert({
         where: {
           pageId: pageId,
@@ -567,7 +566,7 @@ export async function getSharePageSetting({
   pageId: string
   // userId: string
 }) {
-  return prisma.sharePage.findUnique({
+  return prisma.sharePage.findUniqueOrThrow({
     where: {
       pageId,
       // ownerUserId: userId,

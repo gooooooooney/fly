@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   if (!schema.safeParse({ head }).success) {
     return new NextResponse("Bad Request", { status: 400 });
   }
-  const page = addNewPage({
+  const page = await addNewPage({
     blockId: head.blockId!,
     spaceId: head.spaceId!,
     parentId: head.pageId!,
