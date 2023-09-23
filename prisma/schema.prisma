@@ -7,8 +7,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://root:1234@localhost:5432/fly"
-  // url = env("POSTGRES_SUPABASE_URL")
+  // url      = "postgresql://root:1234@localhost:5432/fly"
+  url = env("POSTGRES_SUPABASE_URL")
 }
 // datasource db {
 //   provider = "postgresql"
