@@ -1,8 +1,5 @@
 import { InlineContent, createCustomReactBlockSpec } from "@/components/editor/utils/createReactSpec";
 import { getBlockInfoFromPos } from "@/components/editor/utils/helper";
-import { TipTapNode } from "@blocknote/core";
-import Blockquote from "@tiptap/extension-blockquote";
-import { NodeViewContent, NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
 
 // export const CodeBlockSpec = {
 //   node: Blockquote.extend({

@@ -450,7 +450,7 @@ export async function save({
                 content: block.content,
                 type: block.type,
                 parentId: parentId ? parentId : null,
-                props: block.props,
+                props: block.type === "page" ? undefined : block.props,
                 // when block.prevBlockId is null, it means the block is the first block
                 // so we need to set prevBlockId to null
                 prevBlockId: parentId ? undefined : block.prevBlockId ? block.prevBlockId : null,
