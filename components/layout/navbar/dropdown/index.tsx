@@ -44,6 +44,8 @@ export const DropdownMenus: FC = () => {
     mutate({
       ...data,
       editable: !data.editable
+    }, {
+      revalidate: false
     })
     saveProperty({
       pageId,

@@ -14,11 +14,15 @@ import { findCurrentPagePath } from "@/lib/data-source/menus";
 import { findMenu, mergeMenus } from "@/lib/menus";
 import { setCollapsed } from "@/hooks/store/create-layout-slice";
 import { useMount } from "react-use";
+import { changePageIcon, changePageTitle } from "@/lib/page-meta";
+import { usePageInit } from "@/hooks/use-page-init";
 
 
 
 export function ListBar(props: { email: string }) {
   const pageId = useUuidPathname();
+  const { data } = usePageInit()
+
   const [actSpace, setActSpace] = useState<null | any>(null);
   const [items] = useBoundStore( (state) => [
     state.menus,
@@ -67,6 +71,8 @@ export function ListBar(props: { email: string }) {
       const item = findMenu(s.menus, pageId)
       if (item) {
         item.isActive = true
+        changePageTitle(item.title)
+        changePageIcon(item.icon)
       }
     })
     return () => {
@@ -84,7 +90,7 @@ export function ListBar(props: { email: string }) {
   const activeWp = actSpace;
 
   return (
-    <Transition
+    data?.isOwner ? <Transition
       show={!collapsed}
       enter="transition-width transition-opacity duration-300"
       enterFrom="w-0 opacity-0"
@@ -119,6 +125,6 @@ export function ListBar(props: { email: string }) {
         </div>
         <Menus items={items} />
       </section>
-    </Transition>
+    </Transition> : null
   );
 }
