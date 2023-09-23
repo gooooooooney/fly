@@ -21,7 +21,6 @@ import { usePageInit } from "@/hooks/use-page-init";
 
 export function ListBar(props: { email: string }) {
   const pageId = useUuidPathname();
-  const { data } = usePageInit()
 
   const [actSpace, setActSpace] = useState<null | any>(null);
   const [items] = useBoundStore( (state) => [
@@ -90,7 +89,7 @@ export function ListBar(props: { email: string }) {
   const activeWp = actSpace;
 
   return (
-    data?.isOwner ? <Transition
+    <Transition
       show={!collapsed}
       enter="transition-width transition-opacity duration-300"
       enterFrom="w-0 opacity-0"
@@ -125,6 +124,6 @@ export function ListBar(props: { email: string }) {
         </div>
         <Menus items={items} />
       </section>
-    </Transition> : null
+    </Transition>
   );
 }
