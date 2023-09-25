@@ -2,7 +2,7 @@
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import uniqBy from "lodash/uniqBy";
 import { save } from "@/lib/data-source/page";
 import { usePageInit } from "@/hooks/use-page-init";
@@ -22,7 +22,7 @@ function EditorWrapper() {
   console.log("render editor wrapper");
 
   let beforeBlocks = [] as BlockWithOrder[];
-  let isFirst = true
+  const firstRender = useRef(true);
   const { data } = usePageInit();
 
   const path = useUuidPathname();
@@ -63,11 +63,9 @@ function EditorWrapper() {
       console.log("_tiptapEditor", editor._tiptapEditor);
       console.log("topLevelBlocks", editor.topLevelBlocks);
       console.log("json", editor._tiptapEditor.getJSON());
-      // 避免第一次渲染的时候触发导致调用save接口
-      if (!isFirst) {
-        setTimeout(() => {
-          isFirst = false;
-        }, 2000)
+      console.log(firstRender, "firstRender")
+      if (firstRender.current) {
+        firstRender.current = false;
         return;
       }
       setBlocks(editor.topLevelBlocks);

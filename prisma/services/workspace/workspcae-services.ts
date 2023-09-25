@@ -1,7 +1,7 @@
 
 import { MenuProp } from "@/hooks/store/create-content-slice"
 import prisma from "@/lib/prisma"
-import { getPageMenus } from "../utils"
+import { getPageMenus, getSortArray } from "../utils"
 import { sortMenus } from "@/lib/menus"
 
 export type WorkspaceInfo = ReturnTypePromiseFunc<typeof getWorkspacesByUserId>
@@ -37,6 +37,7 @@ export async function getWorkspaces(userId: string, pageId: string) {
           include: {
             pages: {
               where: {
+                // parent equals null means it's a root page
                 parent: null,
               },
               select: {
@@ -70,7 +71,7 @@ export async function getWorkspaces(userId: string, pageId: string) {
         return {
           ...page,
           // 根据block对page进行排序
-          children: sortMenus(page.children, page.blocks.map(v => v.id))
+          children: sortMenus(page.children, getSortArray(page.blocks).filter(item => item.type === "page").map(item => item.id)),
         }
       })
       return {
@@ -88,6 +89,8 @@ export async function getWorkspaces(userId: string, pageId: string) {
     timeout: 20000, // default: 5000
   })
 }
+
+
 
 export async function getWorkspaceById(workspaceId: string) {
   const workspace = await prisma?.workspace.findUnique({

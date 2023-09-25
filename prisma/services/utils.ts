@@ -36,3 +36,28 @@ export async function getPageMenus(list: any[], pageId: string): Promise<MenuPro
   }))
   return menuProps
 }
+
+export function getSortArray(blocks: any[]) {
+  const dataArray = blocks
+  // Create a map with IDs as keys for faster access
+  const idMap = dataArray.reduce((map, item) => {
+    map[item.id] = item;
+    return map;
+  }, {} as Record<string, any>);
+  const startNodes = dataArray.filter(item => item.prevBlockId === null && item.nextBlockId !== null);
+
+  // Perform topological sort
+  const sortedArray = [];
+  const queue = [...startNodes];
+
+  while (queue.length > 0) {
+    const currentNode = queue.shift();
+    sortedArray.push(currentNode);
+
+    const nextNodeId = currentNode?.nextBlockId;
+    if (nextNodeId && idMap[nextNodeId]) {
+      queue.push(idMap[nextNodeId]);
+    }
+  }
+  return sortedArray
+}

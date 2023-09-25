@@ -1,10 +1,12 @@
 import { SaveBlocksParams, SaveParams, SavePropertyParams } from "@/types"
 import prisma from "@/lib/prisma"
 import { Nullable } from "unsplash-js/dist/helpers/typescript";
-import { getPageMenusWithoutPageId } from "../utils";
+import { getPageMenusWithoutPageId, getSortArray } from "../utils";
 import { MenuProp } from "@/hooks/store/create-content-slice";
 import { sortMenus } from "@/lib/menus";
 import { $Enums } from "@prisma/client";
+
+
 
 async function getNestedBlocks(id: string) {
   const blocks = await prisma.block.findUnique({
@@ -66,29 +68,30 @@ export async function getPageById(pageId: string) {
 
 
 
-    const dataArray = page.blocks
-    // Create a map with IDs as keys for faster access
-    const idMap = dataArray.reduce((map, item) => {
-      map[item.id] = item;
-      return map;
-    }, {} as Record<string, typeof page['blocks'][number]>);
+    // const dataArray = page.blocks
+    // // Create a map with IDs as keys for faster access
+    // const idMap = dataArray.reduce((map, item) => {
+    //   map[item.id] = item;
+    //   return map;
+    // }, {} as Record<string, typeof page['blocks'][number]>);
 
-    // Initialize an array to store nodes without incoming edges (prevBlockId === null)
-    const startNodes = dataArray.filter(item => item.prevBlockId === null && item.nextBlockId !== null);
+    // // Initialize an array to store nodes without incoming edges (prevBlockId === null)
+    // const startNodes = dataArray.filter(item => item.prevBlockId === null && item.nextBlockId !== null);
 
-    // Perform topological sort
-    const sortedArray = [];
-    const queue = [...startNodes];
+    // // Perform topological sort
+    // const sortedArray = [];
+    // const queue = [...startNodes];
 
-    while (queue.length > 0) {
-      const currentNode = queue.shift();
-      sortedArray.push(currentNode);
+    // while (queue.length > 0) {
+    //   const currentNode = queue.shift();
+    //   sortedArray.push(currentNode);
 
-      const nextNodeId = currentNode?.nextBlockId;
-      if (nextNodeId && idMap[nextNodeId]) {
-        queue.push(idMap[nextNodeId]);
-      }
-    }
+    //   const nextNodeId = currentNode?.nextBlockId;
+    //   if (nextNodeId && idMap[nextNodeId]) {
+    //     queue.push(idMap[nextNodeId]);
+    //   }
+    // }
+    const sortedArray = getSortArray(page.blocks)
     // console.log(sortedArray)
     return {
       ...page,
