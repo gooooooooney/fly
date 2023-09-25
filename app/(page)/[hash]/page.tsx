@@ -1,6 +1,10 @@
 import Cover from "@/components/page/cover";
 import TOC from "@/components/toc";
 import PageWrapper from "@/components/page/page-wrapper";
+import { getServerSession } from "next-auth";
+import { notFound, redirect } from "next/navigation";
+import { getSharePageSetting } from "@/prisma/services/pages/pages-services";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 async function getGithubEmojis() {
   const res = await fetch("https://api.github.com/emojis");
@@ -20,13 +24,19 @@ async function getLocalEmojis() {
   return emojis;
 }
 
-export default function BlockPage({ params }: { params: { hash: string } }) {
-  // const page = await getPageById(params.hash);
+export default async function BlockPage({ params }: { params: { hash: string } }) {
+  const session = await getServerSession(authOptions);
 
-  // if (!page) {
-  //   return null;
-  // }
-  // console.log(page)
+  const shareSetting = await getSharePageSetting({ pageId: params.hash})
+
+
+  if (!shareSetting) {
+    notFound();
+  }
+  const isShared = shareSetting.ownerUserId !== session?.user.id
+  if (isShared && !shareSetting.enabled) {
+    notFound()
+  }
   return (
     <>
       {/* <OutHookConfigurator /> */}
