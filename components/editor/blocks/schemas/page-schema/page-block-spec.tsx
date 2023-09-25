@@ -15,7 +15,7 @@ import { useState } from "react";
 export const PageBlockSpec = createReactBlockSpec({
     type: "page",
     propSchema: {
-        ...defaultProps,
+        // ...defaultProps,
         emoji: {
             default: "📄"
         },
