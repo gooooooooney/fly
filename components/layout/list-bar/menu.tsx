@@ -49,10 +49,10 @@ export function Menus({
             textValue={item.title}
 
             className={cn(
-              "px-3 pl-[26px]    h-8 data-[hover=true]:bg-default-100/80",
+              "px-3 pl-[26px]    h-8 data-[hover=true]:bg-foreground/10",
               itemWithoutChildClassName,
               {
-                "bg-default-100/80": item.isActive,
+                "bg-foreground/10": item.isActive,
               }
             )}
             key={item.id}

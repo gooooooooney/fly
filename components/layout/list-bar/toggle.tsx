@@ -56,7 +56,7 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
       }}
       className={cn(
         [
-          "hover:bg-default-100/80",
+          "hover:bg-foreground/10",
           "hover:text-default-foreground",
           "flex",
           "group",
@@ -75,7 +75,7 @@ export function Toggle({ open, item }: { open: boolean; item: MenuProp }) {
           "rounded-md",
         ],
         {
-          "bg-default-100/80": item.isActive,
+          "bg-foreground/10": item.isActive,
         }
       )}
       onMouseLeave={() => setShowActionMenus("hidden")}

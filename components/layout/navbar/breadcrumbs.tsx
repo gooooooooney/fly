@@ -92,7 +92,7 @@ export function Breadcrumbs() {
                     {(item: any) => (
                       <DropdownItem
                         key={item.id}
-                        className=" data-[hover=true]:bg-default-100/80"
+                        className=" data-[hover=true]:bg-foreground/10"
                       >
                         <Link className="block" as={NextLink} href={`/${item.id}`}>
                           {item.title}

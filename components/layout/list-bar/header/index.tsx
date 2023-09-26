@@ -10,8 +10,14 @@ import {
   Avatar,
   User,
   DropdownSection,
+  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalContent,
 } from "@nextui-org/react";
 import { Icons } from "@/components/icons";
+import { Dicebear } from "@/components/dicebear";
 
 interface SidebarHeaderProps {
   name: string;
@@ -20,6 +26,7 @@ interface SidebarHeaderProps {
 }
 
 export default function SidebarHeader(props: SidebarHeaderProps) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <div className="flex items-center px-5 ">
       <Dropdown placement="bottom-start">
@@ -40,10 +47,19 @@ export default function SidebarHeader(props: SidebarHeaderProps) {
           </section>
         </DropdownTrigger>
         <DropdownMenu
-        disabledKeys={["profile"]}
+          disabledKeys={["profile"]}
           onAction={(key) => {
-            if (key === "logout") {
-              signOut();
+            switch (key) {
+              case "logout": {
+                signOut();
+                break;
+              }
+              case "avatar": {
+                onOpen();
+                break;
+              }
+              default:
+                break;
             }
           }}
           aria-label="User Actions"
@@ -55,7 +71,7 @@ export default function SidebarHeader(props: SidebarHeaderProps) {
               <p className="font-bold">{props.email}</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
+            <DropdownItem key="avatar">avatar</DropdownItem>
             <DropdownItem key="analytics">Analytics</DropdownItem>
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
@@ -68,6 +84,19 @@ export default function SidebarHeader(props: SidebarHeaderProps) {
           </DropdownSection>
         </DropdownMenu>
       </Dropdown>
+
+      <Modal isOpen={isOpen}
+        scrollBehavior="inside"
+        classNames={{
+          base: "max-w-[50vw] p-10",
+        }} onOpenChange={onOpenChange} backdrop="blur">
+        <ModalContent>
+          <ModalHeader> Select avatar </ModalHeader>
+          <ModalBody>
+            <Dicebear />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

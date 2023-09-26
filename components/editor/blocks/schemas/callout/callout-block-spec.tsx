@@ -62,7 +62,7 @@ export const CalloutBlockSpec = createCustomReactBlockSpec({
               },
             });
           }}
-          className="flex bg-default-100 text-default-foreground items-start text-md rounded-sm max-w-3xl"
+          className="flex bg-default-100 text-foreground items-start text-md rounded-sm max-w-3xl"
           icon={block.props.icon}
         >
           <div className="whitespace-pre-wrap text-base w-full max-w-full break-words">

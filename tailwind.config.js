@@ -31,6 +31,10 @@ module.exports = {
         //   DEFAULT: "hsl(var(--primary))",
         //   foreground: "hsl(var(--primary-foreground))",
         // },
+        dimmed: {
+          DEFAULT: "#a6a7ab",
+          foreground: "#495057",
+        },
         // secondary: {
         //   DEFAULT: "hsl(var(--secondary))",
         //   foreground: "hsl(var(--secondary-foreground))",
@@ -85,7 +89,11 @@ module.exports = {
         layout: {
           boxShadow: {
             medium: "0 0 0 1px hsl(var(--border)), 0 0 0 1px hsl(var(--border))"
-          }
+          },
+        },
+        colors: {
+          background: "rgb(34,39,46)",
+          foreground: "rgb(173,186,199)"
         }
       }
     }

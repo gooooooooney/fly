@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "text-default-foreground")}>
+      <body className={cn(inter.className, "text-foreground")}>
         <Providers>
           <section>{children}</section>
         </Providers>
