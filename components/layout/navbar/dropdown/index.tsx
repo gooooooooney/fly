@@ -42,7 +42,7 @@ export const DropdownMenus: FC = () => {
   if (!data) return
   const saveEditable = () => {
     mutate({
-      ...data,
+      ...data!,
       editable: !data.editable
     }, {
       revalidate: false

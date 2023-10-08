@@ -41,7 +41,7 @@ function IconAndCover({ id }: { id: string }) {
     const randomCover = covers[Random(0, covers.length - 1)];
 
     mutate({
-      ...data,
+      ...data!,
       cover: randomCover.urls.full,
     }, { revalidate: false })
     saveProperty({

@@ -14,7 +14,7 @@ function EmojiContent() {
 
     const setIcon = (emoji: string) => {
         mutate({
-            ...data,
+            ...data!,
             icon: emoji,
         }, { revalidate: false })
         saveProperty({

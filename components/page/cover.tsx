@@ -26,7 +26,7 @@ function Cover() {
 
   const removeCover = () => {
     mutate({
-      ...data,
+      ...data!,
       cover: "",
     }, { revalidate: false })
     saveProperty({

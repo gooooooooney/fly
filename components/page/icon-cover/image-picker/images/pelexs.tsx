@@ -13,7 +13,7 @@ export const PelexsImages = () => {
   const { data, mutate } = usePageInit()
   const setUrl = (url: string) => {
     mutate({
-      ...data,
+      ...data!,
       cover: url,
     }, { revalidate: false })
     saveProperty({

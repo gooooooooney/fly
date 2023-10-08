@@ -14,7 +14,7 @@ export const PageTitle = ({ id }: { id: string }) => {
   const setPageTitle = (title: string) => {
     changePageTitle(title)
     mutate({
-      ...data,
+      ...data!,
       title
     }, {
       revalidate: false,

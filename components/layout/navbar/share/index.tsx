@@ -24,7 +24,7 @@ export function Share() {
   if (!data) return
   const setShareEnable = (enabled: boolean) => {
     mutate({
-      ...data,
+      ...data!,
       shareSetting: {
         ...data!.shareSetting!,
         enabled,
