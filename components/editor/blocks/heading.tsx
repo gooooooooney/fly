@@ -2,7 +2,7 @@ import { blockStyles, createTipTapBlock } from "@blocknote/core";
 import { InputRule, mergeAttributes } from "@tiptap/core";
 
 
-export const HeadingBlockContent = createTipTapBlock<"heading">({
+export const HeadingBlockContent = createTipTapBlock<"heading", true>({
   name: "heading",
   content: "inline*",
 
