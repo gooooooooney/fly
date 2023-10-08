@@ -7,8 +7,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://root:1234@localhost:5432/fly"
-  // url = env("POSTGRES_SUPABASE_URL")
+  // url      = "postgresql://root:1234@localhost:5432/fly"
+  url = env("POSTGRES_SUPABASE_URL")
 }
 // datasource db {
 //   provider = "postgresql"
@@ -125,7 +125,7 @@ model Block {
   parentId    String?
   parent      Block?  @relation("ParentChildBlock", fields: [parentId], references: [id], onDelete: Cascade)
   children    Block[] @relation("ParentChildBlock")
-  content     Json    @db.Json
+  content     Json?    @db.Json
   props       Json    @db.Json
   page        Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId      String?
@@ -149,6 +149,7 @@ enum Type {
   callout
   todo
   codeBlock
+  image
 }
 
 enum Role {
