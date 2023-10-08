@@ -35,7 +35,7 @@ import {
               <li
               className="w-full"
               >
-                {heading.content.map((ct, i) => {
+                {heading.content?.map((ct, i) => {
                   const text = (() => {
                     switch (ct.type) {
                       case "text":
