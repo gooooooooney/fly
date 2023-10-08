@@ -26,7 +26,7 @@ export function Share() {
     mutate({
       ...data,
       shareSetting: {
-        ...data!.shareSetting,
+        ...data!.shareSetting!,
         enabled,
       }
     }, {
