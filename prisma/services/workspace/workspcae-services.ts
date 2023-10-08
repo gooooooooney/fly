@@ -102,3 +102,20 @@ export async function getWorkspaceById(workspaceId: string) {
   return workspace
 }
 
+export async function updateWorkspaceInfo(params: {
+  name?: string,
+  avatar?: string,
+  workspaceId: string
+}) {
+  return await prisma?.workspace.update({
+    where: {
+      id: params.workspaceId,
+    },
+    data: {
+      name: params.name,
+      avatar: params.avatar,
+    }
+  })
+
+}
+

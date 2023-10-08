@@ -26,7 +26,7 @@ interface SidebarHeaderProps {
 }
 
 export default function SidebarHeader(props: SidebarHeaderProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   return (
     <div className="flex items-center px-5 ">
       <Dropdown placement="bottom-start">
@@ -66,19 +66,19 @@ export default function SidebarHeader(props: SidebarHeaderProps) {
           variant="flat"
         >
           <DropdownSection showDivider>
-            <DropdownItem key="profile" className="h-14 gap-2">
+            <DropdownItem textValue="profile" key="profile" className="h-14 gap-2">
               {/* <p className="font-bold">Signed in as</p> */}
               <p className="font-bold">{props.email}</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="avatar">avatar</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+            <DropdownItem textValue="settings" key="settings">My Settings</DropdownItem>
+            <DropdownItem textValue="avatar" key="avatar">avatar</DropdownItem>
+            <DropdownItem textValue="analytics" key="analytics">Analytics</DropdownItem>
+            <DropdownItem textValue="system" key="system">System</DropdownItem>
+            <DropdownItem textValue="configurations" key="configurations">Configurations</DropdownItem>
+            <DropdownItem textValue="help_and_feedback" key="help_and_feedback">Help & Feedback</DropdownItem>
           </DropdownSection>
           <DropdownSection>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem textValue="logout" key="logout" color="danger">
               Log Out
             </DropdownItem>
           </DropdownSection>
@@ -93,7 +93,7 @@ export default function SidebarHeader(props: SidebarHeaderProps) {
         <ModalContent>
           <ModalHeader> Select avatar </ModalHeader>
           <ModalBody>
-            <Dicebear />
+            <Dicebear onCancel={onClose} />
           </ModalBody>
         </ModalContent>
       </Modal>

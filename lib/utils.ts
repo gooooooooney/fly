@@ -45,3 +45,15 @@ export async function fetcher<JSON = any>(
   return res.json();
 }
 
+export const getImgSrcParams = (imgSrc: string) => {
+  const params = new URL(imgSrc).searchParams
+  return [...params.entries()].reduce((acc, [key, value]) => {
+    if (key == "backgroundColor") {
+      acc[key] = value.split(",")
+    } else {
+      acc[key] = value
+    }
+    return acc
+  }, {} as any)
+}
+

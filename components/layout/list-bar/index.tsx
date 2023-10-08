@@ -16,6 +16,7 @@ import { setCollapsed } from "@/hooks/store/create-layout-slice";
 import { useMount } from "react-use";
 import { changePageIcon, changePageTitle } from "@/lib/page-meta";
 import { usePageInit } from "@/hooks/use-page-init";
+import { setAvatar, setName } from "@/hooks/store/create-user-slice";
 
 
 
@@ -26,8 +27,10 @@ export function ListBar(props: { email: string }) {
   const [items] = useBoundStore( (state) => [
     state.menus,
   ])!;
-  const [collapsed] = useBoundStore( (state) => [
+  const [collapsed, avatar, name] = useBoundStore( (state) => [
     state.collapsed,
+    state.avatar,
+    state.name
   ])!;
 
   const getItems = (list: MenuProp[]): MenuProp[] => {
@@ -50,6 +53,8 @@ export function ListBar(props: { email: string }) {
       ([res, currentPagePath]) => {
         if (res && currentPagePath) {
           setActSpace(res?.activeWorkspace);
+          setName(res.activeWorkspace?.name)
+          setAvatar(res.activeWorkspace?.avatar || "")
           setMenus(
             mergeMenus(res.activeWorkspace?.pages ?? [], currentPagePath ?? [])
           );
@@ -101,8 +106,8 @@ export function ListBar(props: { email: string }) {
       <section className="max-w-[240px]">
         <div className="flex w-60  justify-between items-center mt-3 mb-9">
           <SidebarHeader
-            avatar={activeWp?.avatar!}
-            name={activeWp?.name ?? ""}
+            avatar={avatar}
+            name={name ?? ""}
             email={props.email}
           />
           <div>

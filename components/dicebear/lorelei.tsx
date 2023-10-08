@@ -1,9 +1,15 @@
-import { Image, Input, Radio, RadioGroup, Select, SelectItem } from "@nextui-org/react";
+import { Button, Image, Select, SelectItem } from "@nextui-org/react";
 import { backgroundColor, backgroundType, hairs, radius as rdList, rotates, scales, seeds, translateX } from "./data/lorelei";
-import { useMemo, useState } from "react";
-import { assign, assignWith, isEmpty, isUndefined } from "lodash";
+import { useState } from "react";
+import {  assignWith } from "lodash";
+import useSWRMutation from "swr/mutation";
+import {  updateSpaceInfo } from "@/lib/data-source/space";
+import { toast } from "sonner";
+import { getImgSrcParams } from "@/lib/utils";
+import { setAvatar } from "@/hooks/store/create-user-slice";
 
 interface LoreleiProps {
+  onCancel: () => void
   seed: string
   rotate: string
   scale: string
@@ -22,76 +28,57 @@ export function Lorelei(props: LoreleiProps) {
     rotate: rotates[0].value,
     scale: scales[0].value,
     hair: hairs[0].value,
-    backgroundColor: [backgroundColor[0]],
+    backgroundColor: [],
     translateX: translateX[0].value,
     radius: rdList[0].value,
     backgroundType: backgroundType[0].value,
     bgType: backgroundType[0].value,
   }, props)
 
-  // const [seed, setSeed] = useState(new Set([props.seed]))
-  // const [rotate, setRotate] = useState(new Set([props.rotate]))
-  // const [scale, setScale] = useState(new Set([props.scale]))
-  // const [hair, setHair] = useState(new Set([props.hair]))
-  // const [background, setBackground] = useState(new Set([props.backgroundColor]))
-  // const [translate, setTranslate] = useState(new Set([props.translateX]))
-  // const [radius, setRadius] = useState(new Set([props.radius]))
-  // const [bgType, setBgType] = useState(new Set([props.bgType]))
   const getImgSrc = (propsParams: Partial<LoreleiProps>) => {
-    console.log(propsParams)
-    return `https://api.dicebear.com/7.x/lorelei/svg?${new URLSearchParams(assignWith({
+    const obj: any = {
       seed: propsInfo.seed,
       rotate: propsInfo.rotate,
       scale: propsInfo.scale,
       hair: propsInfo.hair,
-      backgroundColor: propsInfo.backgroundColor.join(","),
+      // backgroundColor: propsInfo.backgroundColor.join(","),
       translateX: propsInfo.translateX,
       radius: propsInfo.radius,
       backgroundType: propsInfo.backgroundType,
-    }, {
-      ...propsParams,
-      backgroundColor: isEmpty(propsParams.backgroundColor) ? null : propsParams.backgroundColor!.join(",")
-    }, (objValue, srcValue) => {
+    }
+    if (propsInfo.backgroundColor.length) {
+      obj.backgroundColor = propsInfo.backgroundColor.join(",")
+    } else {
+      delete obj.backgroundColor
+    }
+    const assignObj: any = {
+      ...propsParams
+    }
+    if (propsParams.backgroundColor?.length) {
+      assignObj.backgroundColor = propsParams.backgroundColor!.join(",")
+    } else {
+      delete assignObj.backgroundColor
+    }
+    return `https://api.dicebear.com/7.x/lorelei/svg?${new URLSearchParams(assignWith(obj, assignObj, (objValue, srcValue) => {
       return srcValue || objValue
     }))
       }`
   }
   const [imgSrc, setImgSrc] = useState(getImgSrc({}))
 
-  // const imgSrc = useMemo(() => {
-  //   return `https://api.dicebear.com/7.x/lorelei/svg?${new URLSearchParams({
-  //     seed: [...seed].join(","),
-  //     rotate: [...rotate].join(","),
-  //     scale: [...scale].join(","),
-  //     hair: [...hair].join(","),
-  //     backgroundColor: [...background].join(","),
-  //     translateX: [...translate].join(","),
-  //     radius: [...radius].join(","),
-  //     backgroundType: [...bgType].join(","),
-  //   })
-  //     }`
-  // }, [
-  //   seed,
-  //   rotate,
-  //   scale,
-  //   hair,
-  //   background,
-  //   translate,
-  //   radius,
-  //   bgType,
-  // ])
-  const getImgSrcParams = () => {
-    const params = new URL(imgSrc).searchParams
-    return [...params.entries()].reduce((acc, [key, value]) => {
-      if (key == "backgroundColor") {
-        acc[key] = value.split(",")
-      
-      } else {
-        acc[key] = value
-      }
-      return acc
-    }, {} as any)
+  const {trigger, isMutating} = useSWRMutation("updateSpaceInfo", updateSpaceInfo)
+
+  const handleCreate = () => {
+    if (isMutating) return
+    trigger({avatar: imgSrc}).catch(err => {
+      toast.error(err.message)
+    }).then(res => {
+      setAvatar(imgSrc)
+      toast.success("Success")
+      props.onCancel()
+    })
   }
+
   return (
     <div className="flex flex-col gap-4">
       <Image width={100} height={100} src={imgSrc} alt="avatar" ></Image>
@@ -99,11 +86,10 @@ export function Lorelei(props: LoreleiProps) {
         <Select
           onSelectionChange={e => {
             if (typeof e !== "string") {
-              const src = getImgSrc({ 
-                ...getImgSrcParams(),
+              const src = getImgSrc({
+                ...getImgSrcParams(imgSrc),
                 seed: [...e.values()][0] as string
-               })
-              console.log(src)
+              })
               setImgSrc(src)
             }
           }}
@@ -121,7 +107,7 @@ export function Lorelei(props: LoreleiProps) {
         <Select
           onSelectionChange={e => {
             if (typeof e !== "string") {
-              setImgSrc(getImgSrc({ rotate: [...e.values()][0] as string }))
+              setImgSrc(getImgSrc({ ...getImgSrcParams(imgSrc), rotate: [...e.values()][0] as string }))
             }
           }}
           defaultSelectedKeys={[propsInfo.rotate]}
@@ -138,7 +124,7 @@ export function Lorelei(props: LoreleiProps) {
         <Select
           onSelectionChange={e => {
             if (typeof e !== "string") {
-              setImgSrc(getImgSrc({ scale: [...e.values()][0] as string }))
+              setImgSrc(getImgSrc({ ...getImgSrcParams(imgSrc), scale: [...e.values()][0] as string }))
             }
           }}
           defaultSelectedKeys={[propsInfo.scale]}
@@ -155,7 +141,7 @@ export function Lorelei(props: LoreleiProps) {
         <Select
           onSelectionChange={e => {
             if (typeof e !== "string") {
-              setImgSrc(getImgSrc({ radius: [...e.values()][0] as string }))
+              setImgSrc(getImgSrc({ ...getImgSrcParams(imgSrc), radius: [...e.values()][0] as string }))
             }
           }}
           defaultSelectedKeys={[propsInfo.radius]}
@@ -173,7 +159,8 @@ export function Lorelei(props: LoreleiProps) {
           selectionMode="multiple"
           onSelectionChange={e => {
             if (typeof e !== "string") {
-              setImgSrc(getImgSrc({ backgroundColor: [...e.values()] as string[] }))
+
+              setImgSrc(getImgSrc({ ...getImgSrcParams(imgSrc), backgroundColor: [...e.values()] as string[] }))
             }
           }}
           defaultSelectedKeys={propsInfo.backgroundColor}
@@ -194,7 +181,7 @@ export function Lorelei(props: LoreleiProps) {
         <Select
           onSelectionChange={e => {
             if (typeof e !== "string") {
-              setImgSrc(getImgSrc({ backgroundType: [...e.values()][0] as string }))
+              setImgSrc(getImgSrc({ ...getImgSrcParams(imgSrc), backgroundType: [...e.values()][0] as string }))
             }
           }}
           defaultSelectedKeys={[propsInfo.bgType]}
@@ -211,7 +198,7 @@ export function Lorelei(props: LoreleiProps) {
         <Select
           onSelectionChange={e => {
             if (typeof e !== "string") {
-              setImgSrc(getImgSrc({ translateX: [...e.values()][0] as string }))
+              setImgSrc(getImgSrc({ ...getImgSrcParams(imgSrc), translateX: [...e.values()][0] as string }))
             }
           }}
           defaultSelectedKeys={[propsInfo.translateX]}
@@ -228,7 +215,7 @@ export function Lorelei(props: LoreleiProps) {
         <Select
           onSelectionChange={e => {
             if (typeof e !== "string") {
-              setImgSrc(getImgSrc({ hair: [...e.values()][0] as string }))
+              setImgSrc(getImgSrc({ ...getImgSrcParams(imgSrc), hair: [...e.values()][0] as string }))
             }
           }}
           defaultSelectedKeys={[propsInfo.hair]}
@@ -242,6 +229,12 @@ export function Lorelei(props: LoreleiProps) {
             </SelectItem>
           ))}
         </Select>
+      </section>
+      <section className="flex justify-end mt-4">
+        <div className="flex gap-4">
+          <Button disabled={isMutating} variant="light" color="danger" onClick={() => props.onCancel()}>Cancel</Button>
+          <Button isLoading={isMutating} variant="shadow" color="primary" onClick={handleCreate}>Save</Button>
+        </div>
       </section>
     </div>
   )

@@ -1,4 +1,8 @@
 export const seeds = [
+  "Chester",
+  "Luna",
+  "Cleo",
+  "Sophie",
   "Casper",
   "Midnight",
   "Misty",

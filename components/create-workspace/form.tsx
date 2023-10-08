@@ -1,6 +1,5 @@
 "use client"
-import { AddSpaceResponse } from "@/app/api/space/route";
-import { fetcher } from "@/lib/utils";
+import { addSpace } from "@/lib/data-source/space";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
 import { Avatar, Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from "@nextui-org/react";
@@ -9,12 +8,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import useSWRMutation from "swr/mutation"
 
-const addSpace = (url: string, {arg}: {arg: {avatar: string, name: string}}) => {
-  return fetcher<AddSpaceResponse>(url, {
-    method: "POST",
-    body: JSON.stringify(arg)
-  })
-}
+
 
 export function WorkspaceForm() {
   const [avatarSrc, setAvatarSrc] = useState("https://api.dicebear.com/6.x/lorelei/svg?seed=Chester")
@@ -63,17 +57,17 @@ export function WorkspaceForm() {
             onValueChange={value => setAvatarSrc(value)}
             orientation="horizontal"
           >
-            <Radio value="https://api.dicebear.com/6.x/lorelei/svg?seed=Chester">
-              <Avatar src="https://api.dicebear.com/6.x/lorelei/svg?seed=Chester"></Avatar>
+            <Radio value="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
+              <Avatar src="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"></Avatar>
             </Radio>
-            <Radio value="https://api.dicebear.com/6.x/lorelei/svg?seed=Luna">
-              <Avatar src="https://api.dicebear.com/6.x/lorelei/svg?seed=Luna"></Avatar>
+            <Radio value="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
+              <Avatar src="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"></Avatar>
             </Radio>
-            <Radio value="https://api.dicebear.com/6.x/lorelei/svg?seed=Sophie">
-              <Avatar src="https://api.dicebear.com/6.x/lorelei/svg?seed=Sophie"></Avatar>
+            <Radio value="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
+              <Avatar src="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"></Avatar>
             </Radio>
-            <Radio value="https://api.dicebear.com/6.x/lorelei/svg?seed=Cleo">
-              <Avatar src="https://api.dicebear.com/6.x/lorelei/svg?seed=Cleo"></Avatar>
+            <Radio value="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
+              <Avatar src="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"></Avatar>
             </Radio>
           </RadioGroup>
         </section>
