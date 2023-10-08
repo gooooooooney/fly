@@ -55,7 +55,6 @@ function Cover() {
               className="w-full h-[30vh] "
               height={0}
               sizes="100vw"
-              isZoomed
               radius="none"
               src={data?.cover}
               alt="NextUI hero Image"
