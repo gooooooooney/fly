@@ -13,6 +13,7 @@ import {
  const TOC: FC<HtmlHTMLAttributes<HTMLDivElement>> = (props) => {
   console.log("render toc")
   const blocks = useBoundStore(state => state.blocks)
+  const collapsed = useBoundStore(state => state.collapsed)
   const [activeId, setActiveId] = useState("");
 
   const headings = blocks.filter((block) => block.type == "heading");
@@ -27,7 +28,9 @@ import {
   };
 
   return (
-    <div className={props.className}>
+    <div className={cn(props.className, {
+      "hidden": collapsed
+    })} >
       <ul className={cn("flex flex-col pl-10  max-w-[160px] w-fit")}>
         {headings.map((heading) => {
           return (

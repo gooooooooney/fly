@@ -94,6 +94,7 @@ export const TodoBlockSpec = createCustomReactBlockSpec({
     return (
       <div className="flex items-center">
         <Checkbox
+          isDisabled={editor.isEditable == false}
           onValueChange={(bol) => {
             editor.updateBlock(block, {
               props: {
