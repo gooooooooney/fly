@@ -73,6 +73,10 @@ export function Lorelei(props: LoreleiProps) {
     trigger({avatar: imgSrc}).catch(err => {
       toast.error(err.message)
     }).then(res => {
+      if (res.body.error) {
+        toast.error(res.body.error)
+        return
+      }
       setAvatar(imgSrc)
       toast.success("Success")
       props.onCancel()

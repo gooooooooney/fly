@@ -8,14 +8,14 @@ import {
   getDefaultReactSlashMenuItems,
   // getDefaultReactSlashMenuItems,
   useBlockNote,
+  
 } from "@blocknote/react";
 import "./index.css";
 import "@blocknote/core/style.css";
 import FormattingToolbar from "./formatting-toolbar";
-import { DependencyList, memo, useEffect, useMemo, useRef } from "react";
+import {  memo, useEffect} from "react";
 import { CustomSideMenu } from "./custom-side-menu";
 import { useTheme } from "next-themes";
-import { useUuidPathname } from "@/hooks/useUuidPathname";
 // import { getReactSlashMenuItems } from "./slash-menu";
 import { CustomBlockSchema } from "./blocks/custom-block-schema";
 import {  slashMenuItems } from "./slash-menu";
@@ -45,7 +45,6 @@ let count = 0;
       editable,
       blockSchema: CustomBlockSchema,
       slashMenuItems: [
-        // ...getReactSlashMenuItems(),
         ...getDefaultReactSlashMenuItems(CustomBlockSchema),
         ...slashMenuItems,
       ],
@@ -75,7 +74,7 @@ let count = 0;
   }, [editable, editor]);
 
   return (
-    <div className="flex-grow flex flex-col">
+    <div className="flex-grow flex flex-col h-screen">
       <BlockNoteView
         className="w-full"
         theme={theme as "light" | "dark"}
@@ -129,3 +128,5 @@ let count = 0;
 }
 
 export default memo(Editor)
+
+

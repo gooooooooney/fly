@@ -70,12 +70,12 @@ export default function SidebarHeader(props: SidebarHeaderProps) {
               {/* <p className="font-bold">Signed in as</p> */}
               <p className="font-bold">{props.email}</p>
             </DropdownItem>
-            <DropdownItem textValue="settings" key="settings">My Settings</DropdownItem>
-            <DropdownItem textValue="avatar" key="avatar">avatar</DropdownItem>
-            <DropdownItem textValue="analytics" key="analytics">Analytics</DropdownItem>
+            {/* <DropdownItem textValue="settings" key="settings">My Settings</DropdownItem> */}
+            <DropdownItem textValue="avatar" key="avatar">Change avatar</DropdownItem>
+            {/* <DropdownItem textValue="analytics" key="analytics">Analytics</DropdownItem>
             <DropdownItem textValue="system" key="system">System</DropdownItem>
             <DropdownItem textValue="configurations" key="configurations">Configurations</DropdownItem>
-            <DropdownItem textValue="help_and_feedback" key="help_and_feedback">Help & Feedback</DropdownItem>
+            <DropdownItem textValue="help_and_feedback" key="help_and_feedback">Help & Feedback</DropdownItem> */}
           </DropdownSection>
           <DropdownSection>
             <DropdownItem textValue="logout" key="logout" color="danger">

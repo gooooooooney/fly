@@ -6,13 +6,11 @@ import { insertOrUpdateBlock } from "./slash-menu-page-item";
 export const SlashMenuDividerItem: ReactSlashMenuItem<CustomBlockSchema> = {
   name: "Divider",
   execute: (editor) => {
-    editor.insertBlocks([
+    insertOrUpdateBlock(
+      editor,
       {
         type: "divider",
       }
-    ],
-    editor.getTextCursorPosition().block,
-    "after"
     )
   },
   icon: <Icons.DividerHorizontal size={18} />,

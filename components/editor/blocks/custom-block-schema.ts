@@ -14,7 +14,7 @@ export type CustomBlockSpecs = {
   callout: CalloutBlockSpec
   todo: TodoBlockSpec
   // custom: CustomSchema
-  codeBlock: CodeBlockSpec
+  // codeBlock: CodeBlockSpec
 }
 
 export const CustomBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
@@ -35,7 +35,7 @@ export const CustomBlockSchema: DefaultBlockSchema & CustomBlockSpecs = {
   callout: CalloutBlockSpec,
   todo: TodoBlockSpec,
   // custom: CustomSchema,
-  codeBlock: CodeBlockSpec
+  // codeBlock: CodeBlockSpec
 }
 
 

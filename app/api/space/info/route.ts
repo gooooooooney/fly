@@ -10,11 +10,12 @@ export async function POST(request: Request) {
   }
   const requestBody = await request.json();
   try {
-    const spaceId = new URL(request.url).searchParams.get("spaceId")
+    const spaceId = new URL(request.url).searchParams.get("workspaceId")
     const res = await updateWorkspaceInfo({
       workspaceId: spaceId,
       ...requestBody
     })
+    
     return NextResponse.json({
       head: {},
       body: res

@@ -13,8 +13,8 @@
     "vercel": "vercel"
   },
   "dependencies": {
-    "@blocknote/core": "^0.9.4",
-    "@blocknote/react": "^0.9.4",
+    "@blocknote/core": "^0.9.5",
+    "@blocknote/react": "^0.9.5",
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
     "@headlessui/react": "^1.7.17",
@@ -34,7 +34,7 @@
     "@nextui-org/system": "^2.0.10",
     "@nextui-org/tabs": "^2.0.21",
     "@nextui-org/theme": "^2.1.9",
-    "@prisma/client": "^5.4.1",
+    "@prisma/client": "^5.4.2",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-hover-card": "^1.0.7",
@@ -45,13 +45,13 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@react-aria/ssr": "^3.8.0",
     "@react-aria/visually-hidden": "^3.8.5",
-    "@tiptap/core": "^2.1.11",
-    "@tiptap/extension-blockquote": "^2.1.11",
-    "@tiptap/pm": "^2.1.11",
-    "@tiptap/react": "^2.1.11",
-    "@types/node": "20.8.3",
-    "@types/react": "18.2.25",
-    "@types/react-dom": "18.2.11",
+    "@tiptap/core": "^2.1.12",
+    "@tiptap/extension-blockquote": "^2.1.12",
+    "@tiptap/pm": "^2.1.12",
+    "@tiptap/react": "^2.1.12",
+    "@types/node": "20.8.4",
+    "@types/react": "18.2.28",
+    "@types/react-dom": "18.2.13",
     "@vercel/postgres": "^0.5.0",
     "autoprefixer": "10.4.16",
     "class-variance-authority": "^0.7.0",
@@ -65,7 +65,7 @@
     "next": "13.5.4",
     "next-auth": "^4.23.2",
     "next-themes": "^0.2.1",
-    "nodemailer": "^6.9.5",
+    "nodemailer": "^6.9.6",
     "pexels": "^1.4.0",
     "postcss": "8.4.31",
     "prosemirror-model": "^1.19.3",
@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.199",
-    "prisma": "^5.4.1",
+    "prisma": "^5.4.2",
     "terser-webpack-plugin": "^5.3.9"
   }
 }

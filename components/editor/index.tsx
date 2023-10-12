@@ -31,29 +31,29 @@ function EditorWrapper() {
 
   const handleTextCursorPositionChange = useCallback(
     (editor: BlockNoteEditor) => {
-      const CannotRemoveTypeList = ["page", "divider"];
-      const currentBlock = editor.getTextCursorPosition().block;
-      if (CannotRemoveTypeList.includes(currentBlock.type)) {
-        // Retrieve all blocks before the current block and reverse them.
-        const blocks = editor.topLevelBlocks
-          .slice(0, editor.topLevelBlocks.indexOf(currentBlock))
-          .reverse();
-        // Then find the first block that is not a page block and set the cursor to the end of that block.
+      // const CannotRemoveTypeList = ["page", "divider"];
+      // const currentBlock = editor.getTextCursorPosition().block;
+      // if (CannotRemoveTypeList.includes(currentBlock.type)) {
+      //   // Retrieve all blocks before the current block and reverse them.
+      //   const blocks = editor.topLevelBlocks
+      //     .slice(0, editor.topLevelBlocks.indexOf(currentBlock))
+      //     .reverse();
+      //   // Then find the first block that is not a page block and set the cursor to the end of that block.
 
-        let hasNotPageBlock = false;
-        for (let i = 0; i < blocks.length; i++) {
-          const block = blocks[i];
-          if (!CannotRemoveTypeList.includes(block.type)) {
-            hasNotPageBlock = true;
-            editor.setTextCursorPosition(block, "end");
-            break;
-          }
-        }
-        // If there is no such block, blur the editor.
-        if (!hasNotPageBlock) {
-          editor._tiptapEditor.commands.blur();
-        }
-      }
+      //   let hasNotPageBlock = false;
+      //   for (let i = 0; i < blocks.length; i++) {
+      //     const block = blocks[i];
+      //     if (!CannotRemoveTypeList.includes(block.type)) {
+      //       hasNotPageBlock = true;
+      //       editor.setTextCursorPosition(block, "end");
+      //       break;
+      //     }
+      //   }
+      //   // If there is no such block, blur the editor.
+      //   if (!hasNotPageBlock) {
+      //     editor._tiptapEditor.commands.blur();
+      //   }
+      // }
     },
     []
   );

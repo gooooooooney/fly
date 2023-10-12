@@ -1,8 +1,7 @@
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { getChildrenMenus } from "@/lib/data-source/menus";
 import { findMenu, mergeMenus, setMenus } from "@/lib/menus";
-import { defaultProps } from "@blocknote/core";
-import { createReactBlockSpec, InlineContent } from "@blocknote/react";
+import { createReactBlockSpec } from "@blocknote/react";
 import { Link } from "@nextui-org/link";
 import cloneDeep from "lodash/cloneDeep";
 import NextLink from "next/link";
@@ -29,7 +28,7 @@ export const PageBlockSpec = createReactBlockSpec({
             default: "1"
         }
     },
-    containsInlineContent: true,
+    containsInlineContent: false,
     render: ({ block }) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const [isDataLoaded, setIsDataLoaded] = useState(false)
@@ -61,7 +60,6 @@ export const PageBlockSpec = createReactBlockSpec({
                     className="data-[focus-visible=true]:outline-0 after:rounded-sm  hover:after:bg-primary/10 flex cursor-pointer " >
                     <span className="mr-1">{block.props.emoji}</span>
                     <span className="underline">{block.props.title || "Untitled"}</span>
-                    <InlineContent className="hidden" />
                 </Link>
 
             </>
