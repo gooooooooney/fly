@@ -29,7 +29,7 @@ import {
 
   return (
     <div className={cn(props.className, {
-      "hidden": collapsed
+      "hidden": !collapsed
     })} >
       <ul className={cn("flex flex-col pl-10  max-w-[160px] w-fit")}>
         {headings.map((heading) => {
