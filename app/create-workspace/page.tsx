@@ -1,15 +1,15 @@
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { WorkspaceForm } from "@/components/create-workspace/form";
 import { getWorkspacesByUserId } from "@/prisma/services/workspace/workspcae-services";
+import { getUserAuth } from "@/lib/auth/utils";
 
 export default async function CreateWorkspacePage() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/signin")
+  const userAuth = await getUserAuth();
+  if (!userAuth.session) {
+    redirect("/sign-in")
   }
-  const wps = await getWorkspacesByUserId(session.user.id)
+  const wps = await getWorkspacesByUserId(userAuth.session.user.id)
+  // const wps = [] as any
   if (wps.length > 0) {
     const activeWp = wps.find(wp => wp.isActive) || wps[0]
     redirect(`/${activeWp.pages[0].id}`)

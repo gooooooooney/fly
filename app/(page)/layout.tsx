@@ -1,10 +1,9 @@
 import Nav from "@/components/layout/navbar/nav";
 import PageTransitionLayout from "@/components/page-transition-layout";
-import { getServerSession } from "next-auth";
 import { PropsWithChildren } from "react";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { ListBar } from "@/components/layout/list-bar";
 import Script from "next/script";
+import { getUserAuth } from "@/lib/auth/utils";
 
 export default async function PageLayout(
   props: PropsWithChildren & {
@@ -13,13 +12,14 @@ export default async function PageLayout(
     };
   }
 ) {
-  const session = await getServerSession(authOptions);
+  const userAuth = await getUserAuth();
+
   return (
     <section className=" h-screen">
       <Script src="https://unpkg.com/shiki"></Script>
       <section className="flex h-screen">
 
-        <ListBar email={session?.user.email || ""} />
+        <ListBar email={userAuth.session?.user.email || ""} />
 
         <section className="flex flex-col w-full">
           <Nav />

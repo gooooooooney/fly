@@ -1,4 +1,5 @@
-import { SignInCard } from "@/components/sign-in"
+import { GooneyFlyLogo } from "@/components/logo";
+import { SignIn } from "@clerk/nextjs";
 
 
 
@@ -20,7 +21,12 @@ export default function Page() {
             }}
           />
         </div>
-        <SignInCard/>
+        <div className="flex justify-center">
+          <div className="flex  flex-col  gap-y-2 items-center">
+          <GooneyFlyLogo />
+          <SignIn />
+          </div>
+        </div>
         <div
           className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
           aria-hidden="true"

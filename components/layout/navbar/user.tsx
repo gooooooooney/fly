@@ -1,7 +1,7 @@
 "use client";
 
-import { signOut } from "next-auth/react";
 
+import { useClerk } from "@clerk/nextjs";
 import {
   Dropdown,
   DropdownTrigger,
@@ -12,10 +12,10 @@ import {
   User,
   DropdownSection,
 } from "@nextui-org/react";
-import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 
-export default function UserDropdown({ session }: { session: Session }) {
+export default function UserDropdown({ session }: any) {
+  const {signOut} = useClerk()
   const { email, image, name } = session?.user || {};
   const router = useRouter();
 
@@ -49,7 +49,7 @@ export default function UserDropdown({ session }: { session: Session }) {
             textValue="logout"
             key="logout"
             onClick={() => {
-              signOut({callbackUrl: "/"});
+              signOut();
             }}
             color="danger"
           >

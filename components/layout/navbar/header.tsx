@@ -4,7 +4,6 @@ import { ThemeSwitch } from "./theme-switch";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
-import { Session } from "next-auth";
 import { Breadcrumbs } from "./breadcrumbs";
 import { DropdownMenus } from "./dropdown";
 import { setCollapsed } from "@/hooks/store/create-layout-slice";
@@ -15,7 +14,6 @@ export default function Header() {
   const [collapsed] = useBoundStore((state) => [
     state.collapsed,
   ])!;
-  // const { SignInModal, setShowSignInModal } = useSignInModal();
   const { data } = usePageInit()
   return (
     <>

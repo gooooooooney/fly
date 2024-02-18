@@ -1,8 +1,7 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
 import {  getWorkspaces } from "@/prisma/services/workspace/workspcae-services";
 import prisma from "@/lib/prisma"
+import { getUserAuth } from "@/lib/auth/utils";
 
 
 
@@ -23,8 +22,8 @@ export interface AddSpaceResponse {
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const userAuth = await getUserAuth();
+  if (!userAuth.session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
   const requestBody = await request.json();
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
       isActive: true,
       user: {
         connect: {
-          id: session.user.id
+          id: userAuth.session.user.id
         }
       },
       pages: {
@@ -48,7 +47,7 @@ export async function POST(request: Request) {
           },
           sharePage: {
             create: {
-              ownerUserId: session.user.id,
+              ownerUserId: userAuth.session.user.id,
             }
           }
         },
@@ -79,12 +78,12 @@ export type SpaceResponse = HttpRequestData<ReturnTypePromiseFunc<typeof getWork
 
 export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams;
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const userAuth = await getUserAuth();
+  if (!userAuth.session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
   try {
-    const spaces = await getWorkspaces(session.user.id, searchParams.get("pageId") ?? "")
+    const spaces = await getWorkspaces(userAuth.session.user.id, searchParams.get("pageId") ?? "")
     return NextResponse.json({
       head: { },
       body: spaces

@@ -1,8 +1,7 @@
 import { addNewPage } from "@/prisma/services/pages/pages-services";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { z } from "@/lib/zod";
+import { getUserAuth } from "@/lib/auth/utils";
 
 const schema = z.object({
   head: z.object({
@@ -13,8 +12,8 @@ const schema = z.object({
 })
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const userAuth = await getUserAuth();
+  if (!userAuth.session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
   const { head } = await request.json()
@@ -25,7 +24,7 @@ export async function POST(request: Request) {
     blockId: head.blockId!,
     spaceId: head.spaceId!,
     parentId: head.pageId!,
-    userId: session.user.id,
+    userId: userAuth.session.user.id,
   })
   if (!page) {
     return NextResponse.json({
