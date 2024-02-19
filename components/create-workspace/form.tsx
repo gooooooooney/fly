@@ -36,7 +36,7 @@ export function WorkspaceForm() {
   };
   return (
     <Card
-      className="max-w-[400px] mx-auto">
+      className="max-w-[400px] mx-auto py-10">
       <CardHeader className="">New space</CardHeader>
       <CardBody>
         <Input
@@ -48,7 +48,7 @@ export function WorkspaceForm() {
           placeholder="Enter your space name"
           variant="bordered"
         />
-        <section className="my-4">
+        <section className="my-4  flex flex-col gap-y-4">
 
           <Avatar
             src={avatarSrc}
@@ -58,27 +58,16 @@ export function WorkspaceForm() {
             selectedKeys={[avatarSrc]}
             onChange={handleSelectionChange}          >
             <SelectItem key="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" value="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
-              <Avatar
-                src="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"
-              ></Avatar>
-              luona
+              Chester
             </SelectItem>
             <SelectItem key="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" value="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
-              <Avatar
-                src="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"
-              ></Avatar>
-ff
+              Luna
             </SelectItem>
             <SelectItem key="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" value="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
-              <Avatar
-                src="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" />
-bb
+              Sophie
             </SelectItem>
             <SelectItem key="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" value="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
-              <Avatar
-                src="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"
-              ></Avatar>
-cc
+              Cleo
             </SelectItem>
           </Select>
 

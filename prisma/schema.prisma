@@ -11,7 +11,7 @@ generator client {
 // }
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_LOCAL_URL") // uses connection pooling
+  url      = env("POSTGRES_LOCAL_URL") // uses connection pooling
 }
 
 model Account {
@@ -45,16 +45,17 @@ model Session {
 }
 
 model User {
-  id            String      @id @default(uuid())
-  name          String?
-  email         String?     @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  workspaces    Workspace[]
+  id             String      @id @default(uuid())
+  name           String?
+  email          String?     @unique
+  externalUserId String      @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  workspaces     Workspace[]
 }
 
 model VerificationToken {
@@ -96,14 +97,14 @@ model Page {
 }
 
 model SharePage {
-  enabled      Boolean     @default(false) // if enabled, the page can be shared
-  id           String      @id @default(uuid())
-  pageId       String      @unique
+  enabled      Boolean    @default(false) // if enabled, the page can be shared
+  id           String     @id @default(uuid())
+  pageId       String     @unique
   passwordHash String?
   permission   Permission @default(READ)
   url          String?
-  ownerUserId  String       // 存储分享者的用户ID
-  Page         Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  ownerUserId  String // 存储分享者的用户ID
+  Page         Page       @relation(fields: [pageId], references: [id], onDelete: Cascade)
 }
 
 model Properties {
@@ -123,7 +124,7 @@ model Block {
   parentId    String?
   parent      Block?  @relation("ParentChildBlock", fields: [parentId], references: [id], onDelete: Cascade)
   children    Block[] @relation("ParentChildBlock")
-  content     Json?    @db.Json
+  content     Json?   @db.Json
   props       Json    @db.Json
   page        Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId      String?

@@ -46,7 +46,6 @@ function Cover() {
               classNames={{
                 wrapper: "!max-w-full",
               }}
-              isZoomed
               style={{
                 objectPosition: `center ${y}%`,
               }}
