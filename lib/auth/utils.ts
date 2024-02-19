@@ -1,5 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import prisma from "@/lib/prisma"
+
 
 export type AuthSession = {
   session: {
@@ -15,10 +17,15 @@ export const getUserAuth = async () => {
   // find out more about setting up 'sessionClaims' (custom sessions) here: https://clerk.com/docs/backend-requests/making/custom-session-token
   const { userId, sessionClaims } = auth();
   if (userId) {
+    const user = await prisma?.user.findUnique({
+      where: {
+        externalUserId: userId,
+      }
+    })
     return {
       session: {
         user: {
-          id: userId,
+          id: user?.id,
           name: `${sessionClaims?.firstName} ${sessionClaims?.lastName}`,
           email: sessionClaims?.email,
         },

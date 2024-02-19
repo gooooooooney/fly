@@ -36,7 +36,7 @@ export function WorkspaceForm() {
   };
   return (
     <Card
-      className="max-w-[400px] mx-auto py-10">
+      className="min-w-[400px] mx-auto py-10">
       <CardHeader className="">New space</CardHeader>
       <CardBody>
         <Input

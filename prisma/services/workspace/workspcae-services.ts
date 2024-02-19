@@ -31,7 +31,7 @@ export async function getWorkspaces(userId: string, pageId: string) {
   return await prisma?.$transaction(async (tx) => {
     const user = await tx.user.findUnique({
       where: {
-        externalUserId: userId,
+        id: userId,
       },
       include: {
         workspaces: {
