@@ -12,7 +12,7 @@ export default async function CreateWorkspacePage() {
   // const wps = [] as any
   if (wps.length > 0) {
     const activeWp = wps.find(wp => wp.isActive) || wps[0]
-    redirect(`/${activeWp.pages[0].id}`)
+    redirect(`/${activeWp.name}/${activeWp.pages[0].id}`)
   }
   return (
     <section className="flex items-center justify-center">

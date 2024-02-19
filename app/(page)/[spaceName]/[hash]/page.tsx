@@ -23,7 +23,8 @@ async function getLocalEmojis() {
   return emojis;
 }
 
-export default async function BlockPage({ params }: { params: { hash: string } }) {
+export default async function BlockPage({ params }: { params: { hash: string, 'spaceName': string } }) {
+  
   const userAuth = await getUserAuth();
 
   const shareSetting = await getSharePageSetting({ pageId: params.hash})
