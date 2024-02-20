@@ -10,7 +10,10 @@ const getShortcutIcon = (icon: string) => {
 }
 
 export async function generateMetadata(
-  { params }: {params: {hash: string}},
+  { params }: {params: {
+    spaceName: string,
+    hash: string
+  }},
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
@@ -38,7 +41,13 @@ export default async function PageLayout(
   const userAuth = await getUserAuth();
 
   const wps = await getWorkspacesByUserId(userAuth.session?.user.id)
+  
   const activeWp = wps.find(wp => wp.isActive) || wps[0]
+  let spaceName = activeWp.name
+
+  if (!userAuth.session) {
+    spaceName = props.params.spaceName
+  }
   if (wps.length > 0) {
     if (props.params.spaceName !== activeWp.name) {
       // redirect to the active workspace
@@ -48,6 +57,6 @@ export default async function PageLayout(
 
 
   return (
-    <section data-space-name={activeWp.name} id="spaceid">{props.children}</section>
+    <section data-space-name={spaceName} id="spaceid">{props.children}</section>
   );
 }
