@@ -1,5 +1,5 @@
 "use client";
-import { Navbar, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem, Button, button } from "@nextui-org/react";
 import { ThemeSwitch } from "./theme-switch";
 import { useBoundStore } from "@/hooks/store/useBoundStore";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,7 @@ import { DropdownMenus } from "./dropdown";
 import { setCollapsed } from "@/hooks/store/create-layout-slice";
 import { Share } from "./share";
 import { usePageInit } from "@/hooks/use-page-init";
-import { SignInButton } from "@clerk/nextjs";
+import { SignInButton, SignedOut } from "@clerk/nextjs";
 
 export default function Header() {
   const [collapsed] = useBoundStore((state) => [
@@ -48,11 +48,18 @@ export default function Header() {
         {/* } */}
         <NavbarContent justify="end">
           <NavbarItem>
-            <SignInButton>
-              <Button color="primary" size="sm" radius="sm" variant="solid">
-                Sign in
-              </Button>
-            </SignInButton>
+            <SignedOut>
+              <SignInButton>
+                <button className={button({
+                  color: "primary",
+                  size: "sm",
+                  radius: "sm",
+                  variant: "solid"
+                })}>
+                  Sign in
+                </button>
+              </SignInButton>
+            </SignedOut>
           </NavbarItem>
           {data?.isOwner && (
             <>

@@ -22,9 +22,9 @@ console.log(workspaces)
       spaceId: activeWorkspace.id,
       userId: userAuth?.session.user.id,
     })
-    redirect(`/${page!.id}`)
+    redirect(`/${activeWorkspace.name}/${page!.id}`)
   }
 
   
-  redirect(`/${activeWorkspace.pages[0].id}`)
+  redirect(`/${activeWorkspace.name}/${activeWorkspace.pages[0].id}`)
 }
