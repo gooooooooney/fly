@@ -26,7 +26,7 @@ export function WorkspaceForm() {
       toast.error(err.message)
     }).then(res => {
       if (res) {
-        router.push(`/${res.head.pageId}`)
+        router.push(`/${res.body.spaceName}/${res.head.pageId}`)
       }
 
     })

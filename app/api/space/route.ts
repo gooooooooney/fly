@@ -18,6 +18,7 @@ export interface AddSpaceResponse {
         emoji: string;
       };
     };
+    spaceName: string;
   };
 }
 
@@ -56,7 +57,8 @@ export async function POST(request: Request) {
     },
     select: {
       pages: true,
-      id: true
+      id: true,
+      name: true
     }
   })
   if (!wp) {
@@ -68,7 +70,8 @@ export async function POST(request: Request) {
       pageId: wp.pages[0].id
     },
     body: {
-      page: wp.pages[0]
+      page: wp.pages[0],
+      spaceName: wp.name,
     }
   });
 }
