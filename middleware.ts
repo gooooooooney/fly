@@ -3,7 +3,7 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({
   // Routes that can be accessed while signed out
   publicRoutes: req => {
-    if (req.url.includes("/api/webhooks/clerk")) return true
+    if (req.url.includes("/api/webhooks")) return true
     return !req.url.includes("/create-workspace")
   }
 });
