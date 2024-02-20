@@ -40,20 +40,21 @@ export default async function PageLayout(
 ) {
   const userAuth = await getUserAuth();
 
-  const wps = await getWorkspacesByUserId(userAuth.session?.user.id)
+  // const wps = await getWorkspacesByUserId(userAuth.session?.user.id)
   
-  const activeWp = wps.find(wp => wp.isActive) || wps[0]
-  let spaceName = activeWp.name
+  // const activeWp = wps.find(wp => wp.isActive) || wps[0]
+  let spaceName = props.params.spaceName
 
-  if (!userAuth.session) {
-    spaceName = props.params.spaceName
-  }
-  if (wps.length > 0) {
-    if (props.params.spaceName !== activeWp.name) {
-      // redirect to the active workspace
-      redirect(`/${activeWp.name}/${activeWp.pages[0].id}`)
-    }
-  }
+  // if the user is not logged in, use the spaceName from the route
+  // if (!userAuth.session) {
+  //   spaceName = props.params.spaceName
+  // }
+  // if (wps.length > 0) {
+  //   if (props.params.spaceName !== activeWp.name) {
+  //     // redirect to the active workspace
+  //     redirect(`/${activeWp.name}/${activeWp.pages[0].id}`)
+  //   }
+  // }
 
 
   return (

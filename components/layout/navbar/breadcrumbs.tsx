@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/dropdown";
 import { Link } from "@nextui-org/link";
 import NextLink from "next/link";
-import { Fragment, useMemo } from "react";
+import { Fragment, useEffect, useMemo, useRef } from "react";
 
 function findParents(
   tree: MenuProp[],
@@ -42,7 +42,6 @@ function findParents(
 export function Breadcrumbs() {
   const pageId = useUuidPathname();
   const menus = useBoundStore((state) => state.menus);
-  const spaceName = document.querySelector("#spaceid")?.getAttribute("data-space-name");
   const breadcrumbs = useMemo(() => {
     const paths = findParents(menus, pageId);
     if (paths) {
@@ -77,6 +76,11 @@ export function Breadcrumbs() {
     return [];
   }, [pageId, menus]);
 
+  const spaceName = useRef('');
+  useEffect(() => {
+    spaceName.current = document.getElementById('spaceid')?.getAttribute('data-space-name') || '';
+  }, [])
+
   return (
     <div className="flex items-center">
       {breadcrumbs?.map((path, index) => {
@@ -94,7 +98,7 @@ export function Breadcrumbs() {
                         key={item.id}
                         className=" data-[hover=true]:bg-foreground/10"
                       >
-                        <Link className="block" as={NextLink} href={`/${spaceName}/${item.id}`}>
+                        <Link className="block" as={NextLink} href={`/${spaceName.current}/${item.id}`}>
                           {item.title}
                         </Link>
                       </DropdownItem>
@@ -106,10 +110,10 @@ export function Breadcrumbs() {
             ) : (
               <>
                 <Link
-                  color={path.id === pageId ? "foreground" : "primary"} 
+                  color={path.id === pageId ? "foreground" : "primary"}
                   isDisabled={path.id === pageId}
                   as={NextLink}
-                  href={`/${spaceName}/${path.id}`}
+                  href={`/${spaceName.current}/${path.id}`}
                 >
                   {path.title}
                 </Link>

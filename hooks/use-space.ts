@@ -3,7 +3,7 @@ import { fetcher } from "@/lib/utils";
 import useSWR from "swr";
 
 export async function getSpaceInfo(url: string) {
-  return await fetcher(url+ `?pageId=${location.pathname.split("/")[1]}`) as SpaceResponse
+  return await fetcher(url+ `?pageId=${location.pathname.split("/")[2]}`) as SpaceResponse
 }
 export function useSpace() {
 

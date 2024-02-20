@@ -33,9 +33,12 @@ export default async function BlockPage({ params }: { params: { hash: string, 's
   if (!shareSetting) {
     notFound();
   }
-  const isShared = shareSetting.ownerUserId !== userAuth.session?.user.id
-  if (isShared && !shareSetting.enabled) {
-    notFound()
+  if (userAuth.session) {
+    if (shareSetting.ownerUserId !== userAuth.session?.user.id) {
+      if (!shareSetting.enabled) {
+        notFound()
+      }
+    }
   }
   return (
     <>

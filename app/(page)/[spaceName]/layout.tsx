@@ -8,7 +8,7 @@ import { getUserAuth } from "@/lib/auth/utils";
 export default async function PageLayout(
   props: PropsWithChildren & {
     params: {
-      hash: string;
+      spaceName: string;
     };
   }
 ) {
@@ -16,15 +16,15 @@ export default async function PageLayout(
 
   return (
     <section className=" h-screen">
-      <Script src="https://unpkg.com/shiki"></Script>
+      {/* <Script src="https://unpkg.com/shiki"></Script> */}
       <section className="flex h-screen">
 
-        <ListBar email={userAuth.session?.user.email || ""} />
+        <ListBar spaceName={props.params.spaceName} email={userAuth.session?.user.email || ""} />
 
         <section className="flex flex-col w-full">
           <Nav />
           <main className="w-full h-full relative overflow-y-auto overflow-x-hidden max-h-full">
-            <PageTransitionLayout key={props.params.hash}>
+            <PageTransitionLayout key={props.params.spaceName}>
               {props.children}
             </PageTransitionLayout>
           </main>

@@ -47,8 +47,9 @@ export default function Header() {
         </NavbarContent>
         {/* } */}
         <NavbarContent justify="end">
-          <NavbarItem>
-            <SignedOut>
+          <SignedOut key="sign-in">
+            <NavbarItem>
+
               <SignInButton>
                 <button className={button({
                   color: "primary",
@@ -59,8 +60,9 @@ export default function Header() {
                   Sign in
                 </button>
               </SignInButton>
-            </SignedOut>
-          </NavbarItem>
+            </NavbarItem>
+          </SignedOut>
+
           {data?.isOwner && (
             <>
 

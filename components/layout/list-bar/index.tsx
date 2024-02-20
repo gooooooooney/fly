@@ -17,11 +17,13 @@ import { useMount } from "react-use";
 import { changePageIcon, changePageTitle } from "@/lib/page-meta";
 import { usePageInit } from "@/hooks/use-page-init";
 import { setAvatar, setName } from "@/hooks/store/create-user-slice";
+import { useSession } from "@/hooks/use-session";
 
 
 
-export function ListBar(props: { email: string }) {
+export function ListBar(props: { email: string, spaceName:string }) {
   const pageId = useUuidPathname();
+  const session = useSession()
 
   const [actSpace, setActSpace] = useState<null | any>(null);
   const [items] = useBoundStore( (state) => [
@@ -47,7 +49,10 @@ export function ListBar(props: { email: string }) {
     });
   };
 
-  useMount(() => {
+  useEffect(() => {
+    
+    if (!session) return
+
     // 避免当进入子页面时，刷新页面导致breadcrumbs不正确
     Promise.all([getSpaceInfo(), findCurrentPagePath(pageId)]).then(
       ([res, currentPagePath]) => {
@@ -67,7 +72,7 @@ export function ListBar(props: { email: string }) {
         }
       }
     );
-  });
+  }, [session]);
   useEffect(() => {
     
     // setMenus(getItems(items));
@@ -91,7 +96,9 @@ export function ListBar(props: { email: string }) {
 
 
   if (!actSpace) return null;
-  const activeWp = actSpace;
+
+  // sign in but current space is not the spaceName
+  if (actSpace.name !== props.spaceName) return null
 
   return (
     <Transition
