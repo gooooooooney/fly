@@ -1,4 +1,3 @@
-import { signOut } from "next-auth/react";
 
 import React from "react";
 import {
@@ -18,6 +17,7 @@ import {
 } from "@nextui-org/react";
 import { Icons } from "@/components/icons";
 import { Dicebear } from "@/components/dicebear";
+import { useClerk } from "@clerk/nextjs";
 
 interface SidebarHeaderProps {
   name: string;
@@ -27,6 +27,8 @@ interface SidebarHeaderProps {
 
 export default function SidebarHeader(props: SidebarHeaderProps) {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const { signOut } = useClerk();
+
   return (
     <div className="flex items-center px-5 ">
       <Dropdown placement="bottom-start">
@@ -52,6 +54,7 @@ export default function SidebarHeader(props: SidebarHeaderProps) {
             switch (key) {
               case "logout": {
                 signOut();
+                window.location.reload();
                 break;
               }
               case "avatar": {

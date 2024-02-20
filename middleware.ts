@@ -1,15 +1,15 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import { withAuth } from "next-auth/middleware"
-
-// This function can be marked `async` if using `await` inside
-export default withAuth(function middleware(request) {
+import { authMiddleware } from "@clerk/nextjs";
  
-}, {
-  callbacks: {
-    authorized({ req, token }) {
-
-      return true
-    }
+export default authMiddleware({
+  // Routes that can be accessed while signed out
+  publicRoutes: req => {
+    return !req.url.includes("/create-workspace")
   }
-})
+});
+ 
+export const config = {
+  // Protects all routes, including api/trpc.
+  // See https://clerk.com/docs/references/nextjs/auth-middleware
+  // for more information about configuring your Middleware
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+};

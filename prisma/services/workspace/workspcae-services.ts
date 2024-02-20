@@ -6,7 +6,8 @@ import { sortMenus } from "@/lib/menus"
 
 export type WorkspaceInfo = ReturnTypePromiseFunc<typeof getWorkspacesByUserId>
 
-export async function getWorkspacesByUserId(userId: string) {
+export async function getWorkspacesByUserId(userId?: string) {
+ try {
   const user = await prisma?.user.findUnique({
     where: {
       id: userId,
@@ -19,10 +20,10 @@ export async function getWorkspacesByUserId(userId: string) {
       }
     }
   })
-  if (!user?.workspaces) {
-    return []
-  }
-  return user.workspaces
+  return user?.workspaces || []
+ } catch (error) {
+  return []
+ }
 }
 
 

@@ -10,7 +10,6 @@ export function Dicebear(props: DicebearProps) {
   const [avatar] = useBoundStore( (state) => [
     state.avatar,
   ])!;
-  console.log(avatar)
   return (
     <section>
       < Lorelei {...getImgSrcParams(avatar)} onCancel={props.onCancel}   />

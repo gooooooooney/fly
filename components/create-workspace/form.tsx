@@ -2,19 +2,19 @@
 import { addSpace } from "@/lib/data-source/space";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
-import { Avatar, Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from "@nextui-org/react";
+import { Avatar, Button, Select, SelectItem } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import useSWRMutation from "swr/mutation"
+import useSWRMutation from "swr/mutation";
 
 
 
 export function WorkspaceForm() {
-  const [avatarSrc, setAvatarSrc] = useState("https://api.dicebear.com/6.x/lorelei/svg?seed=Chester")
+  const [avatarSrc, setAvatarSrc] = useState<string>("https://api.dicebear.com/6.x/lorelei/svg?seed=Chester")
   const router = useRouter()
   const [name, setName] = useState("")
-  const {trigger, isMutating} = useSWRMutation("/api/space", addSpace)
+  const { trigger, isMutating } = useSWRMutation("/api/space", addSpace)
 
   const handleCreate = () => {
     if (isMutating) return
@@ -22,18 +22,21 @@ export function WorkspaceForm() {
       toast.error("Please enter a name")
       return
     }
-    trigger({avatar: avatarSrc, name}).catch(err => {
+    trigger({ avatar: avatarSrc, name }).catch(err => {
       toast.error(err.message)
     }).then(res => {
       if (res) {
         router.push(`/${res.head.pageId}`)
       }
-      
+
     })
   }
+  const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setAvatarSrc(e.target.value);
+  };
   return (
     <Card
-      className="max-w-[400px] mx-auto">
+      className="min-w-[400px] mx-auto py-10">
       <CardHeader className="">New space</CardHeader>
       <CardBody>
         <Input
@@ -45,31 +48,29 @@ export function WorkspaceForm() {
           placeholder="Enter your space name"
           variant="bordered"
         />
-        <section className="my-4">
+        <section className="my-4  flex flex-col gap-y-4">
 
           <Avatar
             src={avatarSrc}
           ></Avatar>
+          <Select
+            label="Select your avatar"
+            selectedKeys={[avatarSrc]}
+            onChange={handleSelectionChange}          >
+            <SelectItem key="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" value="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
+              Chester
+            </SelectItem>
+            <SelectItem key="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" value="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
+              Luna
+            </SelectItem>
+            <SelectItem key="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" value="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
+              Sophie
+            </SelectItem>
+            <SelectItem key="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid" value="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
+              Cleo
+            </SelectItem>
+          </Select>
 
-          <RadioGroup
-            label="Select your favorite avatar"
-            value={avatarSrc}
-            onValueChange={value => setAvatarSrc(value)}
-            orientation="horizontal"
-          >
-            <Radio value="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
-              <Avatar src="https://api.dicebear.com/7.x/lorelei/svg?seed=Chester&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"></Avatar>
-            </Radio>
-            <Radio value="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
-              <Avatar src="https://api.dicebear.com/7.x/lorelei/svg?seed=Luna&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"></Avatar>
-            </Radio>
-            <Radio value="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
-              <Avatar src="https://api.dicebear.com/7.x/lorelei/svg?seed=Sophie&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"></Avatar>
-            </Radio>
-            <Radio value="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid">
-              <Avatar src="https://api.dicebear.com/7.x/lorelei/svg?seed=Cleo&rotate=0&scale=100&hair=variant01&translateX=0&radius=0&backgroundType=solid"></Avatar>
-            </Radio>
-          </RadioGroup>
         </section>
       </CardBody>
       <CardFooter>

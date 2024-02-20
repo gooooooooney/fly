@@ -19,7 +19,6 @@ interface EditorWrapperProps {
   // blocks: BlockNoteEditor["topLevelBlocks"]
 }
 function EditorWrapper() {
-  console.log("render editor wrapper");
 
   let beforeBlocks = [] as BlockWithOrder[];
   const firstRender = useRef(true);
@@ -60,10 +59,6 @@ function EditorWrapper() {
   const handleOnEditorContentChange = useCallback(
     (editor: BlockNoteEditor) => {
       if (data?.editable === false) return;
-      console.log("_tiptapEditor", editor._tiptapEditor);
-      console.log("topLevelBlocks", editor.topLevelBlocks);
-      console.log("json", editor._tiptapEditor.getJSON());
-      console.log(firstRender, "firstRender")
       if (firstRender.current) {
         firstRender.current = false;
         return;

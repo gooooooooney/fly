@@ -1,7 +1,6 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getUserAuth } from "@/lib/auth/utils";
 import { z } from "@/lib/zod";
 import { setSharePageSetting } from "@/prisma/services/pages/pages-services";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 const schema = z.object({
@@ -16,8 +15,8 @@ const schema = z.object({
 })
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const userAuth = await getUserAuth();
+  if (!userAuth.session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
   const reqData = await request.json()
@@ -26,7 +25,7 @@ export async function POST(request: Request) {
   }
   const res = await setSharePageSetting({
     pageId: reqData.head.pageId,
-    userId: session.user.id,
+    userId: userAuth.session.user.id,
     url: reqData.body.url,
     enabled: reqData.body.enabled,
     permission: reqData.body.permission,

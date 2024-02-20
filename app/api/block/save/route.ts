@@ -1,9 +1,8 @@
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { SaveBlocksParams, SaveParams } from "@/types";
 import { save, saveBlocks } from "@/prisma/services/pages/pages-services";
 import { z } from "@/lib/zod";
+import { getUserAuth } from "@/lib/auth/utils";
 
 
 const schema = z.object({
@@ -20,8 +19,8 @@ const schema = z.object({
 })           
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const userAuth = await getUserAuth();
+  if (!userAuth.session) {
     return new NextResponse("Unauthorized", { status: 403 });
   }
   const requestBody = await request.json();
