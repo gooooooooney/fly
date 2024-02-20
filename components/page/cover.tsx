@@ -14,7 +14,6 @@ import { useUuidPathname } from "@/hooks/useUuidPathname";
 import { usePageInit } from "@/hooks/use-page-init";
 
 function Cover() {
-  console.log("render cover")
   const { data, mutate } = usePageInit()
   const pageId = useUuidPathname()
 

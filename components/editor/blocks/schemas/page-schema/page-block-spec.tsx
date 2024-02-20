@@ -5,7 +5,7 @@ import { createReactBlockSpec } from "@blocknote/react";
 import { Link } from "@nextui-org/link";
 import cloneDeep from "lodash/cloneDeep";
 import NextLink from "next/link";
-import {setMenus as setItems} from "@/hooks/store/create-content-slice";
+import { setMenus as setItems } from "@/hooks/store/create-content-slice";
 
 import { useState } from "react";
 
@@ -32,7 +32,7 @@ export const PageBlockSpec = createReactBlockSpec({
     render: ({ block }) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const [isDataLoaded, setIsDataLoaded] = useState(false)
-
+        const spaceName = document.querySelector("#spaceid")?.getAttribute("data-space-name") || ""
         const handleMouseEnter = () => {
             if (isDataLoaded) return;
             const items = useBoundStore.getState().menus
@@ -55,7 +55,7 @@ export const PageBlockSpec = createReactBlockSpec({
                 <Link color="foreground" as={NextLink}
                     onMouseEnter={handleMouseEnter}
                     contentEditable={false}
-                    href={`/${block.id}`}
+                    href={`/${spaceName}/${block.id}`}
                     isBlock
                     className="data-[focus-visible=true]:outline-0 after:rounded-sm  hover:after:bg-primary/10 flex cursor-pointer " >
                     <span className="mr-1">{block.props.emoji}</span>

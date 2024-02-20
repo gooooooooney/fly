@@ -38,15 +38,16 @@ export default async function PageLayout(
   const userAuth = await getUserAuth();
 
   const wps = await getWorkspacesByUserId(userAuth.session?.user.id)
+  const activeWp = wps.find(wp => wp.isActive) || wps[0]
   if (wps.length > 0) {
-    const activeWp = wps.find(wp => wp.isActive) || wps[0]
     if (props.params.spaceName !== activeWp.name) {
       // redirect to the active workspace
       redirect(`/${activeWp.name}/${activeWp.pages[0].id}`)
     }
   }
 
+
   return (
-    <section id="spaceid">{props.children}</section>
+    <section data-space-name={activeWp.name} id="spaceid">{props.children}</section>
   );
 }

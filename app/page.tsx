@@ -10,7 +10,6 @@ export default async function Home() {
     redirect("/sign-in")
   }
   const workspaces = await getWorkspacesByUserId(userAuth?.session.user.id)
-console.log(workspaces)
   if (workspaces.length === 0) {
     redirect("/create-workspace")
   }

@@ -54,6 +54,7 @@ export default function SidebarHeader(props: SidebarHeaderProps) {
             switch (key) {
               case "logout": {
                 signOut();
+                window.location.reload();
                 break;
               }
               case "avatar": {

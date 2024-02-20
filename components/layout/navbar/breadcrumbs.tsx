@@ -42,7 +42,7 @@ function findParents(
 export function Breadcrumbs() {
   const pageId = useUuidPathname();
   const menus = useBoundStore((state) => state.menus);
-
+  const spaceName = document.querySelector("#spaceid")?.getAttribute("data-space-name");
   const breadcrumbs = useMemo(() => {
     const paths = findParents(menus, pageId);
     if (paths) {
@@ -94,7 +94,7 @@ export function Breadcrumbs() {
                         key={item.id}
                         className=" data-[hover=true]:bg-foreground/10"
                       >
-                        <Link className="block" as={NextLink} href={`/${item.id}`}>
+                        <Link className="block" as={NextLink} href={`/${spaceName}/${item.id}`}>
                           {item.title}
                         </Link>
                       </DropdownItem>
@@ -109,7 +109,7 @@ export function Breadcrumbs() {
                   color={path.id === pageId ? "foreground" : "primary"} 
                   isDisabled={path.id === pageId}
                   as={NextLink}
-                  href={`/${path.id}`}
+                  href={`/${spaceName}/${path.id}`}
                 >
                   {path.title}
                 </Link>

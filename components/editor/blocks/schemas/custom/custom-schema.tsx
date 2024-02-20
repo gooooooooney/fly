@@ -17,10 +17,8 @@ export const CustomSchema = createCustomReactBlockSpec({
     );
   },
   addKeyboardShortcuts: (e) => {
-    console.log(e, "aaa")
     return {
         "Mod-A": () => {
-            console.log(e);
             return e.editor.commands.exitCode()
         },
     }
