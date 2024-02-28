@@ -1,18 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("POSTGRES_LOCAL_URL") // uses connection pooling
-// }
 
 model Account {
   id                String  @id @default(uuid())
@@ -20,15 +14,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -48,13 +41,13 @@ model User {
   id             String      @id @default(uuid())
   name           String?
   email          String?     @unique
-  externalUserId String      @unique
   emailVerified  DateTime?
   image          String?
-  accounts       Account[]
-  sessions       Session[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+  externalUserId String      @unique
+  accounts       Account[]
+  sessions       Session[]
   workspaces     Workspace[]
 }
 
@@ -66,70 +59,68 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// one user can have many workspace, and one workspace can have many pages, but just one page's role is root, others belong to root page
 model Workspace {
   id          String   @id @default(uuid())
   name        String
   description String?
   isActive    Boolean  @default(false)
-  pages       Page[]
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   avatar      String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   role        Role     @default(OWNER)
+  pages       Page[]
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Page {
   id          String      @id @default(uuid())
-  children    Page[]      @relation("ParentChildPage")
-  parent      Page?       @relation("ParentChildPage", fields: [parentId], references: [id], onDelete: Cascade)
   parentId    String?
-  workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  properties  Properties?
-  // page and block is one to many relationship, one page can have many blocks but one block can only belong to one page
   blocks      Block[]
+  parent      Page?       @relation("ParentChildPage", fields: [parentId], references: [id], onDelete: Cascade)
+  children    Page[]      @relation("ParentChildPage")
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  properties  Properties?
   sharePage   SharePage?
 }
 
 model SharePage {
-  enabled      Boolean    @default(false) // if enabled, the page can be shared
+  enabled      Boolean    @default(false)
   id           String     @id @default(uuid())
   pageId       String     @unique
   passwordHash String?
   permission   Permission @default(READ)
   url          String?
-  ownerUserId  String // 存储分享者的用户ID
+  ownerUserId  String
   Page         Page       @relation(fields: [pageId], references: [id], onDelete: Cascade)
 }
 
 model Properties {
   pageId    String    @unique
-  page      Page?     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   id        String    @id @default(cuid())
   cover     String    @default("")
   title     String    @default("")
   emoji     String    @default("")
   editable  Boolean   @default(true)
   pageWidth PageWidth @default(default)
+  page      Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
 }
 
 model Block {
   id          String  @id @unique
   type        Type
   parentId    String?
-  parent      Block?  @relation("ParentChildBlock", fields: [parentId], references: [id], onDelete: Cascade)
-  children    Block[] @relation("ParentChildBlock")
   content     Json?   @db.Json
   props       Json    @db.Json
-  page        Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId      String?
   prevBlockId String?
   nextBlockId String?
+  page        Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  parent      Block?  @relation("ParentChildBlock", fields: [parentId], references: [id], onDelete: Cascade)
+  children    Block[] @relation("ParentChildBlock")
 }
 
 enum PageWidth {
